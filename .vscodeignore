@@ -13,3 +13,4 @@ webpack.*.js
 **/*.ts
 pnpm-lock.yaml
 vsix/**
+.versionrc
