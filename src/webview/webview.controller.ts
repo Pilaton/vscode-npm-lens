@@ -98,9 +98,13 @@ class PanelController {
     const reactAppUri = this.panel?.webview.asWebviewUri(reactAppPath);
     if (!reactAppUri) throw new Error("Failed to get react app uri");
 
+    const pkgJSONExt = this.context.extension.packageJSON as {
+      version: string;
+    };
     return `
       <script>
         window.packageData = ${JSON.stringify(packageJson)};
+        window.versionExtension = ${JSON.stringify(pkgJSONExt.version)};
         window.vscode = acquireVsCodeApi();
       </script>
       <div id="root"></div>

@@ -17,6 +17,7 @@ export type VsCodeApi = {
 declare global {
   interface Window {
     packageData: PackageJson;
+    versionExtension: string;
     vscode: VsCodeApi;
   }
 }

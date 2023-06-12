@@ -14,6 +14,8 @@ if (!rootElement) {
   throw new Error("No element with id 'root' found in the document.");
 }
 
+const versionExt = window.versionExtension;
+
 const root = createRoot(rootElement);
 
 const BoxVersion = styled(Box)({
@@ -38,7 +40,7 @@ root.render(
 
             <h1 style={{ paddingInline: "16px" }}>npmLens</h1>
 
-            <BoxVersion>v1.0.0</BoxVersion>
+            {versionExt && <BoxVersion>v{versionExt}</BoxVersion>}
           </Stack>
         </header>
 
