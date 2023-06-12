@@ -1,0 +1,15 @@
+.vscode/**
+.vscode-test/**
+out/**
+node_modules/**
+src/**
+test-vsix/**
+.gitignore
+.yarnrc
+webpack.*.js
+**/tsconfig.json
+**/.eslintrc.json
+**/*.map
+**/*.ts
+pnpm-lock.yaml
+vsix/**

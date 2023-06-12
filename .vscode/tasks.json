@@ -1,0 +1,21 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "DevWebpackTask",
+      "type": "npm",
+      "script": "dev:webpack",
+      "isBackground": true,
+      "problemMatcher": ["$tsc", "$ts-webpack-watch", "$ts-webpack"]
+    },
+    {
+      "label": "DevTSTask",
+      "type": "npm",
+      "script": "dev:ts",
+      "isBackground": true,
+      "problemMatcher": ["$tsc", "$tsc-watch"]
+    }
+  ]
+}
