@@ -1,7 +1,7 @@
 {
   "name": "vscode-npm-lens",
   "displayName": "npmLens",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Visual panel for project dependencies: Monitor updates, analyze size, and more.",
   "categories": [
     "Other",
