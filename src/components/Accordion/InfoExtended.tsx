@@ -2,20 +2,21 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   Stack,
   SvgIcon,
   Tooltip,
   Typography,
 } from "@mui/material";
-import prettyBytes from "pretty-bytes";
 import { ComponentProps, FC, useEffect, useState } from "react";
 
 import BundlephobiaIcon from "../../assets/bundlephobia.svg";
 import NpmIcon from "../../assets/npm.svg";
-import { BundleData } from "../../services/bundlephobia.controller";
-import { IPackageData } from "../../services/npm.controller";
+import { IPackageData } from "../../providers/npm-provider";
 import useStore from "../../store/store";
+import { IBundleSizesData } from "../../types/bundleSizes";
+import convertSize from "../../utils/convertSize";
 
 /* -------------------------------------------------------------------------- */
 
@@ -24,6 +25,21 @@ interface IDetailBlock extends ComponentProps<typeof Stack> {
   value: string | number | JSX.Element;
   title?: string;
 }
+
+interface IStateNPMInfo {
+  data: IPackageData | null;
+  isPending: boolean;
+}
+
+interface IStateSizeInfo {
+  data: IBundleSizesData | null;
+  isPending: boolean;
+}
+
+type GetValue = (
+  state: IStateSizeInfo,
+  key: keyof IBundleSizesData
+) => string | number | JSX.Element;
 
 /* -------------------------------------------------------------------------- */
 
@@ -41,11 +57,31 @@ export const DetailBlock: FC<IDetailBlock> = ({
   </Tooltip>
 );
 
+/* -------------------------------------------------------------------------- */
+
+const getValue: GetValue = (state, key) => {
+  let val;
+
+  if (key === "size" || key === "gzip") {
+    val = convertSize(state.data?.[key]);
+  } else {
+    val = state.data?.[key];
+  }
+
+  return state.isPending ? <CircularProgress size={12} /> : val || "-";
+};
+
+/* -------------------------------------------------------------------------- */
+
 const InfoExtended: FC<{ name: string }> = ({ name }) => {
-  const [info, setInfo] = useState<IPackageData | null>(null);
-  const [bundlephobiaInfo, setBundlephobiaInfo] = useState<BundleData | null>(
-    null
-  );
+  const [npmInfo, setNpmInfo] = useState<IStateNPMInfo>({
+    data: null,
+    isPending: true,
+  });
+  const [sizeInfo, setSizeInfo] = useState<IStateSizeInfo>({
+    data: null,
+    isPending: true,
+  });
   const [pkg, bndl] = useStore((state) => [
     state.packages[name],
     state.bundles[name],
@@ -53,18 +89,18 @@ const InfoExtended: FC<{ name: string }> = ({ name }) => {
 
   useEffect(() => {
     (async () => {
-      setInfo(await pkg);
+      setNpmInfo({ data: await pkg, isPending: false });
     })();
 
     (async () => {
-      setBundlephobiaInfo(await bndl);
+      setSizeInfo({ data: await bndl, isPending: false });
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, pkg, bndl]);
 
-  return info ? (
+  return npmInfo.data ? (
     <Box>
-      <Typography sx={{ opacity: 0.7 }}>{info.description}</Typography>
+      <Typography sx={{ opacity: 0.7 }}>{npmInfo.data.description}</Typography>
 
       <Divider sx={{ my: 2 }} />
 
@@ -75,8 +111,8 @@ const InfoExtended: FC<{ name: string }> = ({ name }) => {
         gap={3.5}
       >
         <Stack direction="row" alignItems="center" gap={3.5}>
-          <DetailBlock label="Updated" value={info.lastPublish} />
-          <DetailBlock label="License" value={info.license} />
+          <DetailBlock label="Updated" value={npmInfo.data.lastPublish} />
+          <DetailBlock label="License" value={npmInfo.data.license} />
         </Stack>
 
         <Stack
@@ -87,35 +123,23 @@ const InfoExtended: FC<{ name: string }> = ({ name }) => {
           flexWrap="wrap"
           sx={{ "& div": { alignItems: "flex-end" } }}
         >
-          {bundlephobiaInfo && (
-            <>
-              <DetailBlock
-                label="Gzipped"
-                value={prettyBytes(bundlephobiaInfo.gzip)}
-              />
-              <DetailBlock
-                label="Minified"
-                value={prettyBytes(bundlephobiaInfo.size)}
-              />
-            </>
-          )}
+          <DetailBlock label="Gzipped" value={getValue(sizeInfo, "gzip")} />
+          <DetailBlock label="Minified" value={getValue(sizeInfo, "size")} />
 
-          {info.size && (
-            <DetailBlock
-              label="Unpacked"
-              value={prettyBytes(info.size)}
-              title="Unpacked Size"
-            />
-          )}
+          <DetailBlock
+            label="Unpacked"
+            value={convertSize(npmInfo.data.size)}
+            title="Unpacked Size"
+          />
 
-          {bundlephobiaInfo && (
+          {sizeInfo.data?.dependencyCount && (
             <DetailBlock
               label="Dependencies"
               value={
-                bundlephobiaInfo.dependencyCount ? (
-                  bundlephobiaInfo.dependencyCount
-                ) : (
+                sizeInfo.data.dependencyCount === 0 ? (
                   <b style={{ color: "var(--vscode-charts-green)" }}>FREE</b>
+                ) : (
+                  sizeInfo.data.dependencyCount
                 )
               }
             />
@@ -127,7 +151,7 @@ const InfoExtended: FC<{ name: string }> = ({ name }) => {
 
       <Stack direction="row" alignItems="center" flexWrap="wrap" gap={2}>
         <Button
-          href={info.repositoryUrl}
+          href={npmInfo.data.repositoryUrl}
           target="_blank"
           rel="noreferrer"
           title="Open GitHub repository"
@@ -139,7 +163,7 @@ const InfoExtended: FC<{ name: string }> = ({ name }) => {
         </Button>
 
         <Button
-          href={info.npmUrl}
+          href={npmInfo.data.npmUrl}
           target="_blank"
           rel="noreferrer"
           title="Open NPM page"
@@ -153,9 +177,9 @@ const InfoExtended: FC<{ name: string }> = ({ name }) => {
           NPM
         </Button>
 
-        {bundlephobiaInfo && (
+        {sizeInfo.data?.url && (
           <Button
-            href={bundlephobiaInfo.url}
+            href={sizeInfo.data.url}
             target="_blank"
             rel="noreferrer"
             title="Open Bundlephobia graphic"

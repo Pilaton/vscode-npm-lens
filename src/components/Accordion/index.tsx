@@ -2,8 +2,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { FC, useEffect, useMemo, useState } from "react";
 
-import Bundlephobia from "../../services/bundlephobia.controller";
-import NPM from "../../services/npm.controller";
+import NPM from "../../providers/npm-provider";
+import BundleJSProvider from "../../providers/size-providers/bundljs";
 import useStore from "../../store/store";
 import { Dependencies } from "../../types/global";
 
@@ -15,12 +15,12 @@ const AccordionsDependency: FC<{ deps: Dependencies }> = ({ deps }) => {
   const [expandedItem, setExpandedItem] = useState<string | false>(false);
   const { setPackages, setBundles } = useStore.getState();
 
-  const npmController = useMemo(() => new NPM(deps), [deps]);
-  const bundlPHController = useMemo(() => new Bundlephobia(deps), [deps]);
+  const npmProvider = useMemo(() => new NPM(deps), [deps]);
+  const sizeProviders = useMemo(() => new BundleJSProvider(deps), [deps]);
 
   useEffect(() => {
-    setPackages(npmController.getDataAllPackages());
-    setBundles(bundlPHController.getDataAllBundles());
+    setPackages(npmProvider.getDataAllPackages());
+    setBundles(sizeProviders.getDataAllBundles());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deps]);
 
@@ -52,7 +52,7 @@ const AccordionsDependency: FC<{ deps: Dependencies }> = ({ deps }) => {
               }}
             >
               <InfoShort name={name} curVersion={version}>
-                <VersionStatus props={{ name, npmController }} />
+                <VersionStatus props={{ name, npmProvider }} />
               </InfoShort>
             </AccordionSummary>
 

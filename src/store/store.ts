@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
-import { BundleDataAsync } from "../services/bundlephobia.controller";
-import { PackageDataAsync } from "../services/npm.controller";
+import { PackageDataAsync } from "../providers/npm-provider";
+import { BundleSizesDataAsync } from "../types/bundleSizes";
 
 export type PackagesState = Record<string, PackageDataAsync>;
-export type BundlesState = Record<string, BundleDataAsync>;
+export type BundlesState = Record<string, BundleSizesDataAsync>;
 
 type State = {
   packages: PackagesState;

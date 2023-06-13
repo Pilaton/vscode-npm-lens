@@ -2,12 +2,12 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, CircularProgress } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
-import NPM, { IPackageData } from "../../services/npm.controller";
+import NPM, { IPackageData } from "../../providers/npm-provider";
 
 interface IVersionStatusProps {
   props: {
     name: string;
-    npmController: NPM;
+    npmProvider: NPM;
   };
 }
 
@@ -64,7 +64,7 @@ const getStatus: GetStatus = (newVer) => {
 };
 
 const VersionStatus: FC<IVersionStatusProps> = ({
-  props: { name, npmController },
+  props: { name, npmProvider },
 }) => {
   const [packageData, setPackageData] = useState<IVersionState>({
     version: null,
@@ -73,7 +73,7 @@ const VersionStatus: FC<IVersionStatusProps> = ({
 
   useEffect(() => {
     (async () => {
-      const res = await npmController.getPackageData(name);
+      const res = await npmProvider.getPackageData(name);
       const version = res && res.version;
 
       setPackageData({ version, isPending: false });
