@@ -43,8 +43,8 @@
     "prepackage": "npm run clean && npm run build:webpack",
     "package": "vsce package --no-dependencies --out ./vsix",
     "postpackage": "npm run clean",
-    "release": "standard-version",
-    "release-demo": "standard-version --dry-run"
+    "release": "standard-version --no-git-tag-version",
+    "release-demo": "standard-version --dry-run --no-git-tag-version"
   },
   "contributes": {
     "views": {

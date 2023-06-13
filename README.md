@@ -33,9 +33,11 @@ Example 2
 
 ## Known Issues
 
-The extension uses two APIs: npm registry and bandelphobia, but bandelphobia is sometimes unavailable...  
+~~The extension uses two APIs: npm registry and bandelphobia, but bandelphobia is sometimes unavailable...  
 The extension continues to work properly, but the estimated size of dependencies may not be displayed. If you do not have access to any API, the extension will notify you.  
-If problems persist, we will make our own solution.
+If the problems persist, I will most likely come up with my own solution.~~  
+
+**Changed bundle size provider to BundleJS...** 🐈
 
 ## Telemetry
 
