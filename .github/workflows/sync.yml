@@ -21,7 +21,8 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Copy files
         run: |
-          cp -R vsix destination/
+          ls -la
+          cp vsix/*.vsix destination/
           cp {CHANGELOG.md,README.md,LICENSE} destination/
       - name: Push changes
         working-directory: ./destination
