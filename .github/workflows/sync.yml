@@ -22,7 +22,7 @@ jobs:
       - name: Copy files
         run: |
           cp vsix/*.vsix destination/
-          cp public/{Screenshot-extension.jpg,Screenshot-extension-2.png} destination/
+          cp public/{Screenshot-extension.jpg,Screenshot-extension-2.png} destination/public/
           cp {CHANGELOG.md,README.md,LICENSE} destination/
 
       - name: Push changes
