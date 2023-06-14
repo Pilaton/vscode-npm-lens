@@ -1,5 +1,15 @@
 # Changelog
 
+### 1.1.1 (2023-06-14)
+
+### 🛠️ Bug Fixes
+
+* Bundlephobia worked again so brought it back
+
+### 📝 Docs
+
+* Edited README
+
 ## 1.1.0 (2023-06-13)
 
 ### 🎉 Features

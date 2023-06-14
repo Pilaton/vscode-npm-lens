@@ -31,14 +31,10 @@ Example 2
 1. The total size of your project's dependencies (for the active tab).
 2. How many dependencies your chosen package depends on (fewer is better)
 
-## Known Issues
+## Providers
 
-<s>The extension uses two APIs: npm registry and bandelphobia, but bandelphobia is sometimes unavailable...  
-The extension continues to work properly, but the estimated size of dependencies may not be displayed. If you do not have access to any API, the extension will notify you.  
-If the problems persist, I will most likely come up with my own solution.
-</s>  
-
-**Changed bundle size provider to BundleJS...** 🐈
+1. NPM
+2. Bundlephobia || BundleJS. <i>(Depends on service availability)</i>
 
 ## Telemetry
 

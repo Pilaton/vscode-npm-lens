@@ -3,7 +3,7 @@ import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { FC, useEffect, useMemo, useState } from "react";
 
 import NPM from "../../providers/npm-provider";
-import BundleJSProvider from "../../providers/size-providers/bundljs";
+import BundlePHProvider from "../../providers/size-providers/bundlephobia";
 import useStore from "../../store/store";
 import { Dependencies } from "../../types/global";
 
@@ -16,7 +16,7 @@ const AccordionsDependency: FC<{ deps: Dependencies }> = ({ deps }) => {
   const { setPackages, setBundles } = useStore.getState();
 
   const npmProvider = useMemo(() => new NPM(deps), [deps]);
-  const sizeProviders = useMemo(() => new BundleJSProvider(deps), [deps]);
+  const sizeProviders = useMemo(() => new BundlePHProvider(deps), [deps]); // BundlePHProvider or BundleJSProvider
 
   useEffect(() => {
     setPackages(npmProvider.getDataAllPackages());

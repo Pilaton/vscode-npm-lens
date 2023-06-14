@@ -132,7 +132,7 @@ const InfoExtended: FC<{ name: string }> = ({ name }) => {
             title="Unpacked Size"
           />
 
-          {sizeInfo.data?.dependencyCount && (
+          {sizeInfo.data?.dependencyCount !== undefined && (
             <DetailBlock
               label="Dependencies"
               value={
