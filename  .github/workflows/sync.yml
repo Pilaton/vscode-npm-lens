@@ -1,0 +1,36 @@
+# .github/workflows/sync.yml
+
+name: Sync Files
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v2
+        with:
+          path: source
+      - name: Checkout destination repository
+        uses: actions/checkout@v2
+        with:
+          repository: Pilaton/vscode-npm-lens-support # target repo
+          path: destination
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Copy files
+        run: |
+          cp vsix/*.vsix destination/
+          cp {CHANGELOG.md,README.md,LICENSE} destination/
+      - name: Push changes
+        working-directory: ./destination
+        run: |
+          git config user.name 'Mark'
+          git config user.email 'pilaton.ever@aleeas.com'
+          git add .
+          git commit -m 'Sync files'
+          git push
