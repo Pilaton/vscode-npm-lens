@@ -9,7 +9,9 @@ interface InfoShortProps {
 
 const InfoShort: FC<InfoShortProps> = ({ name, curVersion, children }) => (
   <>
-    <Typography sx={{ width: "40%", flexShrink: 0 }}>{name}</Typography>
+    <Typography sx={{ width: "40%", flexShrink: 0, fontSize: ".9375rem" }}>
+      {name}
+    </Typography>
 
     <Box sx={{ width: "20%", textAlign: "right", letterSpacing: "0.75px" }}>
       {curVersion}
