@@ -34,10 +34,10 @@ class BundlePHProvider extends BaseProvider {
         url: `https://bundlephobia.com/package/${packageName}`,
       };
     } catch (err) {
-      window.vscode.postMessage({
-        type: "error",
-        text: CONFIG.errorText + packageName,
-      });
+      // window.vscode.postMessage({
+      //   type: "error",
+      //   text: CONFIG.errorText + packageName,
+      // });
       return null;
     }
   }
