@@ -11,15 +11,22 @@ interface IBundlePHResponse {
 
 const CONFIG = {
   url: "https://bundlephobia.com/api/size?package=",
-  errorText: "«Bundlephobia» domain not available",
+  exceptions: ["@types/", "webpack-cli"],
+  errorText: "«Bundlephobia»: failed to get dependency size: ",
 };
 
 class BundlePHProvider extends BaseProvider {
   // eslint-disable-next-line class-methods-use-this
   async fetchBundleInfo(packageName: string): BundleSizesDataAsync {
+    const isException = CONFIG.exceptions.some((exception) =>
+      packageName.includes(exception)
+    );
+    if (isException) return null;
+
     try {
       const response = await fetch(`${CONFIG.url}${packageName}`);
       const parsedData = (await response.json()) as IBundlePHResponse;
+      console.log("BundlePHProvider · fetchBundleInfo · response:", response);
 
       return {
         gzip: parsedData.gzip,
@@ -30,7 +37,7 @@ class BundlePHProvider extends BaseProvider {
     } catch (err) {
       window.vscode.postMessage({
         type: "error",
-        text: CONFIG.errorText,
+        text: CONFIG.errorText + packageName,
       });
       return null;
     }
