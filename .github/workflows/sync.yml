@@ -17,6 +17,7 @@ jobs:
         with:
           repository: Pilaton/vscode-npm-lens-support # target repo
           path: destination
+          path: destination/public
           token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Copy files
