@@ -22,7 +22,7 @@ jobs:
       - name: Copy files
         run: |
           pwd
-          cp vsix/*.vsix destination/
+          cp ./vsix/*.vsix destination/
           cp {CHANGELOG.md,README.md,LICENSE} destination/
       - name: Push changes
         working-directory: ./destination
