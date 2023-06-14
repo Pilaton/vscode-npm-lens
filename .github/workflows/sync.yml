@@ -1,5 +1,3 @@
-# .github/workflows/sync.yml
-
 name: Sync Files
 
 on:
