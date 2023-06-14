@@ -117,8 +117,6 @@ class PanelController {
    * @returns {void}
    */
   private enableMessageHandler(): void {
-    let isSent = false;
-
     const messageTypes: {
       [key: string]: (msg: string) => Thenable<string | undefined>;
     } = {
@@ -129,16 +127,8 @@ class PanelController {
 
     this.panel?.webview.onDidReceiveMessage(
       ({ type, text }: { type: string; text: string }) => {
-        if (!isSent) {
-          const handler = messageTypes[type];
-          handler(text);
-          isSent = true;
-
-          // Reset isSent after 3 seconds
-          setTimeout(() => {
-            isSent = false;
-          }, 3000);
-        }
+        const handler = messageTypes[type];
+        handler(text);
       },
       undefined,
       this.context.subscriptions
