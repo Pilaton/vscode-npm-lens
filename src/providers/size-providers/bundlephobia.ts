@@ -11,17 +11,15 @@ interface IBundlePHResponse {
 
 const CONFIG = {
   url: "https://bundlephobia.com/api/size?package=",
-  exceptions: ["@types/", "webpack-cli"],
+  exceptions: ["^@types/", "^webpack-cli$", "^next$", "^eslint-config-next$"],
   errorText: "«Bundlephobia»: failed to get dependency size: ",
 };
+const regex = new RegExp(CONFIG.exceptions.join("|"));
 
 class BundlePHProvider extends BaseProvider {
   // eslint-disable-next-line class-methods-use-this
   async fetchBundleInfo(packageName: string): BundleSizesDataAsync {
-    const isException = CONFIG.exceptions.some((exception) =>
-      packageName.includes(exception)
-    );
-    if (isException) return null;
+    if (regex.test(packageName)) return null;
 
     try {
       const response = await fetch(`${CONFIG.url}${packageName}`);
