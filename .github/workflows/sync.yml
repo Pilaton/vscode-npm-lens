@@ -16,11 +16,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: Pilaton/vscode-npm-lens-support # target repo
-          path: destination/public
+          path: destination
           token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Copy files
         run: |
+          mkdir -p destination/public
           cp vsix/*.vsix destination/
           cp public/{Screenshot-extension.jpg,Screenshot-extension-2.png} destination/public/
           cp {CHANGELOG.md,README.md,LICENSE} destination/
