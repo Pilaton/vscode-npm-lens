@@ -1,5 +1,12 @@
 # Changelog
 
+### 1.1.3 (2023-06-14)
+
+### 🛠️ Bug Fixes
+
+* Added a list of exclusions for checking
+* Temporarily disabled notifications for Bundlephobia (the service is not completely stable at the moment)
+
 ### 1.1.2 (2023-06-14)
 
 ### 📝 Docs
