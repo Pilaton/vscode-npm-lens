@@ -9,10 +9,8 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source repository
+      - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          path: source
       - name: Checkout destination repository
         uses: actions/checkout@v2
         with:
@@ -21,7 +19,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Copy files
         run: |
-          ls -la
           cp vsix/*.vsix destination/
           cp {CHANGELOG.md,README.md,LICENSE} destination/
       - name: Push changes
