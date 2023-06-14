@@ -26,7 +26,6 @@ class BundlePHProvider extends BaseProvider {
     try {
       const response = await fetch(`${CONFIG.url}${packageName}`);
       const parsedData = (await response.json()) as IBundlePHResponse;
-      console.log("BundlePHProvider · fetchBundleInfo · response:", response);
 
       return {
         gzip: parsedData.gzip,

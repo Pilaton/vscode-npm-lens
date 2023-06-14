@@ -1,5 +1,5 @@
 import { Tabs, Tab, Box } from "@mui/material";
-import { FC, ReactNode, useMemo, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 
 import { PackageJson } from "../../types/global";
 import AccordionsDependency from "../Accordion";
@@ -33,22 +33,14 @@ const TabPanel: FC<TabPanelProps> = ({ children, index, activeTab }) => {
 const TabsDependency: FC = () => {
   const [activeTab, setActiveTab] = useState(0);
 
-  /* eslint-disable react-hooks/exhaustive-deps */
-  const tabsData = useMemo(
-    () =>
-      [
-        "dependencies",
-        "devDependencies",
-        "peerDependencies",
-        "peerDependenciesMeta",
-        "bundleDependencies",
-        "optionalDependencies",
-      ].filter(
-        (label): unknown => window.packageData[label as keyof PackageJson]
-      ),
-    [window.packageData]
-  );
-  /* eslint-enable react-hooks/exhaustive-deps */
+  const tabsData = [
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+    "peerDependenciesMeta",
+    "bundleDependencies",
+    "optionalDependencies",
+  ].filter((label): unknown => window.packageData[label as keyof PackageJson]);
 
   const handleTabChange = (_: React.SyntheticEvent, newTab: number): void =>
     setActiveTab(newTab);
