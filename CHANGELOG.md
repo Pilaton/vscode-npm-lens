@@ -1,5 +1,16 @@
 # Changelog
 
+### 1.1.2 (2023-06-14)
+
+### 📝 Docs
+
+* Edited the documentation
+
+### 🛠️ Bug Fixes
+
+* Disabled notification limit
+* Disabled sizing for «types»
+
 ### 1.1.1 (2023-06-14)
 
 ### 🛠️ Bug Fixes
