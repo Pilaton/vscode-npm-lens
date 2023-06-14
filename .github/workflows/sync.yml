@@ -1,4 +1,4 @@
-name: Sync Files2
+name: Sync Files
 
 on:
   push:
@@ -27,8 +27,9 @@ jobs:
       - name: Push changes
         working-directory: ./destination
         run: |
+          git config --list
           git config user.name 'Mark Fish'
-          git config user.email 'dev@pilaton.com'
+          git config user.email 'pilaton.ever@aleeas.com'
           git add .
           git commit -m 'Sync files'
           git push
