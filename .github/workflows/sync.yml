@@ -9,16 +9,21 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Checkout destination repository
         uses: actions/checkout@v3
         with:
           repository: Pilaton/vscode-npm-lens-support # target repo
           path: destination
           token: ${{ secrets.ACCESS_TOKEN }}
+
       - name: Copy files
         run: |
           cp vsix/*.vsix destination/
           cp {CHANGELOG.md,README.md,LICENSE} destination/
+
       - name: Push changes
         working-directory: ./destination
         run: |
