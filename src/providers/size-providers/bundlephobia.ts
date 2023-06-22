@@ -11,7 +11,13 @@ interface IBundlePHResponse {
 
 const CONFIG = {
   url: "https://bundlephobia.com/api/size?package=",
-  exceptions: ["^@types/", "^webpack-cli$", "^next$", "^eslint-config-next$"],
+  exceptions: [
+    "^@types/",
+    "^webpack-cli$",
+    "^next$",
+    "^eslint-config-next$",
+    "^firebase",
+  ],
   errorText: "«Bundlephobia»: failed to get dependency size: ",
 };
 const regex = new RegExp(CONFIG.exceptions.join("|"));
