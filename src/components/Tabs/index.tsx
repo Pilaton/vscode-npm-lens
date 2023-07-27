@@ -37,9 +37,6 @@ const TabsDependency: FC = () => {
     "dependencies",
     "devDependencies",
     "peerDependencies",
-    "peerDependenciesMeta",
-    "bundleDependencies",
-    "optionalDependencies",
   ].filter((label): unknown => window.packageData[label as keyof PackageJson]);
 
   const handleTabChange = (_: React.SyntheticEvent, newTab: number): void =>
