@@ -56,8 +56,8 @@ devDependencies:
     specifier: ^7.5.0
     version: 7.5.0
   '@types/vscode':
-    specifier: ^1.80.0
-    version: 1.80.0
+    specifier: ^1.75.0
+    version: 1.75.0
   '@types/webpack':
     specifier: ^5.28.1
     version: 5.28.1(webpack-cli@5.1.4)
@@ -2311,8 +2311,8 @@ packages:
     resolution: {integrity: sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==}
     dev: true
 
-  /@types/vscode@1.80.0:
-    resolution: {integrity: sha512-qK/CmOdS2o7ry3k6YqU4zD3R2AYlJfbwBoSbKpBoP+GpXNE+0NEgJOli4n0bm0diK5kfBnchgCEj4igQz/44Hg==}
+  /@types/vscode@1.75.0:
+    resolution: {integrity: sha512-SAr0PoOhJS6FUq5LjNr8C/StBKALZwDVm3+U4pjF/3iYkt3GioJOPV/oB1Sf1l7lROe4TgrMyL5N1yaEgTWycw==}
     dev: true
 
   /@types/webpack@5.28.1(webpack-cli@5.1.4):
@@ -3408,7 +3408,7 @@ packages:
       minimatch: 3.1.2
       object.values: 1.1.6
       resolve: 1.22.2
-      semver: 6.3.0
+      semver: 6.3.1
       tsconfig-paths: 3.14.2
     transitivePeerDependencies:
       - eslint-import-resolver-typescript
