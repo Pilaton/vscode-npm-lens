@@ -1,0 +1,10 @@
+{
+  "$schema": "https://unpkg.com/knip@2/schema.json",
+  "entry": ["src/extension.ts"],
+  "project": ["src/**/*.ts"],
+  "ignore": ["**/*.d.ts"],
+  "ignoreBinaries": ["rimraf", "standard-version", "vsce"],
+  "webpack": {
+    "config": ["webpack.*.{js,ts}"]
+  }
+}

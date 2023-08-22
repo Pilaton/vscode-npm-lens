@@ -38,7 +38,7 @@ interface IStateSizeInfo {
 
 type GetValue = (
   state: IStateSizeInfo,
-  key: keyof IBundleSizesData
+  key: keyof IBundleSizesData,
 ) => string | number | JSX.Element;
 
 /* -------------------------------------------------------------------------- */

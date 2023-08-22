@@ -34,6 +34,7 @@
   },
   "publisher": "Pilaton",
   "main": "./dist/extension.js",
+  "type": "module",
   "scripts": {
     "build:webpack": "webpack --config webpack.prod.js",
     "clean": "rimraf ./dist",
@@ -44,7 +45,8 @@
     "package": "vsce package --no-dependencies --out ./vsix",
     "postpackage": "npm run clean",
     "release": "standard-version --skip.commit --skip.tag",
-    "release-demo": "standard-version --dry-run --skip.commit --skip.tag"
+    "release-demo": "standard-version --dry-run --skip.commit --skip.tag",
+    "knip": "knip"
   },
   "contributes": {
     "views": {
@@ -94,9 +96,11 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.0",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "knip": "^2.19.9",
     "prettier": "^3.0.2",
     "ts-loader": "^9.4.4",
     "tslib": "^2.6.2",
