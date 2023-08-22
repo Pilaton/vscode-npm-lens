@@ -60,7 +60,7 @@ const AccordionsDependency: FC<{ deps: Dependencies }> = ({ deps }) => {
               <InfoExtended name={name} />
             </AccordionDetails>
           </Accordion>
-        )
+        ),
       )}
     </>
   );
