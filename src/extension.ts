@@ -1,54 +1,43 @@
 import * as vscode from "vscode";
 
 import Context from "./panels/context";
-import WebviewPanel from "./panels/WebviewPanel";
+import TreeViewPanelController from "./panels/TreeViewPanel";
+import WebViewPanelController from "./panels/WebViewPanel";
 import getRootPath from "./utils/getRootPath";
 
 /* -------------------------------------------------------------------------- */
 
 /**
- * Initialize the tree view in the explorer of Visual Studio Code.
- * @returns {object} The tree view object for npm-lens, this is of type vscode.TreeView<vscode.TreeItem>.
- */
-const initializeTreeView = (): vscode.TreeView<vscode.TreeItem> => {
-  const getTreeItem = (el: vscode.TreeItem): vscode.TreeItem => el;
-  const getChildren = (): never[] => [];
-  return vscode.window.createTreeView("npm-lens.treeView", {
-    treeDataProvider: { getTreeItem, getChildren },
-  });
-};
-
-/**
  * Handles the change in visibility of the tree view and manages the panel accordingly.
  * @param {object} e - The tree view visibility change event. This is of type vscode.TreeViewVisibilityChangeEvent.
- * @param {WebviewPanel} panelController - The controller for the panel.
+ * @param {WebviewPanel} webViewPanel - The controller for the panel.
  */
 const visibilityChangeHandler = (
   e: vscode.TreeViewVisibilityChangeEvent,
-  panelController: WebviewPanel,
+  webViewPanel: WebViewPanelController,
 ) => {
   if (e.visible) {
-    panelController.openPanel();
+    webViewPanel.open();
   } else {
-    panelController.closePanel();
+    webViewPanel.close();
   }
 };
 
 /**
  * Creates a file watcher for package.json and updates the panel when the file is changed.
  * @param {object} context - The extension context. This is of type vscode.ExtensionContext.
- * @param {PanelController} panelController - The controller for the panel.
+ * @param {WebViewPanelController} webViewPanel - The controller for the panel.
  */
 const packageJsonChangeListener = (
   context: vscode.ExtensionContext,
-  panelController: WebviewPanel,
+  webViewPanel: WebViewPanelController,
 ) => {
   const rootPath = getRootPath();
 
   const watcher = vscode.workspace.createFileSystemWatcher(
     `${rootPath}/package.json`,
   );
-  watcher.onDidChange(() => panelController.updatePanelContent());
+  watcher.onDidChange(() => webViewPanel.updateContent());
 
   context.subscriptions.push(watcher);
 };
@@ -61,16 +50,16 @@ export const activate = (context: vscode.ExtensionContext): void => {
   Context.setContext(context);
   console.log("======");
 
-  const panelController = new WebviewPanel();
+  const webViewPanel = new WebViewPanelController();
 
-  const treeView = initializeTreeView();
-  const visibilityChangeListener = treeView.onDidChangeVisibility((e) =>
-    visibilityChangeHandler(e, panelController),
+  const treeViewPanel = TreeViewPanelController.open();
+  const visibilityChangeListener = treeViewPanel.onDidChangeVisibility((e) =>
+    visibilityChangeHandler(e, webViewPanel),
   );
 
   context.subscriptions.push(visibilityChangeListener);
 
-  packageJsonChangeListener(context, panelController);
+  packageJsonChangeListener(context, webViewPanel);
 };
 
 /**

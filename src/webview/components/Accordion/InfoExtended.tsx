@@ -11,11 +11,11 @@ import {
 } from "@mui/material";
 import { ComponentProps, FC, useEffect, useState } from "react";
 
+import { IPackageData } from "../../../providers/npm-provider";
+import { IBundleSizesData } from "../../../types/bundleSizes";
 import { ReactComponent as BundlephobiaIcon } from "../../assets/bundlephobia.svg";
 import { ReactComponent as NpmIcon } from "../../assets/npm.svg";
-import { IPackageData } from "../../providers/npm-provider";
 import useStore from "../../store/store";
-import { IBundleSizesData } from "../../types/bundleSizes";
 import convertSize from "../../utils/convertSize";
 
 /* -------------------------------------------------------------------------- */

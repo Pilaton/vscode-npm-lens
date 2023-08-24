@@ -8,7 +8,7 @@ import Context from "./context";
 const errorStyle =
   "height: 100svh;font-size: 1.25rem;display: flex;justify-content: center;align-items: center;";
 
-class PanelController {
+class WebViewPanelController {
   /* eslint-disable @typescript-eslint/lines-between-class-members */
   private panel?: vscode.WebviewPanel;
   private readonly context = Context.getContext();
@@ -35,7 +35,7 @@ class PanelController {
    * Opens a new webview panel in Visual Studio Code or reveals the existing one.
    * @returns {void}
    */
-  openPanel(): void {
+  open(): void {
     if (this.panel) {
       this.panel.reveal(vscode.ViewColumn.One);
       return;
@@ -57,7 +57,7 @@ class PanelController {
       this.panel = undefined;
     });
 
-    this.updatePanelContent();
+    this.updateContent();
     this.enableMessageHandler();
   }
 
@@ -65,7 +65,7 @@ class PanelController {
    * Updates the content of the webview panel with the package.json file or an error message.
    * @returns {void}
    */
-  updatePanelContent(): void {
+  updateContent(): void {
     if (!this.panel) return;
 
     let content: string;
@@ -147,9 +147,9 @@ class PanelController {
    * Closes the webview panel if it's currently open.
    * @returns {void}
    */
-  closePanel(): void {
+  close(): void {
     this.panel?.dispose();
   }
 }
 
-export default PanelController;
+export default WebViewPanelController;

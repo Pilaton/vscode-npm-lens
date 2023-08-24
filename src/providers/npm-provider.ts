@@ -42,7 +42,7 @@ export interface IExtendedVersion extends ICoerceVersion {
 export type PackageDataAsync = Promise<IPackageData | null>;
 
 type ConvertToExtendedVersion = (
-  args: Record<string, string>
+  args: Record<string, string>,
 ) => IPackageData["version"];
 
 /* -------------------------------------------------------------------------- */
@@ -77,7 +77,7 @@ class NPM {
 
   private static async getPackage(
     packageName: string,
-    currentVersion: string
+    currentVersion: string,
   ): PackageDataAsync {
     try {
       const response = await fetch(`https://registry.npmjs.org/${packageName}`);
@@ -119,7 +119,7 @@ class NPM {
 
     const checker = diff(
       curVersion.version,
-      newVersion.version
+      newVersion.version,
     ) as IExtendedVersion["updateType"];
 
     if (!checker) return null;

@@ -3,10 +3,9 @@ import { ThemeProvider, styled } from "@mui/material/styles";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { ReactComponent as Logo } from "../assets/logo.svg";
-import Layout from "../components/Layout";
-import TabsDependency from "../components/Tabs";
-
+import { ReactComponent as Logo } from "./assets/logo.svg";
+import Layout from "./components/Layout";
+import TabsDependency from "./components/Tabs";
 import theme from "./theme";
 
 const rootElement = document.getElementById("root");

@@ -1,7 +1,7 @@
 import { Tabs, Tab, Box } from "@mui/material";
 import { FC, ReactNode, useState } from "react";
 
-import { PackageJson } from "../../types/global";
+import { PackageJson } from "../../../types/global";
 import AccordionsDependency from "../Accordion";
 
 import CounterDependency from "./CounterDependency";

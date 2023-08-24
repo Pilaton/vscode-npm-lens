@@ -2,7 +2,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, CircularProgress } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
-import NPM, { IPackageData } from "../../providers/npm-provider";
+import NPM, { IPackageData } from "../../../providers/npm-provider";
 
 interface IVersionStatusProps {
   props: {

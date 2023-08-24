@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
-import { PackageDataAsync } from "../providers/npm-provider";
-import { BundleSizesDataAsync } from "../types/bundleSizes";
+import { PackageDataAsync } from "../../providers/npm-provider";
+import { BundleSizesDataAsync } from "../../types/bundleSizes";
 
 export type PackagesState = Record<string, PackageDataAsync>;
 export type BundlesState = Record<string, BundleSizesDataAsync>;

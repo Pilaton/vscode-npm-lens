@@ -2,10 +2,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { FC, useEffect, useMemo, useState } from "react";
 
-import NPM from "../../providers/npm-provider";
-import BundlePHProvider from "../../providers/size-providers/bundlephobia";
+import NPM from "../../../providers/npm-provider";
+import BundlePHProvider from "../../../providers/size-providers/bundlephobia";
+import { Dependencies } from "../../../types/global";
 import useStore from "../../store/store";
-import { Dependencies } from "../../types/global";
 
 import InfoExtended from "./InfoExtended";
 import InfoShort from "./InfoShort";

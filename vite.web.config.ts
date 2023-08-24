@@ -26,6 +26,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
         input: "src/webview/webview.tsx",
         output: {
           entryFileNames: "[name].js",
+          format: "esm",
         },
       },
     },
