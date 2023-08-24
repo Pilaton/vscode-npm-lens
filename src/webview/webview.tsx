@@ -3,7 +3,7 @@ import { ThemeProvider, styled } from "@mui/material/styles";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import Logo from "../assets/logo.svg";
+import { ReactComponent as Logo } from "../assets/logo.svg";
 import Layout from "../components/Layout";
 import TabsDependency from "../components/Tabs";
 
@@ -47,5 +47,5 @@ root.render(
         <TabsDependency />
       </Layout>
     </ThemeProvider>
-  </StrictMode>
+  </StrictMode>,
 );

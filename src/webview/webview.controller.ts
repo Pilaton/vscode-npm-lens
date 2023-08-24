@@ -1,5 +1,3 @@
-import path from "path";
-
 import * as vscode from "vscode";
 
 import { PackageJson } from "../types/global";
@@ -50,9 +48,9 @@ class PanelController {
       {
         enableScripts: true,
         localResourceRoots: [
-          vscode.Uri.file(path.join(this.context.extensionPath, "dist")),
+          vscode.Uri.joinPath(this.context.extensionUri, "dist"),
         ],
-      }
+      },
     );
 
     this.panel.onDidDispose(() => {
@@ -82,7 +80,7 @@ class PanelController {
 
     this.panel.webview.html = this.webviewHtmlTemplate.replace(
       "%%CONTENT%%",
-      content
+      content,
     );
   }
 
@@ -92,8 +90,10 @@ class PanelController {
    * @returns {string} The HTML content with the package.json data embedded.
    */
   private getContentWithPackageJson(packageJson: PackageJson): string {
-    const reactAppPath = vscode.Uri.file(
-      path.join(this.context.extensionPath, "dist", "webview.js")
+    const reactAppPath = vscode.Uri.joinPath(
+      this.context.extensionUri,
+      "dist",
+      "webview.js",
     );
     const reactAppUri = this.panel?.webview.asWebviewUri(reactAppPath);
     if (!reactAppUri) throw new Error("Failed to get react app uri");
@@ -131,7 +131,7 @@ class PanelController {
         handler(text);
       },
       undefined,
-      this.context.subscriptions
+      this.context.subscriptions,
     );
   }
 

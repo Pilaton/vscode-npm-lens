@@ -7,15 +7,23 @@
 
   "configurations": [
     {
-      "name": "Run Webpack compile test",
+      "name": "Vite dev",
       "type": "extensionHost",
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "preLaunchTask": "DevWebpackTask"
+      "preLaunchTask": "devViteBuild"
     },
     {
-      "name": "Run TypeScript compile [test]",
+      "name": "Vite preview",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "preLaunchTask": "previewViteBuild"
+    },
+    {
+      "name": "TypeScript compile [test]",
       "type": "extensionHost",
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],

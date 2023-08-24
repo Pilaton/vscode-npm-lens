@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import { ComponentProps, FC, useEffect, useState } from "react";
 
-import BundlephobiaIcon from "../../assets/bundlephobia.svg";
-import NpmIcon from "../../assets/npm.svg";
+import { ReactComponent as BundlephobiaIcon } from "../../assets/bundlephobia.svg";
+import { ReactComponent as NpmIcon } from "../../assets/npm.svg";
 import { IPackageData } from "../../providers/npm-provider";
 import useStore from "../../store/store";
 import { IBundleSizesData } from "../../types/bundleSizes";

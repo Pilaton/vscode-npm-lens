@@ -1,7 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": "latest",
     "sourceType": "module",
     "project": "./tsconfig.json",
     "ecmaFeatures": {
@@ -68,5 +68,5 @@
       }
     ]
   },
-  "ignorePatterns": ["out", "dist"]
+  "ignorePatterns": ["out", "dist", "vite.*.ts"]
 }

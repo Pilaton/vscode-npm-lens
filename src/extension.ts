@@ -25,7 +25,7 @@ const initializeTreeView = (): vscode.TreeView<vscode.TreeItem> => {
  */
 const visibilityChangeHandler = (
   e: vscode.TreeViewVisibilityChangeEvent,
-  panelController: PanelController
+  panelController: PanelController,
 ) => {
   if (e.visible) {
     panelController.openPanel();
@@ -41,12 +41,12 @@ const visibilityChangeHandler = (
  */
 const packageJsonChangeListener = (
   context: vscode.ExtensionContext,
-  panelController: PanelController
+  panelController: PanelController,
 ) => {
   const rootPath = getRootPath();
 
   const watcher = vscode.workspace.createFileSystemWatcher(
-    `${rootPath}/package.json`
+    `${rootPath}/package.json`,
   );
   watcher.onDidChange(() => panelController.updatePanelContent());
 
@@ -65,7 +65,7 @@ export const activate = (context: vscode.ExtensionContext): void => {
 
   const treeView = initializeTreeView();
   const visibilityChangeListener = treeView.onDidChangeVisibility((e) =>
-    visibilityChangeHandler(e, panelController)
+    visibilityChangeHandler(e, panelController),
   );
 
   context.subscriptions.push(visibilityChangeListener);

@@ -4,11 +4,18 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "DevWebpackTask",
+      "label": "devViteBuild",
       "type": "npm",
-      "script": "dev:webpack",
+      "script": "dev:all",
       "isBackground": true,
-      "problemMatcher": ["$tsc", "$ts-webpack-watch", "$ts-webpack"]
+      "problemMatcher": []
+    },
+    {
+      "label": "previewViteBuild",
+      "type": "npm",
+      "script": "build:all",
+      "isBackground": true,
+      "problemMatcher": []
     },
     {
       "label": "DevTSTask",
