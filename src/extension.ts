@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 
+import Context from "./panels/context";
+import WebviewPanel from "./panels/WebviewPanel";
 import getRootPath from "./utils/getRootPath";
-import Context from "./webview/context";
-import PanelController from "./webview/webview.controller";
 
 /* -------------------------------------------------------------------------- */
 
@@ -21,11 +21,11 @@ const initializeTreeView = (): vscode.TreeView<vscode.TreeItem> => {
 /**
  * Handles the change in visibility of the tree view and manages the panel accordingly.
  * @param {object} e - The tree view visibility change event. This is of type vscode.TreeViewVisibilityChangeEvent.
- * @param {PanelController} panelController - The controller for the panel.
+ * @param {WebviewPanel} panelController - The controller for the panel.
  */
 const visibilityChangeHandler = (
   e: vscode.TreeViewVisibilityChangeEvent,
-  panelController: PanelController,
+  panelController: WebviewPanel,
 ) => {
   if (e.visible) {
     panelController.openPanel();
@@ -41,7 +41,7 @@ const visibilityChangeHandler = (
  */
 const packageJsonChangeListener = (
   context: vscode.ExtensionContext,
-  panelController: PanelController,
+  panelController: WebviewPanel,
 ) => {
   const rootPath = getRootPath();
 
@@ -61,7 +61,7 @@ export const activate = (context: vscode.ExtensionContext): void => {
   Context.setContext(context);
   console.log("======");
 
-  const panelController = new PanelController();
+  const panelController = new WebviewPanel();
 
   const treeView = initializeTreeView();
   const visibilityChangeListener = treeView.onDidChangeVisibility((e) =>

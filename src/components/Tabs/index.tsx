@@ -70,7 +70,7 @@ const TabsDependency: FC = () => {
                 label={label}
                 sx={{ textTransform: "inherit" }}
               />
-            )
+            ),
           )}
         </Tabs>
         <CounterDependency />
@@ -82,7 +82,7 @@ const TabsDependency: FC = () => {
               deps={window.packageData[label as keyof PackageJson] || {}}
             />
           </TabPanel>
-        )
+        ),
       )}
     </>
   );

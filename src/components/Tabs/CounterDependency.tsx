@@ -45,7 +45,7 @@ const CounterDependency = () => {
           acc.unpacked += data?.size || 0;
           return acc;
         },
-        { unpacked: 0 }
+        { unpacked: 0 },
       );
     };
 
@@ -58,7 +58,7 @@ const CounterDependency = () => {
           acc.minified += data?.size || 0;
           return acc;
         },
-        { gzip: 0, minified: 0 }
+        { gzip: 0, minified: 0 },
       );
     };
 
