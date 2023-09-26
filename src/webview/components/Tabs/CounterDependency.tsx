@@ -41,6 +41,10 @@ const CounterDependency = () => {
 
   useEffect(() => {
     const fetchPackages = async (): Promise<FetchPackages> => {
+      setCounts({
+        unpacked: 0,
+      });
+
       const readyPackages = await Promise.all(Object.values(packages));
 
       return readyPackages.reduce(
