@@ -19,7 +19,6 @@ class BundleJSProvider extends BaseProvider {
   async fetchBundleInfo(packageName: string): BundleSizesDataAsync {
     try {
       const response = await fetch(`${CONFIG.url}${packageName}`);
-
       const parsedData = (await response.json()) as IBundleJSResponse;
 
       return {

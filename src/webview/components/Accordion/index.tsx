@@ -3,7 +3,7 @@ import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { FC, useEffect, useMemo, useState } from "react";
 
 import NPM from "../../../providers/npm-provider";
-import BundlePHProvider from "../../../providers/size-providers/bundlephobia";
+// import BundlePHProvider from "../../../providers/size-providers/bundlephobia"; // TODO: size-provider is off
 import { Dependencies } from "../../../types/global";
 import useStore from "../../store/store";
 
@@ -13,14 +13,15 @@ import VersionStatus from "./VersionStatus";
 
 const AccordionsDependency: FC<{ deps: Dependencies }> = ({ deps }) => {
   const [expandedItem, setExpandedItem] = useState<string | false>(false);
-  const { setPackages, setBundles } = useStore.getState();
+  // const { setPackages, setBundles } = useStore.getState(); // TODO: size-provider is off
+  const { setPackages } = useStore.getState();
 
   const npmProvider = useMemo(() => new NPM(deps), [deps]);
-  const sizeProviders = useMemo(() => new BundlePHProvider(deps), [deps]); // BundlePHProvider or BundleJSProvider
+  // const sizeProviders = useMemo(() => new BundlePHProvider(deps), [deps]); // BundlePHProvider or BundleJSProvider // TODO: size-provider is off
 
   useEffect(() => {
     setPackages(npmProvider.getDataAllPackages());
-    setBundles(sizeProviders.getDataAllBundles());
+    // setBundles(sizeProviders.getDataAllBundles()); // TODO: size-provider is off
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deps]);
 
