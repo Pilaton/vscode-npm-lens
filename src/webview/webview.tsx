@@ -3,7 +3,7 @@ import { ThemeProvider, styled } from "@mui/material/styles";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { ReactComponent as Logo } from "./assets/logo.svg";
+import Logo from "./assets/logo.svg?react";
 import Layout from "./components/Layout";
 import TabsDependency from "./components/Tabs";
 import theme from "./theme";

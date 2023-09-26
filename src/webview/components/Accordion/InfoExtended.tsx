@@ -14,7 +14,7 @@ import { ComponentProps, FC, useEffect, useState } from "react";
 import { IPackageData } from "../../../providers/npm-provider";
 // import { IBundleSizesData } from "../../../types/bundleSizes"; // TODO: size-provider is off
 // import { ReactComponent as BundlephobiaIcon } from "../../assets/bundlephobia.svg"; // TODO: size-provider is off
-import { ReactComponent as NpmIcon } from "../../assets/npm.svg";
+import NpmIcon from "../../assets/npm.svg?react";
 import useStore from "../../store/store";
 import convertSize from "../../utils/convertSize";
 
