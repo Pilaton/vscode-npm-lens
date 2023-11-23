@@ -24,7 +24,7 @@ interface FetchPackages {
 
 /* -------------------------------------------------------------------------- */
 
-const CounterDependency = () => {
+function CounterDependency() {
   const [counts, setCounts] = useState<CountState>({
     // gzip: 0, // TODO: size-provider is off
     // minified: 0, // TODO: size-provider is off
@@ -113,5 +113,5 @@ const CounterDependency = () => {
       ))}
     </Stack>
   );
-};
+}
 export default CounterDependency;

@@ -1,11 +1,11 @@
-import { BundleSizesDataAsync } from "../../types/bundleSizes";
-import { Dependencies } from "../../types/global";
+import { type BundleSizesDataAsync } from "../../types/bundleSizes";
+import { type Dependencies } from "../../types/global";
 
-interface IBundleSizeProvider {
+type IBundleSizeProvider = {
   fetchBundleInfo(packageName: string): BundleSizesDataAsync;
   getBundleData(packageName: string): BundleSizesDataAsync;
   getDataAllBundles(): Record<string, BundleSizesDataAsync>;
-}
+};
 
 abstract class BaseProvider implements IBundleSizeProvider {
   protected bundles: Record<string, BundleSizesDataAsync> = {};

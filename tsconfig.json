@@ -5,16 +5,15 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["dom", "ESNext"],
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "noImplicitAny": true,
-    "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
     "target": "ESNext",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"]
+      "src/*": ["src/*"]
     },
     "useDefineForClassFields": true
   },

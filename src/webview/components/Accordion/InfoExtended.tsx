@@ -9,7 +9,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { ComponentProps, FC, useEffect, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 
 import { IPackageData } from "../../../providers/npm-provider";
 // import { IBundleSizesData } from "../../../types/bundleSizes"; // TODO: size-provider is off
@@ -43,19 +43,16 @@ interface IStateNPMInfo {
 
 /* -------------------------------------------------------------------------- */
 
-export const DetailBlock: FC<IDetailBlock> = ({
-  label,
-  value,
-  title,
-  ...props
-}) => (
-  <Tooltip title={title || ""} arrow placement="top" enterDelay={50}>
-    <Stack spacing={0.5} {...props}>
-      <Box sx={{ opacity: 0.7 }}>{label}</Box>
-      <Box whiteSpace="nowrap">{value}</Box>
-    </Stack>
-  </Tooltip>
-);
+export function DetailBlock({ label, value, title = "" }: IDetailBlock) {
+  return (
+    <Tooltip title={title} arrow placement="top" enterDelay={50}>
+      <Stack spacing={0.5}>
+        <Box sx={{ opacity: 0.7 }}>{label}</Box>
+        <Box whiteSpace="nowrap">{value}</Box>
+      </Stack>
+    </Tooltip>
+  );
+}
 
 /* -------------------------------------------------------------------------- */
 
@@ -73,7 +70,7 @@ export const DetailBlock: FC<IDetailBlock> = ({
 
 /* -------------------------------------------------------------------------- */
 
-const InfoExtended: FC<{ name: string }> = ({ name }) => {
+function InfoExtended({ name }: { name: string }) {
   const [npmInfo, setNpmInfo] = useState<IStateNPMInfo>({
     data: null,
     isPending: true,
@@ -204,6 +201,6 @@ const InfoExtended: FC<{ name: string }> = ({ name }) => {
   ) : (
     <div>Loading...</div>
   );
-};
+}
 
 export default InfoExtended;

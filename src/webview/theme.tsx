@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material";
 
-// const getVSCodeStyle = (property: string): string =>
+// Const getVSCodeStyle = (property: string): string =>
 //   getComputedStyle(document.documentElement)
 //     .getPropertyValue(property)
 //     .trim() || "transparent";

@@ -1,4 +1,4 @@
-import { ExtensionContext } from "vscode";
+import { type ExtensionContext } from "vscode";
 
 class Context {
   private static context: ExtensionContext;

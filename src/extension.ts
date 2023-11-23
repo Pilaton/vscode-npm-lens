@@ -37,7 +37,9 @@ const packageJsonChangeListener = (
   const watcher = vscode.workspace.createFileSystemWatcher(
     `${rootPath}/package.json`,
   );
-  watcher.onDidChange(() => webViewPanel.updateContent());
+  watcher.onDidChange(() => {
+    webViewPanel.updateContent();
+  });
 
   context.subscriptions.push(watcher);
 };
@@ -53,9 +55,9 @@ export const activate = (context: vscode.ExtensionContext): void => {
   const webViewPanel = new WebViewPanelController();
 
   const treeViewPanel = TreeViewPanelController.open();
-  const visibilityChangeListener = treeViewPanel.onDidChangeVisibility((e) =>
-    visibilityChangeHandler(e, webViewPanel),
-  );
+  const visibilityChangeListener = treeViewPanel.onDidChangeVisibility((e) => {
+    visibilityChangeHandler(e, webViewPanel);
+  });
 
   context.subscriptions.push(visibilityChangeListener);
 

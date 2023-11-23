@@ -1,17 +1,17 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
-import { FC, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import NPM from "../../../providers/npm-provider";
-// import BundlePHProvider from "../../../providers/size-providers/bundlephobia"; // TODO: size-provider is off
 import { Dependencies } from "../../../types/global";
 import useStore from "../../store/store";
 
 import InfoExtended from "./InfoExtended";
 import InfoShort from "./InfoShort";
 import VersionStatus from "./VersionStatus";
+// import BundlePHProvider from "../../../providers/size-providers/bundlephobia"; // TODO: size-provider is off
 
-const AccordionsDependency: FC<{ deps: Dependencies }> = ({ deps }) => {
+function AccordionsDependency({ deps }: { deps: Dependencies }) {
   const [expandedItem, setExpandedItem] = useState<string | false>(false);
   // const { setPackages, setBundles } = useStore.getState(); // TODO: size-provider is off
   const { setPackages } = useStore.getState();
@@ -22,7 +22,6 @@ const AccordionsDependency: FC<{ deps: Dependencies }> = ({ deps }) => {
   useEffect(() => {
     setPackages(npmProvider.getDataAllPackages());
     // setBundles(sizeProviders.getDataAllBundles()); // TODO: size-provider is off
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deps]);
 
   const handleAccordionChange =
@@ -65,5 +64,5 @@ const AccordionsDependency: FC<{ deps: Dependencies }> = ({ deps }) => {
       )}
     </>
   );
-};
+}
 export default AccordionsDependency;

@@ -1,5 +1,5 @@
 import { Tabs, Tab, Box } from "@mui/material";
-import { FC, ReactNode, useState } from "react";
+import { useState } from "react";
 
 import { PackageJson } from "../../../types/global";
 import AccordionsDependency from "../Accordion";
@@ -7,14 +7,18 @@ import AccordionsDependency from "../Accordion";
 import CounterDependency from "./CounterDependency";
 
 interface TabPanelProps {
-  children?: ReactNode;
+  children: React.ReactNode;
   index: number;
   activeTab: number;
 }
 
 /* -------------------------------------------------------------------------- */
 
-const TabPanel: FC<TabPanelProps> = ({ children, index, activeTab }) => {
+function TabPanel({
+  children,
+  index,
+  activeTab,
+}: TabPanelProps): React.ReactElement {
   const isCurrentTab = index === activeTab;
   return (
     <div
@@ -26,11 +30,11 @@ const TabPanel: FC<TabPanelProps> = ({ children, index, activeTab }) => {
       {isCurrentTab && <Box sx={{ py: 2 }}>{children}</Box>}
     </div>
   );
-};
+}
 
 /* -------------------------------------------------------------------------- */
 
-const TabsDependency: FC = () => {
+function TabsDependency() {
   const [activeTab, setActiveTab] = useState(0);
 
   const tabsData = [
@@ -86,5 +90,5 @@ const TabsDependency: FC = () => {
       )}
     </>
   );
-};
+}
 export default TabsDependency;

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-import { PackageJson } from "../types/global";
+import { type PackageJson } from "../types/global";
 import getPackageJson from "../utils/getPackageJson";
 
 import Context from "./context";
@@ -9,10 +9,12 @@ const errorStyle =
   "height: 100svh;font-size: 1.25rem;display: flex;justify-content: center;align-items: center;";
 
 class WebViewPanelController {
-  /* eslint-disable @typescript-eslint/lines-between-class-members */
   private panel?: vscode.WebviewPanel;
+
   private readonly context = Context.getContext();
+
   private readonly webViewType = "npmLens.webView";
+
   private readonly webViewTitle = "npmLens";
 
   private get webviewHtmlTemplate() {
@@ -29,7 +31,6 @@ class WebViewPanelController {
       </body>
       </html>`;
   }
-  /* eslint-enable @typescript-eslint/lines-between-class-members */
 
   /**
    * Opens a new webview panel in Visual Studio Code or reveals the existing one.
@@ -117,9 +118,10 @@ class WebViewPanelController {
    * @returns {void}
    */
   private enableMessageHandler(): void {
-    const messageTypes: {
-      [key: string]: (msg: string) => Thenable<string | undefined>;
-    } = {
+    const messageTypes: Record<
+      string,
+      (msg: string) => Thenable<string | undefined>
+    > = {
       info: vscode.window.showInformationMessage,
       warning: vscode.window.showWarningMessage,
       error: vscode.window.showErrorMessage,

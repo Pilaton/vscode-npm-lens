@@ -1,5 +1,5 @@
 import { Typography, Box } from "@mui/material";
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface InfoShortProps {
   name: string;
@@ -7,19 +7,21 @@ interface InfoShortProps {
   children: ReactNode;
 }
 
-const InfoShort: FC<InfoShortProps> = ({ name, curVersion, children }) => (
-  <>
-    <Typography sx={{ width: "40%", flexShrink: 0, fontSize: ".9375rem" }}>
-      {name}
-    </Typography>
+function InfoShort({ name, curVersion, children }: InfoShortProps) {
+  return (
+    <>
+      <Typography sx={{ width: "40%", flexShrink: 0, fontSize: ".9375rem" }}>
+        {name}
+      </Typography>
 
-    <Box sx={{ width: "20%", textAlign: "right", letterSpacing: "0.75px" }}>
-      {curVersion}
-    </Box>
+      <Box sx={{ width: "20%", textAlign: "right", letterSpacing: "0.75px" }}>
+        {curVersion}
+      </Box>
 
-    <Box sx={{ width: "20%", textAlign: "right" }}>{children}</Box>
+      <Box sx={{ width: "20%", textAlign: "right" }}>{children}</Box>
 
-    <Box sx={{ width: "20%" }}></Box>
-  </>
-);
+      <Box sx={{ width: "20%" }} />
+    </>
+  );
+}
 export default InfoShort;

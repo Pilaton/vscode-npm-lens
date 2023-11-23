@@ -1,6 +1,6 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, CircularProgress } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import NPM, { IPackageData } from "../../../providers/npm-provider";
 
@@ -63,9 +63,7 @@ const getStatus: GetStatus = (newVer) => {
   return status[updateType];
 };
 
-const VersionStatus: FC<IVersionStatusProps> = ({
-  props: { name, npmProvider },
-}) => {
+function VersionStatus({ props: { name, npmProvider } }: IVersionStatusProps) {
   const [packageData, setPackageData] = useState<IVersionState>({
     version: null,
     isPending: true,
@@ -78,8 +76,6 @@ const VersionStatus: FC<IVersionStatusProps> = ({
 
       setPackageData({ version, isPending: false });
     })();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
 
   return packageData.isPending ? (
@@ -87,6 +83,6 @@ const VersionStatus: FC<IVersionStatusProps> = ({
   ) : (
     <Box sx={{ letterSpacing: "0.75px" }}>{getStatus(packageData.version)}</Box>
   );
-};
+}
 
 export default VersionStatus;
