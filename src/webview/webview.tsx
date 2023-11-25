@@ -4,16 +4,16 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import Logo from "./assets/logo.svg?react";
-import Layout from "./components/Layout";
+import Layout from "./components/layout";
 import TabsDependency from "./components/Tabs";
 import theme from "./theme";
 
-const rootElement = document.getElementById("root");
+const rootElement = document.querySelector("#root");
 if (!rootElement) {
   throw new Error("No element with id 'root' found in the document.");
 }
 
-const versionExt = window.versionExtension;
+const { versionExtension } = window;
 
 const root = createRoot(rootElement);
 
@@ -37,9 +37,9 @@ root.render(
               }}
             />
 
-            <h1 style={{ paddingInline: "16px" }}>npmLens</h1>
+            <h1 style={{ paddingInline: "16px" }}>npmLens DEV</h1>
 
-            {versionExt && <BoxVersion>v{versionExt}</BoxVersion>}
+            {versionExtension && <BoxVersion>v{versionExtension}</BoxVersion>}
           </Stack>
         </header>
 

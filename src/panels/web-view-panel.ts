@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 
 import { type PackageJson } from "../types/global";
-import getPackageJson from "../utils/getPackageJson";
+import getPackageJson from "../utils/get-package-json";
 
 import Context from "./context";
 
@@ -99,13 +99,15 @@ class WebViewPanelController {
     const reactAppUri = this.panel?.webview.asWebviewUri(reactAppPath);
     if (!reactAppUri) throw new Error("Failed to get react app uri");
 
-    const pkgJSONExt = this.context.extension.packageJSON as {
+    const packageJSONExtension = this.context.extension.packageJSON as {
       version: string;
     };
     return `
       <script>
         window.packageData = ${JSON.stringify(packageJson)};
-        window.versionExtension = ${JSON.stringify(pkgJSONExt.version)};
+        window.versionExtension = ${JSON.stringify(
+          packageJSONExtension.version,
+        )};
         window.vscode = acquireVsCodeApi();
       </script>
       <div id="root"></div>
@@ -120,7 +122,7 @@ class WebViewPanelController {
   private enableMessageHandler(): void {
     const messageTypes: Record<
       string,
-      (msg: string) => Thenable<string | undefined>
+      (message: string) => Thenable<string | undefined>
     > = {
       info: vscode.window.showInformationMessage,
       warning: vscode.window.showWarningMessage,

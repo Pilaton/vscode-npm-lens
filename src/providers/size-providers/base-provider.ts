@@ -1,4 +1,4 @@
-import { type BundleSizesDataAsync } from "../../types/bundleSizes";
+import { type BundleSizesDataAsync } from "../../types/bundle-sizes";
 import { type Dependencies } from "../../types/global";
 
 type IBundleSizeProvider = {

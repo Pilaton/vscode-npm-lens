@@ -11,7 +11,7 @@ const getRootPath = (): string => {
     if (!rootPath) throw new Error();
 
     return rootPath;
-  } catch (error) {
+  } catch {
     throw new Error("Workspace is empty...");
   }
 };

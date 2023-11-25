@@ -4,22 +4,22 @@ import { useEffect, useState } from "react";
 
 import NPM, { IPackageData } from "../../../providers/npm-provider";
 
-interface IVersionStatusProps {
+interface IVersionStatusProperties {
   props: {
     name: string;
     npmProvider: NPM;
   };
 }
 
-type GetStatus = (newVer: IPackageData["version"]) => JSX.Element;
+type GetStatus = (newVersion: IPackageData["version"]) => JSX.Element;
 
 interface IVersionState {
   version: IPackageData["version"] | null;
   isPending: boolean;
 }
 
-const getStatus: GetStatus = (newVer) => {
-  if (!newVer) {
+const getStatus: GetStatus = (newVersion) => {
+  if (!newVersion) {
     return (
       <CheckCircleIcon
         sx={{
@@ -30,7 +30,7 @@ const getStatus: GetStatus = (newVer) => {
     );
   }
 
-  const { major, minor, patch, updateType } = newVer;
+  const { major, minor, patch, updateType } = newVersion;
 
   const baseStyle = { fontWeight: 500 };
   const styles = {
@@ -63,7 +63,9 @@ const getStatus: GetStatus = (newVer) => {
   return status[updateType];
 };
 
-function VersionStatus({ props: { name, npmProvider } }: IVersionStatusProps) {
+function VersionStatus({
+  props: { name, npmProvider },
+}: IVersionStatusProperties) {
   const [packageData, setPackageData] = useState<IVersionState>({
     version: null,
     isPending: true,
@@ -71,8 +73,8 @@ function VersionStatus({ props: { name, npmProvider } }: IVersionStatusProps) {
 
   useEffect(() => {
     (async () => {
-      const res = await npmProvider.getPackageData(name);
-      const version = res && res.version;
+      const result = await npmProvider.getPackageData(name);
+      const version = result && result.version;
 
       setPackageData({ version, isPending: false });
     })();

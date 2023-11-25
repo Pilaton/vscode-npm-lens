@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 
 import Context from "./panels/context";
-import TreeViewPanelController from "./panels/TreeViewPanel";
-import WebViewPanelController from "./panels/WebViewPanel";
-import getRootPath from "./utils/getRootPath";
+import TreeViewPanelController from "./panels/tree-view-panel";
+import WebViewPanelController from "./panels/web-view-panel";
+import getRootPath from "./utils/get-root-path";
 
 /* -------------------------------------------------------------------------- */
 
@@ -13,10 +13,10 @@ import getRootPath from "./utils/getRootPath";
  * @param {WebviewPanel} webViewPanel - The controller for the panel.
  */
 const visibilityChangeHandler = (
-  e: vscode.TreeViewVisibilityChangeEvent,
+  event: vscode.TreeViewVisibilityChangeEvent,
   webViewPanel: WebViewPanelController,
 ) => {
-  if (e.visible) {
+  if (event.visible) {
     webViewPanel.open();
   } else {
     webViewPanel.close();
@@ -55,9 +55,11 @@ export const activate = (context: vscode.ExtensionContext): void => {
   const webViewPanel = new WebViewPanelController();
 
   const treeViewPanel = TreeViewPanelController.open();
-  const visibilityChangeListener = treeViewPanel.onDidChangeVisibility((e) => {
-    visibilityChangeHandler(e, webViewPanel);
-  });
+  const visibilityChangeListener = treeViewPanel.onDidChangeVisibility(
+    (event) => {
+      visibilityChangeHandler(event, webViewPanel);
+    },
+  );
 
   context.subscriptions.push(visibilityChangeListener);
 

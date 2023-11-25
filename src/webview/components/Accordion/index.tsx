@@ -6,9 +6,9 @@ import NPM from "../../../providers/npm-provider";
 import { Dependencies } from "../../../types/global";
 import useStore from "../../store/store";
 
-import InfoExtended from "./InfoExtended";
-import InfoShort from "./InfoShort";
-import VersionStatus from "./VersionStatus";
+import InfoExtended from "./info-extended";
+import InfoShort from "./info-short";
+import VersionStatus from "./version-status";
 // import BundlePHProvider from "../../../providers/size-providers/bundlephobia"; // TODO: size-provider is off
 
 function AccordionsDependency({ deps }: { deps: Dependencies }) {

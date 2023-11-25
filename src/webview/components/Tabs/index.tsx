@@ -4,9 +4,9 @@ import { useState } from "react";
 import { PackageJson } from "../../../types/global";
 import AccordionsDependency from "../Accordion";
 
-import CounterDependency from "./CounterDependency";
+import CounterDependency from "./counter-dependency";
 
-interface TabPanelProps {
+interface TabPanelProperties {
   children: React.ReactNode;
   index: number;
   activeTab: number;
@@ -18,7 +18,7 @@ function TabPanel({
   children,
   index,
   activeTab,
-}: TabPanelProps): React.ReactElement {
+}: TabPanelProperties): React.ReactElement {
   const isCurrentTab = index === activeTab;
   return (
     <div

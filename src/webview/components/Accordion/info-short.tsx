@@ -1,13 +1,13 @@
 import { Typography, Box } from "@mui/material";
 import { ReactNode } from "react";
 
-interface InfoShortProps {
+interface InfoShortProperties {
   name: string;
   curVersion: string;
   children: ReactNode;
 }
 
-function InfoShort({ name, curVersion, children }: InfoShortProps) {
+function InfoShort({ name, curVersion, children }: InfoShortProperties) {
   return (
     <>
       <Typography sx={{ width: "40%", flexShrink: 0, fontSize: ".9375rem" }}>

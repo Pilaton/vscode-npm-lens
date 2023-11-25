@@ -3,7 +3,7 @@ import prettyBytes from "pretty-bytes";
 import { useEffect, useState } from "react";
 
 import useStore from "../../store/store";
-import { DetailBlock } from "../Accordion/InfoExtended";
+import { DetailBlock } from "../Accordion/info-extended";
 
 /* -------------------------------------------------------------------------- */
 
@@ -48,9 +48,9 @@ function CounterDependency() {
       const readyPackages = await Promise.all(Object.values(packages));
 
       return readyPackages.reduce(
-        (acc, data) => {
-          acc.unpacked += data?.size || 0;
-          return acc;
+        (accumulator, data) => {
+          accumulator.unpacked += data?.size || 0;
+          return accumulator;
         },
         { unpacked: 0 },
       );

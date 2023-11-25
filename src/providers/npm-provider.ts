@@ -42,7 +42,7 @@ export interface IExtendedVersion extends ICoerceVersion {
 export type PackageDataAsync = Promise<IPackageData | null>;
 
 type ConvertToExtendedVersion = (
-  args: Record<string, string>,
+  arguments_: Record<string, string>,
 ) => IPackageData["version"];
 
 /* -------------------------------------------------------------------------- */
@@ -52,8 +52,8 @@ const formatRepoUrl = (repoUrl: string): string => {
   return match ? `https://${match[0]}` : "";
 };
 
-const formatDate = (dateStr: string): string => {
-  const date = new Date(dateStr);
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
   const day = date.toLocaleString("en-US", { day: "2-digit" });
   const month = date.toLocaleString("en-US", { month: "long" });
   const year = date.toLocaleString("en-US", { year: "numeric" });
@@ -99,7 +99,7 @@ class NPM {
         license: parsedData.license,
         size: parsedData.versions[latestVersion].dist?.unpackedSize,
       };
-    } catch (err) {
+    } catch {
       window.vscode.postMessage({
         type: "error",
         text: "«NPM» domain not available",
@@ -109,16 +109,16 @@ class NPM {
   }
 
   private static convertToExtendedVersion: ConvertToExtendedVersion = ({
-    currentVersion,
+    currentVersionProp,
     latestVersion,
   }) => {
     /* eslint-disable @typescript-eslint/no-non-null-assertion */
-    const curVersion: ICoerceVersion = coerce(currentVersion)!;
+    const currentVersion: ICoerceVersion = coerce(currentVersionProp)!;
     const newVersion: ICoerceVersion = coerce(latestVersion)!;
     /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
     const checker = diff(
-      curVersion.version,
+      currentVersion.version,
       newVersion.version,
     ) as IExtendedVersion["updateType"];
 

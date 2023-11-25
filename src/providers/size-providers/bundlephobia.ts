@@ -1,4 +1,4 @@
-import { BundleSizesDataAsync } from "../../types/bundleSizes";
+import { BundleSizesDataAsync } from "../../types/bundle-sizes";
 
 import BaseProvider from "./base-provider";
 
@@ -37,7 +37,7 @@ class BundlePHProvider extends BaseProvider {
         dependencyCount: parsedData.dependencyCount,
         url: `https://bundlephobia.com/package/${packageName}`,
       };
-    } catch (err) {
+    } catch {
       // window.vscode.postMessage({
       //   type: "error",
       //   text: CONFIG.errorText + packageName,

@@ -16,7 +16,7 @@ import { IPackageData } from "../../../providers/npm-provider";
 // import { ReactComponent as BundlephobiaIcon } from "../../assets/bundlephobia.svg"; // TODO: size-provider is off
 import NpmIcon from "../../assets/npm.svg?react";
 import useStore from "../../store/store";
-import convertSize from "../../utils/convertSize";
+import convertSize from "../../utils/convert-size";
 
 /* -------------------------------------------------------------------------- */
 
@@ -83,7 +83,7 @@ function InfoExtended({ name }: { name: string }) {
   //   state.packages[name],
   //   state.bundles[name],
   // ]); // TODO: size-provider is off
-  const [pkg] = useStore((state) => [state.packages[name]]);
+  const [packageData] = useStore((state) => [state.packages[name]]);
 
   // useEffect(() => {
   //   (async () => {
@@ -97,9 +97,9 @@ function InfoExtended({ name }: { name: string }) {
   // }, [name, pkg, bndl]); // TODO: size-provider is off
   useEffect(() => {
     (async () => {
-      setNpmInfo({ data: await pkg, isPending: false });
+      setNpmInfo({ data: await packageData, isPending: false });
     })();
-  }, [name, pkg]);
+  }, [name, packageData]);
 
   return npmInfo.data ? (
     <Box>
