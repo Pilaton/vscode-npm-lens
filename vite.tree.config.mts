@@ -1,5 +1,6 @@
 import { UserConfig, defineConfig } from "vite";
 import merge from "ts-deepmerge";
+
 import banner from "vite-plugin-banner";
 
 const bannerText = `/**
@@ -9,7 +10,7 @@ const bannerText = `/**
  * @see {@link https://github.com/Pilaton/npmLens|GitHub}
 */`;
 
-const treeConfig = {
+const baseBuildConfig = {
   build: {
     copyPublicDir: false,
     emptyOutDir: false,
@@ -50,10 +51,13 @@ const overrides = {
 } satisfies Record<string, UserConfig>;
 
 export default defineConfig(({ mode }) => {
-  const isDev = mode === "development";
+  const isDevelopment = mode === "development";
 
   return {
     plugins: [banner(bannerText)],
-    ...merge(treeConfig, isDev ? overrides.forDev : overrides.forProd),
+    ...merge(
+      baseBuildConfig,
+      isDevelopment ? overrides.forDev : overrides.forProd,
+    ),
   };
 });

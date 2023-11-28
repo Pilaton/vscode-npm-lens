@@ -16,13 +16,14 @@ const noAssetsCopyPlugin = () => ({
   generateBundle(_, bundle) {
     for (const name in bundle) {
       if (name.startsWith("assets/")) {
+        // eslint-disable-next-line no-param-reassign
         delete bundle[name];
       }
     }
   },
 });
 
-const webConfig = {
+const baseBuildConfig = {
   build: {
     copyPublicDir: false,
     emptyOutDir: false,
@@ -70,10 +71,13 @@ const overrides = {
 } satisfies Record<string, UserConfig>;
 
 export default defineConfig(({ mode }) => {
-  const isDev = mode === "development";
+  const isDevelopment = mode === "development";
 
   return {
     plugins: [banner(bannerText), react(), svgr(), noAssetsCopyPlugin()],
-    ...merge(webConfig, isDev ? overrides.forDev : overrides.forProd),
+    ...merge(
+      baseBuildConfig,
+      isDevelopment ? overrides.forDev : overrides.forProd,
+    ),
   };
 });

@@ -1,4 +1,8 @@
 {
-  "$schema": "https://unpkg.com/knip@2/schema.json",
-  "entry": ["src/extension.ts", "src/webview/webview.tsx"]
+  "$schema": "https://unpkg.com/knip@3/schema.json",
+  "entry": ["src/extension.ts", "src/webview/webview.tsx"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "vite": {
+    "config": ["vite.*.config.mts"]
+  }
 }

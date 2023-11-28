@@ -23,6 +23,23 @@ module.exports = {
       },
     },
     {
+      files: ["vite.*.config.mts"],
+      extends: [
+        "airbnb-base",
+        "airbnb-typescript",
+        "plugin:unicorn/recommended",
+        "prettier",
+      ],
+      plugins: ["unicorn", "prettier"],
+      parserOptions: {
+        project: "./tsconfig.node.json",
+      },
+      rules: {
+        "import/no-extraneous-dependencies": "off",
+        "no-restricted-syntax": "off",
+      },
+    },
+    {
       files: ["*.ts", "*.tsx"],
       extends: [
         "airbnb",
