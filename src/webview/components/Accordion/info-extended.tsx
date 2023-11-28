@@ -2,27 +2,24 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import {
   Box,
   Button,
-  // CircularProgress, // TODO: size-provider is off
   Divider,
   Stack,
   SvgIcon,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { ComponentProps, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { IPackageData } from "../../../providers/npm-provider";
-// import { IBundleSizesData } from "../../../types/bundleSizes"; // TODO: size-provider is off
-// import { ReactComponent as BundlephobiaIcon } from "../../assets/bundlephobia.svg"; // TODO: size-provider is off
+import { type IPackageData } from "../../../providers/npm-provider";
 import NpmIcon from "../../assets/npm.svg?react";
 import useStore from "../../store/store";
 import convertSize from "../../utils/convert-size";
 
 /* -------------------------------------------------------------------------- */
 
-interface IDetailBlock extends ComponentProps<typeof Stack> {
+interface IDetailBlock extends React.ComponentProps<typeof Stack> {
   label: string;
-  value: string | number | JSX.Element;
+  value: React.ReactNode;
   title?: string;
 }
 
@@ -30,16 +27,6 @@ interface IStateNPMInfo {
   data: IPackageData | null;
   isPending: boolean;
 }
-
-// interface IStateSizeInfo {
-//   data: IBundleSizesData | null;
-//   isPending: boolean;
-// } // TODO: size-provider is off
-
-// type GetValue = (
-//   state: IStateSizeInfo,
-//   key: keyof IBundleSizesData,
-// ) => string | number | JSX.Element; // TODO: size-provider is off
 
 /* -------------------------------------------------------------------------- */
 
@@ -54,54 +41,35 @@ export function DetailBlock({ label, value, title = "" }: IDetailBlock) {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-
-// const getValue: GetValue = (state, key) => {
-//   let val;
-
-//   if (key === "size" || key === "gzip") {
-//     val = convertSize(state.data?.[key]);
-//   } else {
-//     val = state.data?.[key];
-//   }
-
-//   return state.isPending ? <CircularProgress size={12} /> : val || "-";
-// }; // TODO: size-provider is off
-
-/* -------------------------------------------------------------------------- */
-
-function InfoExtended({ name }: { name: string }) {
+export default function InfoExtended({ name }: { name: string }) {
   const [npmInfo, setNpmInfo] = useState<IStateNPMInfo>({
     data: null,
     isPending: true,
   });
-  // const [sizeInfo, setSizeInfo] = useState<IStateSizeInfo>({
-  //   data: null,
-  //   isPending: true,
-  // }); // TODO: size-provider is off
-  // const [pkg, bndl] = useStore((state) => [
-  //   state.packages[name],
-  //   state.bundles[name],
-  // ]); // TODO: size-provider is off
-  const [packageData] = useStore((state) => [state.packages[name]]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     setNpmInfo({ data: await pkg, isPending: false });
-  //   })();
+  const packageData = useStore((state) => state.packages[name]);
 
-  //   (async () => {
-  //     setSizeInfo({ data: await bndl, isPending: false });
-  //   })();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [name, pkg, bndl]); // TODO: size-provider is off
   useEffect(() => {
-    (async () => {
-      setNpmInfo({ data: await packageData, isPending: false });
-    })();
+    let isMounted = true;
+
+    const fetchData = async () => {
+      const data = await packageData;
+      if (isMounted) {
+        setNpmInfo({ data, isPending: false });
+      }
+    };
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [name, packageData]);
 
-  return npmInfo.data ? (
+  if (npmInfo.isPending || !npmInfo.data) {
+    return <div>Loading...</div>;
+  }
+
+  return (
     <Box>
       <Typography sx={{ opacity: 0.7 }}>{npmInfo.data.description}</Typography>
 
@@ -126,27 +94,11 @@ function InfoExtended({ name }: { name: string }) {
           flexWrap="wrap"
           sx={{ "& div": { alignItems: "flex-end" } }}
         >
-          {/* <DetailBlock label="Gzipped" value={getValue(sizeInfo, "gzip")} /> // TODO: size-provider is off */}
-          {/* <DetailBlock label="Minified" value={getValue(sizeInfo, "size")} /> // TODO: size-provider is off */}
-
           <DetailBlock
             label="Unpacked"
             value={convertSize(npmInfo.data.size)}
             title="Unpacked Size"
           />
-
-          {/* {sizeInfo.data?.dependencyCount !== undefined && (
-            <DetailBlock
-              label="Dependencies"
-              value={
-                sizeInfo.data.dependencyCount === 0 ? (
-                  <b style={{ color: "var(--vscode-charts-green)" }}>FREE</b>
-                ) : (
-                  sizeInfo.data.dependencyCount
-                )
-              }
-            />
-          )} // TODO: size-provider is off */}
         </Stack>
       </Stack>
 
@@ -179,28 +131,7 @@ function InfoExtended({ name }: { name: string }) {
         >
           NPM
         </Button>
-
-        {/* {sizeInfo.data?.url && (
-          <Button
-            href={sizeInfo.data.url}
-            target="_blank"
-            rel="noreferrer"
-            title="Open Bundlephobia graphic"
-            startIcon={
-              <SvgIcon>
-                <BundlephobiaIcon />
-              </SvgIcon>
-            }
-            size="small"
-          >
-            BundlePhobia
-          </Button>
-        )} // TODO: size-provider is off */}
       </Stack>
     </Box>
-  ) : (
-    <div>Loading...</div>
   );
 }
-
-export default InfoExtended;

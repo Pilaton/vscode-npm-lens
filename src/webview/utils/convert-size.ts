@@ -1,6 +1,5 @@
 import prettyBytes from "pretty-bytes";
 
-const convertSize = (size: number | undefined) =>
-  size ? prettyBytes(size) : "-";
+const convertSize = (size?: number) => (size ? prettyBytes(size) : "-");
 
 export default convertSize;

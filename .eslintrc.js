@@ -14,22 +14,26 @@ module.exports = {
   ],
   overrides: [
     {
+      files: [".eslintrc.{js,cjs}"],
       env: {
         node: true,
       },
-      files: [".eslintrc.{js,cjs}"],
       parserOptions: {
         sourceType: "script",
       },
     },
     {
+      files: ["*.ts", "*.tsx"],
       extends: [
         "airbnb",
         "airbnb-typescript",
+        "airbnb/hooks",
+        "plugin:@typescript-eslint/recommended-type-checked", // @typescript-eslint @v6
+        "plugin:@typescript-eslint/stylistic-type-checked", // @typescript-eslint @v6
         "plugin:react/jsx-runtime",
+        "plugin:unicorn/recommended",
         "prettier",
       ],
-      files: ["*.ts", "*.tsx"],
       rules: {
         "import/order": [
           "warn",
@@ -50,10 +54,18 @@ module.exports = {
             alphabetize: { order: "asc", caseInsensitive: true },
           },
         ],
+        "@typescript-eslint/consistent-type-imports": [
+          "error",
+          {
+            fixStyle: "inline-type-imports",
+          },
+        ],
+        "@typescript-eslint/no-floating-promises": "off",
         "react/require-default-props": "off",
         "unicorn/no-array-for-each": "off",
         "unicorn/no-null": "off",
         "unicorn/no-array-reduce": "off",
+        "class-methods-use-this": "off",
       },
     },
   ],

@@ -7,96 +7,31 @@ import { DetailBlock } from "../Accordion/info-extended";
 
 /* -------------------------------------------------------------------------- */
 
-interface CountState {
-  // gzip: number; // TODO: size-provider is off
-  // minified: number; // TODO: size-provider is off
-  unpacked: number;
-}
+export default function CounterDependency() {
+  const [count, setCount] = useState<number>(0);
 
-interface FetchPackages {
-  unpacked: 0;
-}
-
-// interface FetchBundles {
-//   gzip: number;
-//   minified: number;
-// } // TODO: size-provider is off
-
-/* -------------------------------------------------------------------------- */
-
-function CounterDependency() {
-  const [counts, setCounts] = useState<CountState>({
-    // gzip: 0, // TODO: size-provider is off
-    // minified: 0, // TODO: size-provider is off
-    unpacked: 0,
-  });
-
-  // const { packages, bundles } = useStore((state) => ({
-  //   packages: state.packages,
-  //   bundles: state.bundles,
-  // })); // TODO: size-provider is off
-  const { packages } = useStore((state) => ({
-    packages: state.packages,
-  }));
+  const packages = useStore((state) => state.packages);
 
   useEffect(() => {
-    const fetchPackages = async (): Promise<FetchPackages> => {
-      setCounts({
-        unpacked: 0,
-      });
+    let isMounted = true;
 
+    const fetchPackages = async () => {
       const readyPackages = await Promise.all(Object.values(packages));
-
-      return readyPackages.reduce(
-        (accumulator, data) => {
-          accumulator.unpacked += data?.size || 0;
-          return accumulator;
-        },
-        { unpacked: 0 },
+      const totalCount = readyPackages.reduce(
+        (accumulator, data) => accumulator + (data?.size ?? 0),
+        0,
       );
+
+      if (isMounted) {
+        setCount(totalCount);
+      }
     };
+    fetchPackages();
 
-    // const fetchBundles = async (): Promise<FetchBundles> => {
-    //   const readyBundles = await Promise.all(Object.values(bundles));
-
-    //   return readyBundles.reduce(
-    //     (acc, data) => {
-    //       acc.gzip += data?.gzip || 0;
-    //       acc.minified += data?.size || 0;
-    //       return acc;
-    //     },
-    //     { gzip: 0, minified: 0 },
-    //   );
-    // };
-    // TODO: size-provider is off
-
-    //   (async () => {
-    //     const [packageCounts, bundleCounts] = await Promise.all([
-    //       fetchPackages(),
-    //       fetchBundles(),
-    //     ]);
-
-    //     setCounts({
-    //       gzip: bundleCounts.gzip,
-    //       minified: bundleCounts.minified,
-    //       unpacked: packageCounts.unpacked,
-    //     });
-    //   })();
-    // }, [bundles, packages]); // TODO: size-provider is off
-    (async () => {
-      const [packageCounts] = await Promise.all([fetchPackages()]);
-
-      setCounts({
-        unpacked: packageCounts.unpacked,
-      });
-    })();
+    return () => {
+      isMounted = false;
+    };
   }, [packages]);
-
-  const details = [
-    // { label: "Gzipped", value: counts.gzip }, // TODO: size-provider is off
-    // { label: "Minified", value: counts.minified }, // TODO: size-provider is off
-    { label: "Unpacked", value: counts.unpacked },
-  ];
 
   return (
     <Stack
@@ -104,14 +39,10 @@ function CounterDependency() {
       spacing={3.5}
       sx={{ "& div": { alignItems: "flex-end" } }}
     >
-      {details.map(({ label, value }) => (
-        <DetailBlock
-          key={label}
-          label={label}
-          value={value ? prettyBytes(value) : <CircularProgress size={12} />}
-        />
-      ))}
+      <DetailBlock
+        label="Unpacked"
+        value={count ? prettyBytes(count) : <CircularProgress size={12} />}
+      />
     </Stack>
   );
 }
-export default CounterDependency;

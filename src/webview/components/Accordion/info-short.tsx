@@ -1,21 +1,23 @@
-import { Typography, Box } from "@mui/material";
-import { ReactNode } from "react";
+import { Box } from "@mui/material";
 
 interface InfoShortProperties {
   name: string;
-  curVersion: string;
-  children: ReactNode;
+  currentVersion: string;
 }
 
-function InfoShort({ name, curVersion, children }: InfoShortProperties) {
+function InfoShort({
+  name,
+  currentVersion,
+  children,
+}: React.PropsWithChildren<InfoShortProperties>) {
   return (
     <>
-      <Typography sx={{ width: "40%", flexShrink: 0, fontSize: ".9375rem" }}>
+      <Box sx={{ width: "40%", flexShrink: 0, fontSize: ".9375rem" }}>
         {name}
-      </Typography>
+      </Box>
 
       <Box sx={{ width: "20%", textAlign: "right", letterSpacing: "0.75px" }}>
-        {curVersion}
+        {currentVersion}
       </Box>
 
       <Box sx={{ width: "20%", textAlign: "right" }}>{children}</Box>

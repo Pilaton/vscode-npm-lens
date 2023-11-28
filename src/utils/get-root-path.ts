@@ -1,18 +1,13 @@
 import { workspace } from "vscode";
 
-const getRootPath = (): string => {
-  try {
-    const { workspaceFolders } = workspace;
-    const rootPath =
-      workspaceFolders && workspaceFolders.length > 0
-        ? workspaceFolders[0].uri.fsPath
-        : undefined;
+const getRootPath = () => {
+  const { workspaceFolders } = workspace;
 
-    if (!rootPath) throw new Error();
-
-    return rootPath;
-  } catch {
-    throw new Error("Workspace is empty...");
+  if (!workspaceFolders || workspaceFolders.length === 0) {
+    throw new Error("No workspace folders found.");
   }
+
+  return workspaceFolders[0].uri.fsPath;
 };
+
 export default getRootPath;

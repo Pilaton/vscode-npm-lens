@@ -1,22 +1,15 @@
-export type Dependencies = Record<string, string>;
+import { type IPackageJson } from "src/utils/get-package-json";
 
-export interface PackageJson {
-  dependencies?: Dependencies;
-  devDependencies?: Dependencies;
-  peerDependencies?: Dependencies;
-  bundleDependencies?: Dependencies;
-  optionalDependencies?: Dependencies;
-}
-export type VsCodeApi = {
-  postMessage: (msg: {
+export interface VsCodeApi {
+  postMessage: (message: {
     type: "info" | "error" | "warning";
     text: string;
   }) => void;
-};
+}
 
 declare global {
   interface Window {
-    packageData: PackageJson;
+    packageJson: IPackageJson;
     versionExtension: string;
     vscode: VsCodeApi;
   }

@@ -1,13 +1,12 @@
 import { Tabs, Tab, Box } from "@mui/material";
 import { useState } from "react";
+import { type IPackageJson } from "src/utils/get-package-json";
 
-import { PackageJson } from "../../../types/global";
 import AccordionsDependency from "../Accordion";
 
 import CounterDependency from "./counter-dependency";
 
 interface TabPanelProperties {
-  children: React.ReactNode;
   index: number;
   activeTab: number;
 }
@@ -18,7 +17,7 @@ function TabPanel({
   children,
   index,
   activeTab,
-}: TabPanelProperties): React.ReactElement {
+}: React.PropsWithChildren<TabPanelProperties>) {
   const isCurrentTab = index === activeTab;
   return (
     <div
@@ -34,14 +33,18 @@ function TabPanel({
 
 /* -------------------------------------------------------------------------- */
 
-function TabsDependency() {
+export default function TabsDependency({
+  packageJson,
+}: {
+  packageJson: IPackageJson;
+}) {
   const [activeTab, setActiveTab] = useState(0);
 
   const tabsData = [
     "dependencies",
     "devDependencies",
     "peerDependencies",
-  ].filter((label): unknown => window.packageData[label as keyof PackageJson]);
+  ].filter((field) => field in packageJson);
 
   const handleTabChange = (_: React.SyntheticEvent, newTab: number): void =>
     setActiveTab(newTab);
@@ -67,28 +70,21 @@ function TabsDependency() {
           variant="scrollable"
           scrollButtons={false}
         >
-          {tabsData.map(
-            (label): JSX.Element => (
-              <Tab
-                key={label}
-                label={label}
-                sx={{ textTransform: "inherit" }}
-              />
-            ),
-          )}
+          {tabsData.map((field) => (
+            <Tab key={field} label={field} sx={{ textTransform: "inherit" }} />
+          ))}
         </Tabs>
         <CounterDependency />
       </Box>
-      {tabsData.map(
-        (label, index): JSX.Element => (
-          <TabPanel key={label} activeTab={activeTab} index={index}>
-            <AccordionsDependency
-              deps={window.packageData[label as keyof PackageJson] || {}}
-            />
+      {tabsData.map((field, index) => {
+        const dependencies = packageJson[field as keyof IPackageJson]!;
+
+        return (
+          <TabPanel key={field} activeTab={activeTab} index={index}>
+            <AccordionsDependency dependencies={dependencies} />
           </TabPanel>
-        ),
-      )}
+        );
+      })}
     </>
   );
 }
-export default TabsDependency;

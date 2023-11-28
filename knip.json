@@ -1,10 +1,4 @@
 {
   "$schema": "https://unpkg.com/knip@2/schema.json",
-  "entry": ["src/extension.ts", "src/webview/webview.{ts,tsx}"],
-  "project": ["src/**/*.{ts,tsx}"],
-  "ignore": ["**/*.d.ts"],
-  "ignoreBinaries": ["standard-version", "vsce"],
-  "vite": {
-    "entry": ["vite.*.config.*"]
-  }
+  "entry": ["src/extension.ts", "src/webview/webview.tsx"]
 }

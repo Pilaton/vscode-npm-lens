@@ -2,24 +2,21 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import NPM, { IPackageData } from "../../../providers/npm-provider";
+import { type IPackageData } from "../../../providers/npm-provider";
 
-interface IVersionStatusProperties {
-  props: {
-    name: string;
-    npmProvider: NPM;
-  };
-}
-
-type GetStatus = (newVersion: IPackageData["version"]) => JSX.Element;
+import type NPM from "../../../providers/npm-provider";
 
 interface IVersionState {
-  version: IPackageData["version"] | null;
+  version?: IPackageData["version"];
   isPending: boolean;
 }
 
-const getStatus: GetStatus = (newVersion) => {
-  if (!newVersion) {
+function VersionStatusBadge({
+  version,
+}: {
+  version?: IPackageData["version"];
+}) {
+  if (!version) {
     return (
       <CheckCircleIcon
         sx={{
@@ -30,61 +27,86 @@ const getStatus: GetStatus = (newVersion) => {
     );
   }
 
-  const { major, minor, patch, updateType } = newVersion;
-
-  const baseStyle = { fontWeight: 500 };
-  const styles = {
-    major: { ...baseStyle, color: "var(--vscode-editorError-foreground)" },
-    minor: { ...baseStyle, color: "var(--vscode-editorWarning-foreground)" },
-    patch: { ...baseStyle, color: "var(--vscode-editorInfo-foreground)" },
+  const { major, minor, patch, updateType, version: fullVersion } = version;
+  const allowedTypes: Record<string, boolean> = {
+    major: true,
+    minor: true,
+    patch: true,
   };
 
-  const status = {
-    major: (
-      <span style={styles.major}>
-        {major}.{minor}.{patch}
-      </span>
-    ),
-    minor: (
-      <>
-        {major}.
-        <span style={styles.minor}>
-          {minor}.{patch}
+  if (updateType in allowedTypes) {
+    const baseStyle = { fontWeight: 500 };
+    const styles = {
+      major: { ...baseStyle, color: "var(--vscode-editorError-foreground)" },
+      minor: { ...baseStyle, color: "var(--vscode-editorWarning-foreground)" },
+      patch: { ...baseStyle, color: "var(--vscode-editorInfo-foreground)" },
+    };
+
+    const status = {
+      major: (
+        <span style={styles.major}>
+          {major}.{minor}.{patch}
         </span>
-      </>
-    ),
-    patch: (
-      <>
-        {major}.{minor}.<span style={styles.patch}>{patch}</span>
-      </>
-    ),
-  };
+      ),
+      minor: (
+        <>
+          {major}.
+          <span style={styles.minor}>
+            {minor}.{patch}
+          </span>
+        </>
+      ),
+      patch: (
+        <>
+          {major}.{minor}.<span style={styles.patch}>{patch}</span>
+        </>
+      ),
+    };
 
-  return status[updateType];
-};
+    return status[updateType as keyof typeof status];
+  }
 
-function VersionStatus({
-  props: { name, npmProvider },
-}: IVersionStatusProperties) {
-  const [packageData, setPackageData] = useState<IVersionState>({
-    version: null,
+  return fullVersion;
+}
+
+export default function VersionStatus({
+  name,
+  npmProvider,
+}: {
+  name: string;
+  npmProvider: NPM;
+}) {
+  const [version, setVersion] = useState<IVersionState>({
+    version: undefined,
     isPending: true,
   });
 
   useEffect(() => {
-    (async () => {
-      const result = await npmProvider.getPackageData(name);
-      const version = result && result.version;
+    let isMounted = true;
+    const fetchData = async () => {
+      const data = await npmProvider.getPackageData(name);
+      if (isMounted) {
+        setVersion({
+          version: data?.version,
+          isPending: false,
+        });
+      }
+    };
 
-      setPackageData({ version, isPending: false });
-    })();
-  }, [name]);
+    fetchData();
 
-  return packageData.isPending ? (
-    <CircularProgress size={18} />
-  ) : (
-    <Box sx={{ letterSpacing: "0.75px" }}>{getStatus(packageData.version)}</Box>
+    return () => {
+      isMounted = false;
+    };
+  }, [name, npmProvider]);
+
+  return (
+    <Box sx={{ letterSpacing: "0.75px" }}>
+      {version.isPending ? (
+        <CircularProgress size={18} />
+      ) : (
+        <VersionStatusBadge version={version?.version} />
+      )}
+    </Box>
   );
 }
-
-export default VersionStatus;

@@ -1,14 +1,14 @@
 import { type ExtensionContext } from "vscode";
 
 class Context {
-  private static context: ExtensionContext;
+  static #context: ExtensionContext;
 
   static setContext(context: ExtensionContext): void {
-    this.context = context;
+    this.#context = context;
   }
 
   static getContext(): ExtensionContext {
-    return this.context;
+    return this.#context;
   }
 }
 

@@ -24,6 +24,8 @@ const BoxVersion = styled(Box)({
   padding: "1px 4px",
 });
 
+const { packageJson } = window;
+
 root.render(
   <StrictMode>
     <ThemeProvider theme={theme}>
@@ -43,7 +45,7 @@ root.render(
           </Stack>
         </header>
 
-        <TabsDependency />
+        <TabsDependency packageJson={packageJson} />
       </Layout>
     </ThemeProvider>
   </StrictMode>,
