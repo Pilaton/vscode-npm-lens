@@ -1,5 +1,6 @@
-import { Tabs, Tab, Box } from "@mui/material";
+import { Tabs, Tab, Box, Button } from "@mui/material";
 import { useState } from "react";
+import { type MessageListener } from "src/controllers/web-view-panel";
 import { type IPackageJson } from "src/utils/get-package-json";
 
 import AccordionsDependency from "../Accordion";
@@ -32,6 +33,13 @@ function TabPanel({
 }
 
 /* -------------------------------------------------------------------------- */
+
+const handleUpdateAllPackages = () => {
+  const { vscode } = window;
+  vscode.postMessage({
+    command: "updateAllPackages",
+  } satisfies MessageListener);
+};
 
 export default function TabsDependency({
   packageJson,
@@ -74,7 +82,16 @@ export default function TabsDependency({
             <Tab key={field} label={field} sx={{ textTransform: "inherit" }} />
           ))}
         </Tabs>
-        <CounterDependency />
+        <Box sx={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+          <CounterDependency />
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleUpdateAllPackages}
+          >
+            Update all
+          </Button>
+        </Box>
       </Box>
       {tabsData.map((field, index) => {
         const dependencies = packageJson[field as keyof IPackageJson]!;

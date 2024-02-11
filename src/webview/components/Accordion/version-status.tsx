@@ -1,6 +1,7 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
+import { type MessageListener } from "src/controllers/web-view-panel";
 
 import { type IPackageData } from "../../../providers/npm-provider";
 
@@ -69,6 +70,14 @@ function VersionStatusBadge({
   return fullVersion;
 }
 
+const handleUpdatePackage = (packageName: string) => {
+  const { vscode } = window;
+  vscode.postMessage({
+    command: "updatePackage",
+    packageName,
+  } satisfies MessageListener);
+};
+
 export default function VersionStatus({
   name,
   npmProvider,
@@ -101,12 +110,29 @@ export default function VersionStatus({
   }, [name, npmProvider]);
 
   return (
-    <Box sx={{ letterSpacing: "0.75px" }}>
-      {version.isPending ? (
-        <CircularProgress size={18} />
-      ) : (
-        <VersionStatusBadge version={version?.version} />
-      )}
-    </Box>
+    <>
+      <Box sx={{ width: "20%", textAlign: "right", letterSpacing: "0.75px" }}>
+        {version.isPending ? (
+          <CircularProgress size={18} />
+        ) : (
+          <VersionStatusBadge version={version?.version} />
+        )}
+      </Box>
+
+      <Box sx={{ width: "10%", textAlign: "right" }}>
+        {version?.version && (
+          <Button
+            sx={{ marginInlineEnd: "1rem" }}
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              handleUpdatePackage(name);
+            }}
+          >
+            Update
+          </Button>
+        )}
+      </Box>
+    </>
   );
 }

@@ -13,6 +13,14 @@ const packageJsonWatcher = (
     `${rootPath}/package.json`,
   );
 
+  watcher.onDidCreate(async () => {
+    try {
+      await webView.updateContent();
+    } catch (error) {
+      console.error("Error updating the web view panel:", error);
+    }
+  });
+
   watcher.onDidChange(async () => {
     try {
       await webView.updateContent();

@@ -20,9 +20,9 @@ function InfoShort({
         {currentVersion}
       </Box>
 
-      <Box sx={{ width: "20%", textAlign: "right" }}>{children}</Box>
+      {children}
 
-      <Box sx={{ width: "20%" }} />
+      <Box sx={{ width: "10%" }} />
     </>
   );
 }

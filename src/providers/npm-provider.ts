@@ -1,4 +1,5 @@
 import { type ReleaseType, coerce, diff } from "semver";
+import { type MessageListener } from "src/controllers/web-view-panel";
 import { type Dependencies } from "src/utils/get-package-json";
 
 export interface IPackageData {
@@ -135,9 +136,11 @@ class NPM {
     } catch (error) {
       console.error("Error processing package data:", error);
       window.vscode.postMessage({
+        command: "alert",
         type: "error",
         text: "«NPM» domain not available",
-      });
+      } satisfies MessageListener);
+
       return null;
     }
   }

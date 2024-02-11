@@ -22,10 +22,12 @@ export const activate = (context: vscode.ExtensionContext) => {
   Context.setContext(context);
 
   const webView = new WebViewPanel();
-  const treeView = TreeViewPanel.open();
+  const treeView = new TreeViewPanel();
+
+  const treeViewPanel = treeView.open();
 
   context.subscriptions.push(
-    treeView.onDidChangeVisibility(handleWebViewVisible(context, webView)),
+    treeViewPanel.onDidChangeVisibility(handleWebViewVisible(context, webView)),
   );
 };
 

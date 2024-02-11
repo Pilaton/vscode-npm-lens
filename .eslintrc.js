@@ -6,12 +6,7 @@ module.exports = {
     es2023: true,
     node: true,
   },
-  extends: [
-    "airbnb",
-    "plugin:react/recommended",
-    "plugin:unicorn/recommended",
-    "prettier",
-  ],
+
   overrides: [
     {
       files: [".eslintrc.{js,cjs}"],
