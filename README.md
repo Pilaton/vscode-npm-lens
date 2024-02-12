@@ -16,8 +16,6 @@ Simple and clear visual panel for npm dependencies of your project: Monitor Upda
 To activate the extension, click on the new icon added to your `activitybar`.  
 ❕`package.json` must be present in your workspace.
 
-<br>
-
 ## Example
 
 <img src="public/Screenshot-extension.jpg" alt="npmLens screenshot"/>
