@@ -1,5 +1,5 @@
 import react from "@vitejs/plugin-react";
-import merge from "ts-deepmerge";
+import { merge } from "ts-deepmerge";
 import svgr from "vite-plugin-svgr";
 import { UserConfig, defineConfig } from "vite";
 import banner from "vite-plugin-banner";

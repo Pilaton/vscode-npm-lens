@@ -1,5 +1,5 @@
 import { UserConfig, defineConfig } from "vite";
-import merge from "ts-deepmerge";
+import { merge } from "ts-deepmerge";
 
 import banner from "vite-plugin-banner";
 
