@@ -1,4 +1,4 @@
-# 🥷 npmLens
+# npmLens
 
 Simple and clear visual panel for npm dependencies of your project: Monitor Updates, Analyze Size, and More.
 
@@ -18,14 +18,6 @@ To activate the extension, click on the new icon added to your `activitybar`.
 
 <br>
 
-Example 1
+## Example
+
 <img src="public/Screenshot-extension.jpg" alt="npmLens screenshot"/>
-
-<br>
-<br>
-
-Example 2
-<img src="public/Screenshot-extension-2.png" alt="npmLens screenshot 2"/>
-
-1. The total size of your project's dependencies (for the active tab).
-2. How many dependencies your chosen package depends on (fewer is better)
