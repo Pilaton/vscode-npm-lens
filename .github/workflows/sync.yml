@@ -23,7 +23,7 @@ jobs:
         run: |
           mkdir -p destination/public
           cp vsix/*.vsix destination/
-          cp public/{Screenshot-extension.jpg} destination/public/
+          cp public/Screenshot-extension.jpg destination/public/
           cp {CHANGELOG.md,README.md,LICENSE} destination/
 
       - name: Push changes
