@@ -101,8 +101,10 @@
     "terser": "^5.27.0",
     "ts-deepmerge": "^7.0.0",
     "tslib": "^2.6.2",
+
     "typescript": "^5.3.3",
     "vite": "^5.1.1",
+
     "vite-plugin-banner": "^0.7.1",
     "vite-plugin-svgr": "^4.2.0"
   },
