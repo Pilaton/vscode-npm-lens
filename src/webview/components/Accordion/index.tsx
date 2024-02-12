@@ -31,8 +31,10 @@ export default function AccordionsDependency({ dependencies }: IProperties) {
           onChange={(_, isExpanded) => {
             setExpanded(isExpanded ? name : false);
           }}
-          TransitionProps={{ mountOnEnter: true }}
           elevation={0}
+          slotProps={{
+            transition: { mountOnEnter: true },
+          }}
         >
           <AccordionSummary
             aria-controls={name}

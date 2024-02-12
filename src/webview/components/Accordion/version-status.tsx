@@ -100,12 +100,8 @@ export default function VersionStatus({
         });
       }
     };
-
-    fetchData()
-      .then((data) => data)
-      .catch((error) => {
-        console.log(error);
-      });
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    fetchData();
 
     return () => {
       isMounted = false;

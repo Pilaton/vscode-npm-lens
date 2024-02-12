@@ -25,11 +25,8 @@ export default function CounterDependency() {
         setCount(totalCount);
       }
     };
-    fetchPackages()
-      .then((data) => data)
-      .catch((error) => {
-        console.log(error);
-      });
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    fetchPackages();
 
     return () => {
       isMounted = false;

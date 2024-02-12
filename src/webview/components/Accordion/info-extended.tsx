@@ -46,7 +46,8 @@ export default function InfoExtended({ name }: { name: string }) {
     isPending: true,
   });
 
-  const packageData = useStore(async (state) => await state.packages[name]);
+  // eslint-disable-next-line @typescript-eslint/promise-function-async
+  const packageData = useStore((state) => state.packages[name]);
 
   useEffect(() => {
     let isMounted = true;
@@ -57,11 +58,8 @@ export default function InfoExtended({ name }: { name: string }) {
         setNpmInfo({ data, isPending: false });
       }
     };
-    fetchData()
-      .then((data) => data)
-      .catch((error) => {
-        console.log(error);
-      });
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    fetchData();
 
     return () => {
       isMounted = false;
@@ -76,7 +74,12 @@ export default function InfoExtended({ name }: { name: string }) {
     <Box>
       <Typography sx={{ opacity: 0.7 }}>{npmInfo.data.description}</Typography>
 
-      <Divider sx={{ my: 2 }} />
+      <Divider
+        sx={{
+          my: 2,
+          opacity: "0.6",
+        }}
+      />
 
       <Stack
         direction="row"
@@ -105,7 +108,12 @@ export default function InfoExtended({ name }: { name: string }) {
         </Stack>
       </Stack>
 
-      <Divider sx={{ my: 2 }} />
+      <Divider
+        sx={{
+          my: 2,
+          opacity: "0.6",
+        }}
+      />
 
       <Stack direction="row" alignItems="center" flexWrap="wrap" gap={2}>
         <Button

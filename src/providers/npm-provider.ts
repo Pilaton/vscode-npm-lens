@@ -64,7 +64,8 @@ class NPM {
   }
 
   async getPackageData(packageName: string): PackageDataAsync {
-    return await this.#packages[packageName];
+    // eslint-disable-next-line @typescript-eslint/return-await
+    return this.#packages[packageName];
   }
 
   getDataAllPackages(): Record<string, PackageDataAsync> {
@@ -115,8 +116,6 @@ class NPM {
         currentVersion,
         latestVersion
       );
-
-      if (!extendedVersion) return null;
 
       const repositoryUrl =
         typeof parsedData?.repository === "string"

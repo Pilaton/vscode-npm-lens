@@ -12,6 +12,7 @@ interface IStoreState {
 const useStore = create<IStoreState>()((set) => ({
   packages: {},
   setPackages: (packages) => {
+    console.log("useStore · packages:", packages);
     set((state) => ({ ...state, packages }));
   },
 }));
