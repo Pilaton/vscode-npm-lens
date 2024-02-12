@@ -1,8 +1,8 @@
 import react from "@vitejs/plugin-react";
-import merge from "ts-deepmerge";
-import svgr from "vite-plugin-svgr";
-import { UserConfig, defineConfig } from "vite";
+import { merge } from "ts-deepmerge";
+import { type UserConfig, defineConfig } from "vite";
 import banner from "vite-plugin-banner";
+import svgr from "vite-plugin-svgr";
 
 const bannerText = `/**
  * npmLens
@@ -16,13 +16,14 @@ const noAssetsCopyPlugin = () => ({
   generateBundle(_, bundle) {
     for (const name in bundle) {
       if (name.startsWith("assets/")) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, @typescript-eslint/no-unsafe-member-access
         delete bundle[name];
       }
     }
   },
 });
 
-const webConfig = {
+const baseBuildConfig = {
   build: {
     copyPublicDir: false,
     emptyOutDir: false,
@@ -70,10 +71,13 @@ const overrides = {
 } satisfies Record<string, UserConfig>;
 
 export default defineConfig(({ mode }) => {
-  const isDev = mode === "development";
+  const isDevelopment = mode === "development";
 
   return {
     plugins: [banner(bannerText), react(), svgr(), noAssetsCopyPlugin()],
-    ...merge(webConfig, isDev ? overrides.forDev : overrides.forProd),
+    ...merge(
+      baseBuildConfig,
+      isDevelopment ? overrides.forDev : overrides.forProd
+    ),
   };
 });

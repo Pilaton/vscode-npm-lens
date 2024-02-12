@@ -2,18 +2,17 @@ import { Box, Stack } from "@mui/material";
 import { ThemeProvider, styled } from "@mui/material/styles";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-
 import Logo from "./assets/logo.svg?react";
-import Layout from "./components/Layout";
 import TabsDependency from "./components/Tabs";
+import Layout from "./components/layout";
 import theme from "./theme";
 
-const rootElement = document.getElementById("root");
+const rootElement = document.querySelector("#root");
 if (!rootElement) {
   throw new Error("No element with id 'root' found in the document.");
 }
 
-const versionExt = window.versionExtension;
+const { versionExtension } = window;
 
 const root = createRoot(rootElement);
 
@@ -24,11 +23,13 @@ const BoxVersion = styled(Box)({
   padding: "1px 4px",
 });
 
+const { packageJson, packageManager } = window;
+
 root.render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <Layout>
-        <header style={{ marginBottom: ".5rem" }}>
+        <header style={{ marginBottom: "1rem" }}>
           <Stack direction="row" alignItems="center">
             <Logo
               style={{
@@ -37,14 +38,17 @@ root.render(
               }}
             />
 
-            <h1 style={{ paddingInline: "16px" }}>npmLens</h1>
+            <h1 style={{ paddingInline: "16px" }}>npmLens DEV</h1>
 
-            {versionExt && <BoxVersion>v{versionExt}</BoxVersion>}
+            {versionExtension && <BoxVersion>v{versionExtension}</BoxVersion>}
           </Stack>
         </header>
 
-        <TabsDependency />
+        <TabsDependency packageJson={packageJson} />
+        <Box sx={{ textAlign: "right", marginTop: ".25rem", opacity: 0.7 }}>
+          Package manager: {packageManager}
+        </Box>
       </Layout>
     </ThemeProvider>
-  </StrictMode>,
+  </StrictMode>
 );

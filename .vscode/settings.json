@@ -10,5 +10,6 @@
   "material-icon-theme.files.associations": {
     "vite.tree.config.mts": "vite",
     "vite.web.config.mts": "vite"
-  }
+  },
+  "eslint.experimental.useFlatConfig": true
 }

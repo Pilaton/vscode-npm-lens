@@ -29,8 +29,8 @@ jobs:
       - name: Push changes
         working-directory: ./destination
         run: |
-          git config user.name 'Mark Fish'
-          git config user.email 'pilaton.ever@aleeas.com'
+          git config user.name 'Mark'
+          git config user.email 'dev@pilaton.com'
           git add .
           git commit -m 'Sync files'
           git push

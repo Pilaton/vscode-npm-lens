@@ -1,17 +1,19 @@
-import { coerce, diff } from "semver";
-
-import { Dependencies } from "../types/global";
+import { type ReleaseType, coerce, diff } from "semver";
+import { type MessageListener } from "src/controllers/web-view-panel";
+import { type Dependencies } from "src/utils/get-package-json";
 
 export interface IPackageData {
   name: string;
   description: string;
-  version: IExtendedVersion | null;
+  version?: IPackageVersion;
   npmUrl: string;
   repositoryUrl: string;
   lastPublish: string;
   license: string;
   size: number | undefined;
 }
+
+export type PackageDataAsync = Promise<IPackageData | null>;
 
 interface INpmRegistryResponse {
   name: string;
@@ -20,31 +22,23 @@ interface INpmRegistryResponse {
   repository: { url: string };
   time: { modified: string };
   license: string;
-  versions: {
-    [ver: string]: {
+  versions: Record<
+    string,
+    {
       dist: {
         unpackedSize?: number | undefined;
       };
-    };
-  };
+    }
+  >;
 }
 
-interface ICoerceVersion {
+interface IPackageVersion {
+  updateType: ReleaseType;
   major: number;
   minor: number;
   patch: number;
   version: string;
 }
-export interface IExtendedVersion extends ICoerceVersion {
-  updateType: "major" | "minor" | "patch";
-}
-
-export type PackageDataAsync = Promise<IPackageData | null>;
-
-type ConvertToExtendedVersion = (
-  args: Record<string, string>,
-) => IPackageData["version"];
-
 /* -------------------------------------------------------------------------- */
 
 const formatRepoUrl = (repoUrl: string): string => {
@@ -52,8 +46,8 @@ const formatRepoUrl = (repoUrl: string): string => {
   return match ? `https://${match[0]}` : "";
 };
 
-const formatDate = (dateStr: string): string => {
-  const date = new Date(dateStr);
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
   const day = date.toLocaleString("en-US", { day: "2-digit" });
   const month = date.toLocaleString("en-US", { month: "long" });
   const year = date.toLocaleString("en-US", { year: "numeric" });
@@ -63,84 +57,112 @@ const formatDate = (dateStr: string): string => {
 /* -------------------------------------------------------------------------- */
 
 class NPM {
-  private packages: Record<string, PackageDataAsync> = {};
+  #packages: Record<string, PackageDataAsync> = {};
 
-  constructor(deps: Dependencies) {
-    this.init(deps);
+  constructor(dependencies: Dependencies) {
+    this.#init(dependencies);
   }
 
-  private init(packages: Dependencies) {
-    Object.entries(packages).forEach(([packageName, version]) => {
-      this.packages[packageName] = NPM.getPackage(packageName, version);
-    });
+  async getPackageData(packageName: string): PackageDataAsync {
+    // eslint-disable-next-line @typescript-eslint/return-await
+    return this.#packages[packageName];
   }
 
-  private static async getPackage(
-    packageName: string,
-    currentVersion: string,
-  ): PackageDataAsync {
+  getDataAllPackages(): Record<string, PackageDataAsync> {
+    return this.#packages;
+  }
+
+  async fetchPackageData(
+    packageName: string
+  ): Promise<INpmRegistryResponse | null> {
     try {
       const response = await fetch(`https://registry.npmjs.org/${packageName}`);
-
-      const parsedData = (await response.json()) as INpmRegistryResponse;
-
-      const latestVersion = parsedData["dist-tags"].latest;
-
-      return {
-        name: parsedData.name,
-        description: parsedData.description,
-        version: this.convertToExtendedVersion({
-          currentVersion,
-          latestVersion,
-        }),
-        npmUrl: `https://npmjs.com/package/${parsedData.name}`,
-        repositoryUrl: formatRepoUrl(parsedData.repository.url),
-        lastPublish: formatDate(parsedData.time.modified),
-        license: parsedData.license,
-        size: parsedData.versions[latestVersion].dist?.unpackedSize,
-      };
-    } catch (err) {
-      window.vscode.postMessage({
-        type: "error",
-        text: "«NPM» domain not available",
-      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data for ${packageName}`);
+      }
+      return (await response.json()) as INpmRegistryResponse;
+    } catch (error) {
+      console.error(error);
       return null;
     }
   }
 
-  private static convertToExtendedVersion: ConvertToExtendedVersion = ({
-    currentVersion,
-    latestVersion,
-  }) => {
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
-    const curVersion: ICoerceVersion = coerce(currentVersion)!;
-    const newVersion: ICoerceVersion = coerce(latestVersion)!;
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
-
-    const checker = diff(
-      curVersion.version,
-      newVersion.version,
-    ) as IExtendedVersion["updateType"];
-
-    if (!checker) return null;
-
-    const { major, minor, patch, version } = newVersion;
-
-    return {
-      updateType: checker,
-      major,
-      minor,
-      patch,
-      version,
-    };
-  };
-
-  async getPackageData(packageName: string): PackageDataAsync {
-    return this.packages[packageName];
+  #init(dependencies: Dependencies) {
+    for (const [packageName, version] of Object.entries(dependencies)) {
+      this.#packages[packageName] = this.#getPackage(packageName, version);
+    }
   }
 
-  getDataAllPackages(): Record<string, PackageDataAsync> {
-    return this.packages;
+  async #getPackage(
+    packageName: string,
+    currentVersion: string
+  ): PackageDataAsync {
+    const parsedData = await this.fetchPackageData(packageName);
+    if (!parsedData) return null;
+
+    return this.#processPackageData(currentVersion, parsedData);
+  }
+
+  #processPackageData(
+    currentVersion: string,
+    parsedData: INpmRegistryResponse
+  ): IPackageData | null {
+    try {
+      const latestVersion = parsedData["dist-tags"].latest;
+
+      const packageInfo = parsedData.versions[latestVersion];
+
+      const extendedVersion = this.#convertToExtendedVersion(
+        currentVersion,
+        latestVersion
+      );
+
+      const repositoryUrl =
+        typeof parsedData?.repository === "string"
+          ? parsedData?.repository
+          : parsedData?.repository?.url;
+
+      return {
+        name: parsedData.name,
+        description: parsedData.description ?? "?",
+        version: extendedVersion,
+        npmUrl: `https://npmjs.com/package/${parsedData.name}`,
+        repositoryUrl: repositoryUrl ? formatRepoUrl(repositoryUrl) : "",
+        lastPublish: formatDate(parsedData.time.modified),
+        license: parsedData.license,
+        size: packageInfo.dist?.unpackedSize,
+      };
+    } catch (error) {
+      console.error("Error processing package data:", error);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      window.vscode.postMessage({
+        command: "alert",
+        type: "error",
+        text: "«NPM» domain not available",
+      } satisfies MessageListener);
+
+      return null;
+    }
+  }
+
+  #convertToExtendedVersion(
+    currentVersionProperty: string,
+    latestVersion: string
+  ): IPackageData["version"] {
+    const currentVersion = coerce(currentVersionProperty);
+    const newVersion = coerce(latestVersion);
+    if (!currentVersion || !newVersion) return undefined;
+
+    const updateType = diff(currentVersion.version, newVersion.version);
+    if (!updateType) return undefined;
+
+    return {
+      updateType,
+      major: newVersion.major,
+      minor: newVersion.minor,
+      patch: newVersion.patch,
+      version: newVersion.version,
+    };
   }
 }
 

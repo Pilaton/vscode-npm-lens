@@ -1,72 +1,40 @@
-import * as vscode from "vscode";
-
-import Context from "./panels/context";
-import TreeViewPanelController from "./panels/TreeViewPanel";
-import WebViewPanelController from "./panels/WebViewPanel";
-import getRootPath from "./utils/getRootPath";
+import type * as vscode from "vscode";
+import Context from "./controllers/context";
+import TreeViewPanel from "./controllers/tree-view-panel";
+import WebViewPanel from "./controllers/web-view-panel";
+import packageJsonWatcher from "./watchers/package-json-watcher";
 
 /* -------------------------------------------------------------------------- */
 
-/**
- * Handles the change in visibility of the tree view and manages the panel accordingly.
- * @param {object} e - The tree view visibility change event. This is of type vscode.TreeViewVisibilityChangeEvent.
- * @param {WebviewPanel} webViewPanel - The controller for the panel.
- */
-const visibilityChangeHandler = (
-  e: vscode.TreeViewVisibilityChangeEvent,
-  webViewPanel: WebViewPanelController,
-) => {
-  if (e.visible) {
-    webViewPanel.open();
-  } else {
-    webViewPanel.close();
-  }
-};
-
-/**
- * Creates a file watcher for package.json and updates the panel when the file is changed.
- * @param {object} context - The extension context. This is of type vscode.ExtensionContext.
- * @param {WebViewPanelController} webViewPanel - The controller for the panel.
- */
-const packageJsonChangeListener = (
+const handleWebViewVisible = (
   context: vscode.ExtensionContext,
-  webViewPanel: WebViewPanelController,
+  webView: WebViewPanel
 ) => {
-  const rootPath = getRootPath();
+  packageJsonWatcher(context, webView);
 
-  const watcher = vscode.workspace.createFileSystemWatcher(
-    `${rootPath}/package.json`,
-  );
-  watcher.onDidChange(() => {
-    webViewPanel.updateContent();
-  });
-
-  context.subscriptions.push(watcher);
+  return async (event: vscode.TreeViewVisibilityChangeEvent) => {
+    event.visible ? await webView.open() : webView.close();
+  };
 };
 
-/**
- * This method is called when the extension is activated.
- * @param {object} context - The context object provided by VS Code for the extension. This is of type vscode.ExtensionContext.
- */
-export const activate = (context: vscode.ExtensionContext): void => {
+export const activate = (context: vscode.ExtensionContext) => {
   Context.setContext(context);
-  console.log("======");
 
-  const webViewPanel = new WebViewPanelController();
-
-  const treeViewPanel = TreeViewPanelController.open();
-  const visibilityChangeListener = treeViewPanel.onDidChangeVisibility((e) => {
-    visibilityChangeHandler(e, webViewPanel);
+  const webView = new WebViewPanel({
+    extensionUri: context.extensionUri,
+    viewType: "npmLens.webView",
+    title: "npmLens",
+    viewId: "panelIdA",
   });
+  const treeView = new TreeViewPanel();
 
-  context.subscriptions.push(visibilityChangeListener);
+  const treeViewPanel = treeView.open();
 
-  packageJsonChangeListener(context, webViewPanel);
+  context.subscriptions.push(
+    treeViewPanel.onDidChangeVisibility(handleWebViewVisible(context, webView))
+  );
 };
 
-/**
- * This method is called when the extension is deactivated.
- */
 export const deactivate = (): void => {
   console.log("deactivate");
 };

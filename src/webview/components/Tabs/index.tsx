@@ -1,13 +1,11 @@
-import { Tabs, Tab, Box } from "@mui/material";
+import { Tabs, Tab, Box, Button } from "@mui/material";
 import { useState } from "react";
-
-import { PackageJson } from "../../../types/global";
+import { type MessageListener } from "src/controllers/web-view-panel";
+import { type IPackageJson } from "src/utils/get-package-json";
 import AccordionsDependency from "../Accordion";
+import CounterDependency from "./counter-dependency";
 
-import CounterDependency from "./CounterDependency";
-
-interface TabPanelProps {
-  children: React.ReactNode;
+interface TabPanelProperties {
   index: number;
   activeTab: number;
 }
@@ -18,7 +16,7 @@ function TabPanel({
   children,
   index,
   activeTab,
-}: TabPanelProps): React.ReactElement {
+}: React.PropsWithChildren<TabPanelProperties>) {
   const isCurrentTab = index === activeTab;
   return (
     <div
@@ -34,17 +32,30 @@ function TabPanel({
 
 /* -------------------------------------------------------------------------- */
 
-function TabsDependency() {
+const handleUpdateAllPackages = () => {
+  const { vscode } = window;
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
+  vscode.postMessage({
+    command: "updateAllPackages",
+  } satisfies MessageListener);
+};
+
+export default function TabsDependency({
+  packageJson,
+}: {
+  packageJson: IPackageJson;
+}) {
   const [activeTab, setActiveTab] = useState(0);
 
   const tabsData = [
     "dependencies",
     "devDependencies",
     "peerDependencies",
-  ].filter((label): unknown => window.packageData[label as keyof PackageJson]);
+  ].filter((field) => field in packageJson);
 
-  const handleTabChange = (_: React.SyntheticEvent, newTab: number): void =>
+  const handleTabChange = (_: React.SyntheticEvent, newTab: number): void => {
     setActiveTab(newTab);
+  };
 
   return (
     <>
@@ -67,28 +78,30 @@ function TabsDependency() {
           variant="scrollable"
           scrollButtons={false}
         >
-          {tabsData.map(
-            (label): JSX.Element => (
-              <Tab
-                key={label}
-                label={label}
-                sx={{ textTransform: "inherit" }}
-              />
-            ),
-          )}
+          {tabsData.map((field) => (
+            <Tab key={field} label={field} sx={{ textTransform: "inherit" }} />
+          ))}
         </Tabs>
-        <CounterDependency />
+        <Box sx={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+          <CounterDependency />
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleUpdateAllPackages}
+          >
+            Update all
+          </Button>
+        </Box>
       </Box>
-      {tabsData.map(
-        (label, index): JSX.Element => (
-          <TabPanel key={label} activeTab={activeTab} index={index}>
-            <AccordionsDependency
-              deps={window.packageData[label as keyof PackageJson] || {}}
-            />
+      {tabsData.map((field, index) => {
+        const dependencies = packageJson[field as keyof IPackageJson]!;
+
+        return (
+          <TabPanel key={field} activeTab={activeTab} index={index}>
+            <AccordionsDependency dependencies={dependencies} />
           </TabPanel>
-        ),
-      )}
+        );
+      })}
     </>
   );
 }
-export default TabsDependency;
