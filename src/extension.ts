@@ -21,7 +21,12 @@ const handleWebViewVisible = (
 export const activate = (context: vscode.ExtensionContext) => {
   Context.setContext(context);
 
-  const webView = new WebViewPanel();
+  const webView = new WebViewPanel({
+    extensionUri: context.extensionUri,
+    viewType: "npmLens.webView",
+    title: "npmLens",
+    viewId: "panelIdA",
+  });
   const treeView = new TreeViewPanel();
 
   const treeViewPanel = treeView.open();

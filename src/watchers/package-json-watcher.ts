@@ -15,7 +15,7 @@ const packageJsonWatcher = (
 
   watcher.onDidCreate(async () => {
     try {
-      await webView.updateContent();
+      await webView.update();
     } catch (error) {
       console.error("Error updating the web view panel:", error);
     }
@@ -23,7 +23,7 @@ const packageJsonWatcher = (
 
   watcher.onDidChange(async () => {
     try {
-      await webView.updateContent();
+      await webView.update();
     } catch (error) {
       console.error("Error updating the web view panel:", error);
     }

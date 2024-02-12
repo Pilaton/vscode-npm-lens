@@ -30,7 +30,7 @@ root.render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <Layout>
-        <header style={{ marginBottom: ".5rem" }}>
+        <header style={{ marginBottom: "1rem" }}>
           <Stack direction="row" alignItems="center">
             <Logo
               style={{
@@ -46,9 +46,9 @@ root.render(
         </header>
 
         <TabsDependency packageJson={packageJson} />
-        <div className="text-right uppercase mt-4">
+        <Box sx={{ textAlign: "right", marginTop: ".25rem", opacity: 0.7 }}>
           Package manager: {packageManager}
-        </div>
+        </Box>
       </Layout>
     </ThemeProvider>
   </StrictMode>,

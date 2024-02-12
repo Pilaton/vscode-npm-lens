@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { type PackageManager } from "pubun";
 import * as vscode from "vscode";
 
@@ -28,27 +29,78 @@ export type MessageListener =
 const errorStyle =
   "height: 100svh;font-size: 1.25rem;display: flex;justify-content: center;align-items: center;";
 
-export default class WebViewPanelController {
-  #panel?: vscode.WebviewPanel;
+/* ========================================================================== */
+interface WebViewStartOptions {
+  extensionUri: vscode.Uri;
+  viewType: string;
+  title: string;
+  viewId: string;
+  scriptUri?: vscode.Uri;
+  styleUri?: vscode.Uri;
+}
 
-  readonly #context = Context.getContext();
+interface IContentWindowData {
+  packageJson?: IPackageJson;
+  versionExtension?: string;
+  packageManager?: PackageManager | null;
+}
+interface IContentErrorMessage {
+  errorMessage?: string;
+}
+type CuContentType = IContentWindowData & IContentErrorMessage;
 
-  readonly #webViewType = "npmLens.webView";
+/**
+ * WebViewStart
+ */
+abstract class WebViewStart {
+  protected readonly options: WebViewStartOptions;
 
-  readonly #webViewTitle = "npmLens";
+  constructor(options: WebViewStartOptions) {
+    this.options = {
+      scriptUri: vscode.Uri.joinPath(options.extensionUri, "dist/webview.js"),
+      styleUri: vscode.Uri.joinPath(options.extensionUri, "dist/style.css"),
 
-  readonly #webViewHtmlTemplate = `
+      ...options,
+    };
+  }
+
+  protected getContent(webview: vscode.Webview, opt: CuContentType) {
+    const scriptUri = webview.asWebviewUri(this.options.scriptUri!).toString();
+    // const styleUri = webview.asWebviewUri(this.options.styleUri!).toString();
+    // <link href="${styleUri}" rel="stylesheet" />
+
+    return `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1. d0">
-        <title>${this.#webViewTitle}</title>
+        <title>${this.options.title}</title>
       </head>
       <body style="margin:0;padding:0;">
-        %%CONTENT%%
+        ${opt?.errorMessage ?? ""}
+        <div id="root"></div>
+        <script>
+          window.packageJson = ${JSON.stringify(opt?.packageJson ?? "")};
+          window.versionExtension = ${JSON.stringify(
+            opt?.versionExtension ?? "",
+          )};
+          window.packageManager = ${JSON.stringify(opt?.packageManager ?? "")};
+          window.vscode = acquireVsCodeApi();
+        </script>
+        <script src="${scriptUri}"></script>
       </body>
       </html>`;
+  }
+}
+
+/**
+ * WebViewPanelController
+ */
+export default class WebViewPanelController extends WebViewStart {
+  #panel?: vscode.WebviewPanel;
+
+  readonly #context = Context.getContext();
 
   async open(): Promise<void> {
     if (this.#panel) {
@@ -57,19 +109,28 @@ export default class WebViewPanelController {
       this.#createWebviewPanel();
     }
 
-    await this.updateContent();
+    await this.update();
   }
 
-  async updateContent(): Promise<void> {
+  async update(): Promise<void> {
     if (!this.#panel) return;
 
     try {
       const packageJson = await getPackageJson();
-      const content = packageJson
-        ? await this.#getContentWithPackageJson(packageJson)
-        : this.#getErrorHtml("Workspace has no package.json");
+      const packageManager = await this.#getPackageManager();
+      const versionExtension = this.#getVersionExtension();
 
-      this.#panel.webview.html = this.#buildHtml(content);
+      const options: CuContentType = packageJson
+        ? {
+            packageJson,
+            packageManager,
+            versionExtension,
+          }
+        : {
+            errorMessage: this.#getErrorHtml("Workspace has no package.json"),
+          };
+
+      this.#panel.webview.html = this.getContent(this.#panel.webview, options);
     } catch (error) {
       console.error("Error updating content:", error);
       this.#panel.webview.html = this.#getErrorHtml(
@@ -91,8 +152,8 @@ export default class WebViewPanelController {
   /* ========================================================================== */
   #createWebviewPanel() {
     this.#panel = vscode.window.createWebviewPanel(
-      this.#webViewType,
-      this.#webViewTitle,
+      this.options.viewType,
+      this.options.title,
       vscode.ViewColumn.One,
       {
         enableScripts: true,
@@ -111,34 +172,6 @@ export default class WebViewPanelController {
    */
   #createTerminal(terminalName: string) {
     return vscode.window.createTerminal(terminalName);
-  }
-
-  /**
-   * Asynchronously generates HTML content for a webview panel, incorporating dynamic data.
-   *
-   * @param {IPackageJson} packageJson - The parsed `package.json` file of the current project,
-   * providing context and data to the React application.
-   * @returns {Promise<string>} A promise that resolves to the full HTML content string, ready to be
-   * loaded into the webview. This includes script tags for setting up initial state and integrating
-   * the React application.
-   */
-  async #getContentWithPackageJson(packageJson: IPackageJson): Promise<string> {
-    const reactAppUri = this.#getReactAppUri();
-
-    const versionExtension = this.#getVersionExtension();
-
-    const packageManager = await this.#getPackageManager();
-
-    return `
-      <script>
-        window.packageJson = ${JSON.stringify(packageJson)};
-        window.versionExtension = ${versionExtension};
-        window.packageManager = ${JSON.stringify(packageManager)};
-        window.vscode = acquireVsCodeApi();
-      </script>
-      <div id="root"></div>
-      <script src="${String(reactAppUri)}"></script>
-    `;
   }
 
   /**
@@ -167,39 +200,41 @@ export default class WebViewPanelController {
       error: vscode.window.showErrorMessage,
     };
 
-    this.#panel?.webview.onDidReceiveMessage(
-      async (message: MessageListener) => {
-        switch (message?.command) {
-          case "updateAllPackages":
-          case "updatePackage": {
-            const terminal = this.#createTerminal("npmLens Terminal");
-            terminal.show();
+    const handleMessage = async (message: MessageListener) => {
+      switch (message?.command) {
+        case "updateAllPackages":
+        case "updatePackage": {
+          const terminal = this.#createTerminal("npmLens Terminal");
+          terminal.show();
 
-            const packageManager = await this.#getPackageManager();
-            if (!packageManager) {
-              throw new Error("Package manager could not be determined.");
-            }
-
-            const command = getTerminalUpdateCommand({
-              packageManager,
-              packageName:
-                "packageName" in message ? message.packageName : undefined,
-            });
-
-            setTimeout(() => terminal.sendText(command), 500);
-            break;
+          const packageManager = await this.#getPackageManager();
+          if (!packageManager) {
+            throw new Error("Package manager could not be determined.");
           }
 
-          case "alert": {
-            const { type, text } = message;
-            messageHandlers[type](text);
-            break;
-          }
-          default: {
-            break;
-          }
+          const command = getTerminalUpdateCommand({
+            packageManager,
+            packageName:
+              "packageName" in message ? message.packageName : undefined,
+          });
+
+          setTimeout(() => terminal.sendText(command), 500);
+          break;
         }
-      },
+
+        case "alert": {
+          const { type, text } = message;
+          messageHandlers[type](text);
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    };
+
+    this.#panel?.webview.onDidReceiveMessage(
+      handleMessage,
       undefined,
       this.#context.subscriptions,
     );
@@ -214,31 +249,6 @@ export default class WebViewPanelController {
   }
 
   /**
-   * Constructs the full HTML content for a webview by inserting provided content into a template.
-   * @param {string} content The dynamic content to be inserted into the HTML template.
-   */
-  #buildHtml(content: string): string {
-    return this.#webViewHtmlTemplate.replace("%%CONTENT%%", content);
-  }
-
-  /**
-   * Constructs and retrieves the URI for a React application script to be used within a Visual Studio Code webview.
-   * @returns {vscode.Uri}
-   */
-  #getReactAppUri(): vscode.Uri {
-    const reactAppScript = vscode.Uri.joinPath(
-      this.#context.extensionUri,
-      "dist",
-      "webview.js",
-    );
-    const reactAppUri = this.#panel?.webview.asWebviewUri(reactAppScript);
-    if (!reactAppUri) {
-      throw new Error("Failed to get react app uri");
-    }
-    return reactAppUri;
-  }
-
-  /**
    * Get version npmLens
    * @returns {string}
    */
@@ -246,7 +256,7 @@ export default class WebViewPanelController {
     const packageJSONExtension = this.#context.extension.packageJSON as {
       version: string;
     };
-    return JSON.stringify(packageJSONExtension.version);
+    return packageJSONExtension.version;
   }
 
   /**

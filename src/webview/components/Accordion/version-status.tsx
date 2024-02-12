@@ -122,7 +122,7 @@ export default function VersionStatus({
       <Box sx={{ width: "10%", textAlign: "right" }}>
         {version?.version && (
           <Button
-            sx={{ marginInlineEnd: "1rem" }}
+            sx={{ marginInlineStart: "1rem" }}
             size="small"
             variant="outlined"
             onClick={() => {
