@@ -4,6 +4,7 @@
 .vscode/**
 .yarnrc
 **/.eslintrc.json
+eslint.config.js
 **/*.map
 **/*.ts
 **/tsconfig.json
@@ -13,3 +14,7 @@ pnpm-lock.yaml
 src/**
 test-vsix/**
 vsix/**
+viteConfigs
+knip.json
+.github
+package.json
