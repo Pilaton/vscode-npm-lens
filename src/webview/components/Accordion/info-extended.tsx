@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-
 import { type IPackageData } from "../../../providers/npm-provider";
 import NpmIcon from "../../assets/npm.svg?react";
 import useStore from "../../store/store";
@@ -47,7 +46,7 @@ export default function InfoExtended({ name }: { name: string }) {
     isPending: true,
   });
 
-  const packageData = useStore((state) => state.packages[name]);
+  const packageData = useStore(async (state) => await state.packages[name]);
 
   useEffect(() => {
     let isMounted = true;
@@ -58,7 +57,11 @@ export default function InfoExtended({ name }: { name: string }) {
         setNpmInfo({ data, isPending: false });
       }
     };
-    fetchData();
+    fetchData()
+      .then((data) => data)
+      .catch((error) => {
+        console.log(error);
+      });
 
     return () => {
       isMounted = false;

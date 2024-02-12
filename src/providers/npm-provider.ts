@@ -64,7 +64,7 @@ class NPM {
   }
 
   async getPackageData(packageName: string): PackageDataAsync {
-    return this.#packages[packageName];
+    return await this.#packages[packageName];
   }
 
   getDataAllPackages(): Record<string, PackageDataAsync> {
@@ -72,7 +72,7 @@ class NPM {
   }
 
   async fetchPackageData(
-    packageName: string,
+    packageName: string
   ): Promise<INpmRegistryResponse | null> {
     try {
       const response = await fetch(`https://registry.npmjs.org/${packageName}`);
@@ -87,14 +87,14 @@ class NPM {
   }
 
   #init(dependencies: Dependencies) {
-    Object.entries(dependencies).forEach(([packageName, version]) => {
+    for (const [packageName, version] of Object.entries(dependencies)) {
       this.#packages[packageName] = this.#getPackage(packageName, version);
-    });
+    }
   }
 
   async #getPackage(
     packageName: string,
-    currentVersion: string,
+    currentVersion: string
   ): PackageDataAsync {
     const parsedData = await this.fetchPackageData(packageName);
     if (!parsedData) return null;
@@ -104,7 +104,7 @@ class NPM {
 
   #processPackageData(
     currentVersion: string,
-    parsedData: INpmRegistryResponse,
+    parsedData: INpmRegistryResponse
   ): IPackageData | null {
     try {
       const latestVersion = parsedData["dist-tags"].latest;
@@ -113,7 +113,7 @@ class NPM {
 
       const extendedVersion = this.#convertToExtendedVersion(
         currentVersion,
-        latestVersion,
+        latestVersion
       );
 
       if (!extendedVersion) return null;
@@ -135,6 +135,7 @@ class NPM {
       };
     } catch (error) {
       console.error("Error processing package data:", error);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       window.vscode.postMessage({
         command: "alert",
         type: "error",
@@ -147,7 +148,7 @@ class NPM {
 
   #convertToExtendedVersion(
     currentVersionProperty: string,
-    latestVersion: string,
+    latestVersion: string
   ): IPackageData["version"] {
     const currentVersion = coerce(currentVersionProperty);
     const newVersion = coerce(latestVersion);

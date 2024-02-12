@@ -1,5 +1,4 @@
 import { create } from "zustand";
-
 import { type PackageDataAsync } from "../../providers/npm-provider";
 
 type PackagesState = Record<string, PackageDataAsync>;
@@ -12,7 +11,9 @@ interface IStoreState {
 
 const useStore = create<IStoreState>()((set) => ({
   packages: {},
-  setPackages: (packages) => set((state) => ({ ...state, packages })),
+  setPackages: (packages) => {
+    set((state) => ({ ...state, packages }));
+  },
 }));
 
 export default useStore;

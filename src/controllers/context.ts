@@ -1,5 +1,6 @@
 import { type ExtensionContext } from "vscode";
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class Context {
   static #context: ExtensionContext;
 

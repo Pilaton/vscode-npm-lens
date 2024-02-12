@@ -1,7 +1,6 @@
 import { CircularProgress, Stack } from "@mui/material";
 import prettyBytes from "pretty-bytes";
 import { useEffect, useState } from "react";
-
 import useStore from "../../store/store";
 import { DetailBlock } from "../Accordion/info-extended";
 
@@ -19,14 +18,18 @@ export default function CounterDependency() {
       const readyPackages = await Promise.all(Object.values(packages));
       const totalCount = readyPackages.reduce(
         (accumulator, data) => accumulator + (data?.size ?? 0),
-        0,
+        0
       );
 
       if (isMounted) {
         setCount(totalCount);
       }
     };
-    fetchPackages();
+    fetchPackages()
+      .then((data) => data)
+      .catch((error) => {
+        console.log(error);
+      });
 
     return () => {
       isMounted = false;

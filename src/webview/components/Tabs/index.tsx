@@ -2,9 +2,7 @@ import { Tabs, Tab, Box, Button } from "@mui/material";
 import { useState } from "react";
 import { type MessageListener } from "src/controllers/web-view-panel";
 import { type IPackageJson } from "src/utils/get-package-json";
-
 import AccordionsDependency from "../Accordion";
-
 import CounterDependency from "./counter-dependency";
 
 interface TabPanelProperties {
@@ -36,6 +34,7 @@ function TabPanel({
 
 const handleUpdateAllPackages = () => {
   const { vscode } = window;
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   vscode.postMessage({
     command: "updateAllPackages",
   } satisfies MessageListener);
@@ -54,8 +53,9 @@ export default function TabsDependency({
     "peerDependencies",
   ].filter((field) => field in packageJson);
 
-  const handleTabChange = (_: React.SyntheticEvent, newTab: number): void =>
+  const handleTabChange = (_: React.SyntheticEvent, newTab: number): void => {
     setActiveTab(newTab);
+  };
 
   return (
     <>

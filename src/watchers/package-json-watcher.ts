@@ -1,16 +1,14 @@
 import * as vscode from "vscode";
-
-import getRootPath from "../utils/get-root-path";
-
 import type WebViewPanelController from "../controllers/web-view-panel";
+import getRootPath from "../utils/get-root-path";
 
 const packageJsonWatcher = (
   context: vscode.ExtensionContext,
-  webView: WebViewPanelController,
+  webView: WebViewPanelController
 ) => {
   const rootPath = getRootPath();
   const watcher = vscode.workspace.createFileSystemWatcher(
-    `${rootPath}/package.json`,
+    `${rootPath}/package.json`
   );
 
   watcher.onDidCreate(async () => {

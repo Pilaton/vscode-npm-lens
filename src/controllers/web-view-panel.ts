@@ -1,11 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import { type PackageManager } from "pubun";
 import * as vscode from "vscode";
-
 import getPackageJson, { type IPackageJson } from "../utils/get-package-json";
 import getRootPath from "../utils/get-root-path";
 import getTerminalUpdateCommand from "../utils/get-terminal-update-command";
-
 import Context from "./context";
 
 interface IUpdateAllPackageMessage {
@@ -83,7 +81,7 @@ abstract class WebViewStart {
         <script>
           window.packageJson = ${JSON.stringify(opt?.packageJson ?? "")};
           window.versionExtension = ${JSON.stringify(
-            opt?.versionExtension ?? "",
+            opt?.versionExtension ?? ""
           )};
           window.packageManager = ${JSON.stringify(opt?.packageManager ?? "")};
           window.vscode = acquireVsCodeApi();
@@ -134,7 +132,7 @@ export default class WebViewPanelController extends WebViewStart {
     } catch (error) {
       console.error("Error updating content:", error);
       this.#panel.webview.html = this.#getErrorHtml(
-        "Error loading package.json",
+        "Error loading package.json"
       );
     }
   }
@@ -160,7 +158,7 @@ export default class WebViewPanelController extends WebViewStart {
         localResourceRoots: [
           vscode.Uri.joinPath(this.#context.extensionUri, "dist"),
         ],
-      },
+      }
     );
 
     this.#enablePanelWatcher();
@@ -218,13 +216,15 @@ export default class WebViewPanelController extends WebViewStart {
               "packageName" in message ? message.packageName : undefined,
           });
 
-          setTimeout(() => terminal.sendText(command), 500);
+          setTimeout(() => {
+            terminal.sendText(command);
+          }, 500);
           break;
         }
 
         case "alert": {
           const { type, text } = message;
-          messageHandlers[type](text);
+          await messageHandlers[type](text);
           break;
         }
         default: {
@@ -236,7 +236,7 @@ export default class WebViewPanelController extends WebViewStart {
     this.#panel?.webview.onDidReceiveMessage(
       handleMessage,
       undefined,
-      this.#context.subscriptions,
+      this.#context.subscriptions
     );
   }
 

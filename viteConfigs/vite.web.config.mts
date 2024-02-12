@@ -1,7 +1,8 @@
-import { UserConfig, defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 import { merge } from "ts-deepmerge";
-
+import { type UserConfig, defineConfig } from "vite";
 import banner from "vite-plugin-banner";
+import svgr from "vite-plugin-svgr";
 
 const bannerText = `/**
  * npmLens
@@ -10,20 +11,30 @@ const bannerText = `/**
  * @see {@link https://github.com/Pilaton/npmLens|GitHub}
 */`;
 
+const noAssetsCopyPlugin = () => ({
+  name: "no-assets-copy",
+  generateBundle(_, bundle) {
+    for (const name in bundle) {
+      if (name.startsWith("assets/")) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, @typescript-eslint/no-unsafe-member-access
+        delete bundle[name];
+      }
+    }
+  },
+});
+
 const baseBuildConfig = {
   build: {
     copyPublicDir: false,
     emptyOutDir: false,
     outDir: "dist",
     rollupOptions: {
-      external: ["fs", "path", "vscode"],
-      input: "./src/extension.ts",
+      input: "src/webview/webview.tsx",
       output: {
-        format: "commonjs",
+        entryFileNames: "[name].js",
+        format: "esm",
       },
     },
-    ssr: true,
-    target: "node18",
   },
 } satisfies UserConfig;
 
@@ -31,7 +42,7 @@ const overrides = {
   forDev: {
     build: {
       minify: "esbuild",
-      sourcemap: "inline",
+      // sourcemap: "inline",
       rollupOptions: {
         output: {
           compact: false,
@@ -43,8 +54,17 @@ const overrides = {
   forProd: {
     build: {
       minify: "terser",
+      terserOptions: {
+        format: { comments: false },
+        compress: {
+          passes: 3,
+        },
+      },
       rollupOptions: {
         treeshake: "smallest",
+        output: {
+          compact: true,
+        },
       },
     },
   },
@@ -54,10 +74,10 @@ export default defineConfig(({ mode }) => {
   const isDevelopment = mode === "development";
 
   return {
-    plugins: [banner(bannerText)],
+    plugins: [banner(bannerText), react(), svgr(), noAssetsCopyPlugin()],
     ...merge(
       baseBuildConfig,
-      isDevelopment ? overrides.forDev : overrides.forProd,
+      isDevelopment ? overrides.forDev : overrides.forProd
     ),
   };
 });

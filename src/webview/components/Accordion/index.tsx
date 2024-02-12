@@ -2,10 +2,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { type Dependencies } from "src/utils/get-package-json";
-
 import NPM from "../../../providers/npm-provider";
 import useStore from "../../store/store";
-
 import InfoExtended from "./info-extended";
 import InfoShort from "./info-short";
 import VersionStatus from "./version-status";

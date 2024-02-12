@@ -1,6 +1,5 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-
 import getRootPath from "./get-root-path";
 
 export type Dependencies = Record<string, string>;

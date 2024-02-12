@@ -2,9 +2,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, Button, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { type MessageListener } from "src/controllers/web-view-panel";
-
 import { type IPackageData } from "../../../providers/npm-provider";
-
 import type NPM from "../../../providers/npm-provider";
 
 interface IVersionState {
@@ -72,6 +70,7 @@ function VersionStatusBadge({
 
 const handleUpdatePackage = (packageName: string) => {
   const { vscode } = window;
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   vscode.postMessage({
     command: "updatePackage",
     packageName,
@@ -102,7 +101,11 @@ export default function VersionStatus({
       }
     };
 
-    fetchData();
+    fetchData()
+      .then((data) => data)
+      .catch((error) => {
+        console.log(error);
+      });
 
     return () => {
       isMounted = false;

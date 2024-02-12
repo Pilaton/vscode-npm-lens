@@ -2,10 +2,9 @@ import { Box, Stack } from "@mui/material";
 import { ThemeProvider, styled } from "@mui/material/styles";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-
 import Logo from "./assets/logo.svg?react";
-import Layout from "./components/layout";
 import TabsDependency from "./components/Tabs";
+import Layout from "./components/layout";
 import theme from "./theme";
 
 const rootElement = document.querySelector("#root");
@@ -51,5 +50,5 @@ root.render(
         </Box>
       </Layout>
     </ThemeProvider>
-  </StrictMode>,
+  </StrictMode>
 );

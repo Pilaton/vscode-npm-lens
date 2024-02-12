@@ -1,20 +1,19 @@
+import type * as vscode from "vscode";
 import Context from "./controllers/context";
 import TreeViewPanel from "./controllers/tree-view-panel";
 import WebViewPanel from "./controllers/web-view-panel";
 import packageJsonWatcher from "./watchers/package-json-watcher";
 
-import type * as vscode from "vscode";
-
 /* -------------------------------------------------------------------------- */
 
 const handleWebViewVisible = (
   context: vscode.ExtensionContext,
-  webView: WebViewPanel,
+  webView: WebViewPanel
 ) => {
   packageJsonWatcher(context, webView);
 
   return async (event: vscode.TreeViewVisibilityChangeEvent) => {
-    await (event.visible ? webView.open() : webView.close());
+    event.visible ? await webView.open() : webView.close();
   };
 };
 
@@ -32,7 +31,7 @@ export const activate = (context: vscode.ExtensionContext) => {
   const treeViewPanel = treeView.open();
 
   context.subscriptions.push(
-    treeViewPanel.onDidChangeVisibility(handleWebViewVisible(context, webView)),
+    treeViewPanel.onDidChangeVisibility(handleWebViewVisible(context, webView))
   );
 };
 

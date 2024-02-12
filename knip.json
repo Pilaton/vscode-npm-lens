@@ -3,6 +3,6 @@
   "entry": ["src/extension.ts", "src/webview/webview.tsx"],
   "project": ["src/**/*.{ts,tsx}"],
   "vite": {
-    "config": ["vite.*.config.mts"]
+    "config": ["viteConfigs/vite.*.config.mts"]
   }
 }
