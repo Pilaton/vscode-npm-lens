@@ -22,7 +22,7 @@ const baseBuildConfig = {
       },
     },
     ssr: true,
-    target: "node18",
+    target: "node20",
   },
 } satisfies UserConfig;
 
