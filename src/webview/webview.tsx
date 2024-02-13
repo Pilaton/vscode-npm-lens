@@ -22,6 +22,7 @@ const BoxVersion = styled(Box)({
   backgroundColor: "hsla(0,0%,50.2%,.17)",
   padding: "1px 4px",
 });
+console.log(import.meta.env);
 
 const { packageJson, packageManager } = window;
 
@@ -38,7 +39,9 @@ root.render(
               }}
             />
 
-            <h1 style={{ paddingInline: "16px" }}>npmLens DEV</h1>
+            <h1 style={{ paddingInline: "16px" }}>
+              npmLens {import.meta.env.MODE === "development" && "DEV"}
+            </h1>
 
             {versionExtension && <BoxVersion>v{versionExtension}</BoxVersion>}
           </Stack>

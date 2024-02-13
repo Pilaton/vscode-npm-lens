@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { type PackageManager } from "pubun";
+import { type PackageManager, defineManager } from "pubun";
 import * as vscode from "vscode";
 import getPackageJson, { type IPackageJson } from "../utils/get-package-json";
 import getRootPath from "../utils/get-root-path";
@@ -265,9 +265,12 @@ export default class WebViewPanelController extends WebViewStart {
    */
   async #getPackageManager(): Promise<PackageManager | null> {
     const rootPath = getRootPath();
-    // const { defineManager } = await import("pubun"); // FIXME
-    // const packageManager = await defineManager(rootPath);
-    const packageManager = "pnpm";
+
+    const packageManager = await defineManager(rootPath);
+    // console.log(
+    //   "WebViewPanelController · #getPackageManager · packageManager:",
+    //   packageManager
+    // );
     return packageManager;
   }
 }

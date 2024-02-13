@@ -15,13 +15,26 @@ const baseBuildConfig = {
     emptyOutDir: false,
     outDir: "dist",
     rollupOptions: {
-      external: ["fs", "path", "vscode"],
+      external: [
+        /node:\w+/g,
+        "node:process",
+        "fs",
+        "path",
+        "child_process",
+        "stream",
+        "vscode",
+      ],
       input: "./src/extension.ts",
       output: {
+        entryFileNames: "[name].js",
         format: "commonjs",
       },
     },
-    ssr: true,
+    lib: {
+      entry: "./src/extension.ts",
+      formats: ["cjs"],
+    },
+    // ssr: true,
     target: "node20",
   },
 } satisfies UserConfig;
@@ -43,7 +56,7 @@ const overrides = {
     build: {
       minify: "terser",
       rollupOptions: {
-        treeshake: "smallest",
+        treeshake: "recommended",
       },
     },
   },
