@@ -57,6 +57,8 @@ export default function TabsDependency({
     setActiveTab(newTab);
   };
 
+  const { packageManager } = window;
+
   return (
     <>
       <Box
@@ -84,13 +86,16 @@ export default function TabsDependency({
         </Tabs>
         <Box sx={{ display: "flex", alignItems: "center", gap: "2rem" }}>
           <CounterDependency />
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={handleUpdateAllPackages}
-          >
-            Update all
-          </Button>
+
+          {packageManager !== "npm" && (
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={handleUpdateAllPackages}
+            >
+              Update all
+            </Button>
+          )}
         </Box>
       </Box>
       {tabsData.map((field, index) => {
