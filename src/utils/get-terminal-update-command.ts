@@ -13,7 +13,7 @@ const getTerminalUpdateCommand = ({
     bun: packageName
       ? `bun update ${packageName} --force`
       : "bun update --force",
-    npm: packageName ? `npm update ${packageName}@latest` : "npm update",
+    npm: packageName ? `npm install ${packageName}@latest` : "npm update",
     yarn: packageName
       ? `yarn upgrade ${packageName} --latest`
       : "yarn upgrade --latest",
