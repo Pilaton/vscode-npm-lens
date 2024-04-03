@@ -14,9 +14,7 @@ const getTerminalUpdateCommand = ({
       ? `bun update ${packageName} --force`
       : "bun update --force",
     npm: packageName ? `npm install ${packageName}@latest` : "npm update",
-    yarn: packageName
-      ? `yarn upgrade ${packageName} --latest`
-      : "yarn upgrade --latest",
+    yarn: packageName ? `yarn up ${packageName}` : "yarn up '**'",
     pnpm: packageName ? `pnpm up ${packageName} --latest` : "pnpm up --latest",
   } satisfies Record<PackageManager, string>;
 

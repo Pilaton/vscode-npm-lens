@@ -166,10 +166,17 @@ export default class WebViewPanelController extends WebViewStart {
   }
 
   /**
-   * Create a terminal
+   * Activate a terminal
    */
-  #createTerminal(terminalName: string) {
-    return vscode.window.createTerminal(terminalName);
+  #activateTerminal() {
+    const terminalName = "npmLens Terminal";
+    let terminal = vscode.window.terminals.find((t) => t.name === terminalName);
+
+    if (!terminal) {
+      terminal = vscode.window.createTerminal(terminalName);
+    }
+
+    return terminal;
   }
 
   /**
@@ -202,7 +209,7 @@ export default class WebViewPanelController extends WebViewStart {
       switch (message?.command) {
         case "updateAllPackages":
         case "updatePackage": {
-          const terminal = this.#createTerminal("npmLens Terminal");
+          const terminal = this.#activateTerminal();
           terminal.show();
 
           const packageManager = await this.#getPackageManager();
