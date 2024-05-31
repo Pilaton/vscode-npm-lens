@@ -1,10 +1,10 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
-import getRootPath from "./get-root-path";
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import getRootPath from './get-root-path';
 
 export type Dependencies = Record<string, string>;
 
-export interface IPackageJson {
+export interface PackageJson {
   dependencies?: Dependencies;
   devDependencies?: Dependencies;
   peerDependencies?: Dependencies;
@@ -12,16 +12,16 @@ export interface IPackageJson {
   optionalDependencies?: Dependencies;
 }
 
-const getPackageJson = async (): Promise<IPackageJson | null> => {
+const getPackageJson = async (): Promise<PackageJson | null> => {
   try {
     const rootPath = getRootPath();
-    const packageJsonPath = join(rootPath, "package.json");
+    const packageJsonPath = join(rootPath, 'package.json');
 
-    const packageJsonData = await readFile(packageJsonPath, "utf8");
-    const packageJson = JSON.parse(packageJsonData) as IPackageJson;
+    const packageJsonData = await readFile(packageJsonPath, 'utf8');
+    const packageJson = JSON.parse(packageJsonData) as PackageJson;
     return packageJson;
   } catch (error) {
-    console.error("Error reading package.json:", error);
+    console.error('Error reading package.json:', error);
     return null;
   }
 };

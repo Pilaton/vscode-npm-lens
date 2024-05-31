@@ -1,26 +1,26 @@
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Box, Button, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
-import { type MessageListener } from "src/controllers/web-view-panel";
-import { type IPackageData } from "../../../providers/npm-provider";
-import type NPM from "../../../providers/npm-provider";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Box, Button, CircularProgress } from '@mui/material';
+import { useEffect, useState } from 'react';
+import type { MessageListener } from 'src/controllers/web-view-panel';
+import type { PackageData } from '../../../providers/npm-provider';
+import type NPM from '../../../providers/npm-provider';
 
-interface IVersionState {
-  version?: IPackageData["version"];
+interface VersionState {
+  version?: PackageData['version'];
   isPending: boolean;
 }
 
 function VersionStatusBadge({
   version,
 }: {
-  version?: IPackageData["version"];
+  version?: PackageData['version'];
 }) {
   if (!version) {
     return (
       <CheckCircleIcon
         sx={{
-          fill: "var(--vscode-activityBarBadge-background)",
-          fontSize: "1.25rem",
+          fill: 'var(--vscode-activityBarBadge-background)',
+          fontSize: '1.25rem',
         }}
       />
     );
@@ -36,9 +36,9 @@ function VersionStatusBadge({
   if (updateType in allowedTypes) {
     const baseStyle = { fontWeight: 500 };
     const styles = {
-      major: { ...baseStyle, color: "var(--vscode-editorError-foreground)" },
-      minor: { ...baseStyle, color: "var(--vscode-editorWarning-foreground)" },
-      patch: { ...baseStyle, color: "var(--vscode-editorInfo-foreground)" },
+      major: { ...baseStyle, color: 'var(--vscode-editorError-foreground)' },
+      minor: { ...baseStyle, color: 'var(--vscode-editorWarning-foreground)' },
+      patch: { ...baseStyle, color: 'var(--vscode-editorInfo-foreground)' },
     };
 
     const status = {
@@ -72,7 +72,7 @@ const handleUpdatePackage = (packageName: string) => {
   const { vscode } = window;
   // eslint-disable-next-line @typescript-eslint/no-floating-promises
   vscode.postMessage({
-    command: "updatePackage",
+    command: 'updatePackage',
     packageName,
   } satisfies MessageListener);
 };
@@ -84,7 +84,7 @@ export default function VersionStatus({
   name: string;
   npmProvider: NPM;
 }) {
-  const [version, setVersion] = useState<IVersionState>({
+  const [version, setVersion] = useState<VersionState>({
     version: undefined,
     isPending: true,
   });
@@ -110,7 +110,7 @@ export default function VersionStatus({
 
   return (
     <>
-      <Box sx={{ width: "20%", textAlign: "right", letterSpacing: "0.75px" }}>
+      <Box sx={{ width: '20%', textAlign: 'right', letterSpacing: '0.75px' }}>
         {version.isPending ? (
           <CircularProgress size={18} />
         ) : (
@@ -118,10 +118,10 @@ export default function VersionStatus({
         )}
       </Box>
 
-      <Box sx={{ width: "10%", textAlign: "right" }}>
+      <Box sx={{ width: '10%', textAlign: 'right' }}>
         {version?.version && (
           <Button
-            sx={{ marginInlineStart: "1rem" }}
+            sx={{ marginInlineStart: '1rem' }}
             size="small"
             variant="outlined"
             onClick={() => {

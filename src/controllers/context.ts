@@ -1,16 +1,16 @@
-import { type ExtensionContext } from "vscode";
+import type { ExtensionContext } from 'vscode';
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-class Context {
-  static #context: ExtensionContext;
+const contextManager = (() => {
+  let context: ExtensionContext;
 
-  static setContext(context: ExtensionContext): void {
-    this.#context = context;
-  }
+  return {
+    setContext(newContext: ExtensionContext): void {
+      context = newContext;
+    },
+    getContext(): ExtensionContext {
+      return context;
+    },
+  };
+})();
 
-  static getContext(): ExtensionContext {
-    return this.#context;
-  }
-}
-
-export default Context;
+export const { setContext, getContext } = contextManager;

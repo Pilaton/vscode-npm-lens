@@ -1,8 +1,8 @@
-import react from "@vitejs/plugin-react";
-import { merge } from "ts-deepmerge";
-import { type UserConfig, defineConfig } from "vite";
-import banner from "vite-plugin-banner";
-import svgr from "vite-plugin-svgr";
+import react from '@vitejs/plugin-react';
+import { merge } from 'ts-deepmerge';
+import { type UserConfig, defineConfig } from 'vite';
+import banner from 'vite-plugin-banner';
+import svgr from 'vite-plugin-svgr';
 
 const bannerText = `/**
  * npmLens
@@ -12,10 +12,10 @@ const bannerText = `/**
 */`;
 
 const noAssetsCopyPlugin = () => ({
-  name: "no-assets-copy",
+  name: 'no-assets-copy',
   generateBundle(_, bundle) {
     for (const name in bundle) {
-      if (name.startsWith("assets/")) {
+      if (name.startsWith('assets/')) {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, @typescript-eslint/no-unsafe-member-access
         delete bundle[name];
       }
@@ -27,12 +27,12 @@ const baseBuildConfig = {
   build: {
     copyPublicDir: false,
     emptyOutDir: false,
-    outDir: "dist",
+    outDir: 'dist',
     rollupOptions: {
-      input: "src/webview/webview.tsx",
+      input: 'src/webview/webview.tsx',
       output: {
-        entryFileNames: "[name].js",
-        format: "esm",
+        entryFileNames: '[name].js',
+        format: 'esm',
       },
     },
   },
@@ -41,7 +41,7 @@ const baseBuildConfig = {
 const overrides = {
   forDev: {
     build: {
-      minify: "esbuild",
+      minify: 'esbuild',
       // sourcemap: "inline",
       rollupOptions: {
         output: {
@@ -53,7 +53,7 @@ const overrides = {
 
   forProd: {
     build: {
-      minify: "terser",
+      minify: 'terser',
       terserOptions: {
         format: { comments: false },
         compress: {
@@ -61,7 +61,7 @@ const overrides = {
         },
       },
       rollupOptions: {
-        treeshake: "smallest",
+        treeshake: 'smallest',
         output: {
           compact: true,
         },
@@ -71,13 +71,10 @@ const overrides = {
 } satisfies Record<string, UserConfig>;
 
 export default defineConfig(({ mode }) => {
-  const isDevelopment = mode === "development";
+  const isDevelopment = mode === 'development';
 
   return {
     plugins: [banner(bannerText), react(), svgr(), noAssetsCopyPlugin()],
-    ...merge(
-      baseBuildConfig,
-      isDevelopment ? overrides.forDev : overrides.forProd
-    ),
+    ...merge(baseBuildConfig, isDevelopment ? overrides.forDev : overrides.forProd),
   };
 });

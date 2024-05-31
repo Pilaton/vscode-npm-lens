@@ -14,7 +14,7 @@ pnpm-lock.yaml
 src/**
 test-vsix/**
 vsix/**
-viteConfigs
+vite-configs
 knip.json
 .github
 package.json

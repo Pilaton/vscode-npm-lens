@@ -1,8 +1,8 @@
-import { CircularProgress, Stack } from "@mui/material";
-import prettyBytes from "pretty-bytes";
-import { useEffect, useState } from "react";
-import useStore from "../../store/store";
-import { DetailBlock } from "../Accordion/info-extended";
+import { CircularProgress, Stack } from '@mui/material';
+import prettyBytes from 'pretty-bytes';
+import { useEffect, useState } from 'react';
+import useStore from '../../store/store';
+import { DetailBlock } from '../Accordion/info-extended';
 
 /* -------------------------------------------------------------------------- */
 
@@ -34,11 +34,7 @@ export default function CounterDependency() {
   }, [packages]);
 
   return (
-    <Stack
-      direction="row"
-      spacing={3.5}
-      sx={{ "& div": { alignItems: "flex-end" } }}
-    >
+    <Stack direction="row" spacing={3.5} sx={{ '& div': { alignItems: 'flex-end' } }}>
       <DetailBlock
         label="Unpacked"
         value={count ? prettyBytes(count) : <CircularProgress size={12} />}

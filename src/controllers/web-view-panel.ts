@@ -1,31 +1,28 @@
 /* eslint-disable max-classes-per-file */
-import { type PackageManager, defineManager } from "pubun";
-import * as vscode from "vscode";
-import getPackageJson, { type IPackageJson } from "../utils/get-package-json";
-import getRootPath from "../utils/get-root-path";
-import getTerminalUpdateCommand from "../utils/get-terminal-update-command";
-import Context from "./context";
+import { type PackageManager, defineManager } from 'pubun';
+import vscode from 'vscode';
+import getPackageJson, { type PackageJson } from '../utils/get-package-json';
+import getRootPath from '../utils/get-root-path';
+import getTerminalUpdateCommand from '../utils/get-terminal-update-command';
+import { getContext } from './context';
 
-interface IUpdateAllPackageMessage {
-  command: "updateAllPackages";
+interface UpdateAllPackageMessage {
+  command: 'updateAllPackages';
 }
-interface IUpdatePackageMessage {
-  command: "updatePackage";
+interface UpdatePackageMessage {
+  command: 'updatePackage';
   packageName: string;
 }
-interface IAlertMessage {
-  command: "alert";
-  type: "info" | "warning" | "error";
+interface AlertMessage {
+  command: 'alert';
+  type: 'info' | 'warning' | 'error';
   text: string;
 }
 
-export type MessageListener =
-  | IUpdatePackageMessage
-  | IUpdateAllPackageMessage
-  | IAlertMessage;
+export type MessageListener = UpdatePackageMessage | UpdateAllPackageMessage | AlertMessage;
 
 const errorStyle =
-  "height: 100svh;font-size: 1.25rem;display: flex;justify-content: center;align-items: center;";
+  'height: 100svh;font-size: 1.25rem;display: flex;justify-content: center;align-items: center;';
 
 /* ========================================================================== */
 interface WebViewStartOptions {
@@ -37,15 +34,15 @@ interface WebViewStartOptions {
   styleUri?: vscode.Uri;
 }
 
-interface IContentWindowData {
-  packageJson?: IPackageJson;
+interface ContentWindowData {
+  packageJson?: PackageJson;
   versionExtension?: string;
   packageManager?: PackageManager | null;
 }
-interface IContentErrorMessage {
+interface ContentErrorMessage {
   errorMessage?: string;
 }
-type CuContentType = IContentWindowData & IContentErrorMessage;
+type CuContentType = ContentWindowData & ContentErrorMessage;
 
 /**
  * WebViewStart
@@ -55,8 +52,8 @@ abstract class WebViewStart {
 
   constructor(options: WebViewStartOptions) {
     this.options = {
-      scriptUri: vscode.Uri.joinPath(options.extensionUri, "dist/webview.js"),
-      styleUri: vscode.Uri.joinPath(options.extensionUri, "dist/style.css"),
+      scriptUri: vscode.Uri.joinPath(options.extensionUri, 'dist/webview.js'),
+      styleUri: vscode.Uri.joinPath(options.extensionUri, 'dist/style.css'),
 
       ...options,
     };
@@ -76,14 +73,12 @@ abstract class WebViewStart {
         <title>${this.options.title}</title>
       </head>
       <body style="margin:0;padding:0;">
-        ${opt?.errorMessage ?? ""}
+        ${opt?.errorMessage ?? ''}
         <div id="root"></div>
         <script>
-          window.packageJson = ${JSON.stringify(opt?.packageJson ?? "")};
-          window.versionExtension = ${JSON.stringify(
-            opt?.versionExtension ?? ""
-          )};
-          window.packageManager = ${JSON.stringify(opt?.packageManager ?? "")};
+          window.packageJson = ${JSON.stringify(opt?.packageJson ?? '')};
+          window.versionExtension = ${JSON.stringify(opt?.versionExtension ?? '')};
+          window.packageManager = ${JSON.stringify(opt?.packageManager ?? '')};
           window.vscode = acquireVsCodeApi();
         </script>
         <script src="${scriptUri}"></script>
@@ -98,7 +93,7 @@ abstract class WebViewStart {
 export default class WebViewPanelController extends WebViewStart {
   #panel?: vscode.WebviewPanel;
 
-  readonly #context = Context.getContext();
+  readonly #context = getContext();
 
   async open(): Promise<void> {
     if (this.#panel) {
@@ -111,7 +106,9 @@ export default class WebViewPanelController extends WebViewStart {
   }
 
   async update(): Promise<void> {
-    if (!this.#panel) return;
+    if (!this.#panel) {
+      return;
+    }
 
     try {
       const packageJson = await getPackageJson();
@@ -125,15 +122,13 @@ export default class WebViewPanelController extends WebViewStart {
             versionExtension,
           }
         : {
-            errorMessage: this.#getErrorHtml("Workspace has no package.json"),
+            errorMessage: this.#getErrorHtml('Workspace has no package.json'),
           };
 
       this.#panel.webview.html = this.getContent(this.#panel.webview, options);
     } catch (error) {
-      console.error("Error updating content:", error);
-      this.#panel.webview.html = this.#getErrorHtml(
-        "Error loading package.json"
-      );
+      console.error('Error updating content:', error);
+      this.#panel.webview.html = this.#getErrorHtml('Error loading package.json');
     }
   }
 
@@ -155,9 +150,7 @@ export default class WebViewPanelController extends WebViewStart {
       vscode.ViewColumn.One,
       {
         enableScripts: true,
-        localResourceRoots: [
-          vscode.Uri.joinPath(this.#context.extensionUri, "dist"),
-        ],
+        localResourceRoots: [vscode.Uri.joinPath(this.#context.extensionUri, 'dist')],
       }
     );
 
@@ -169,7 +162,7 @@ export default class WebViewPanelController extends WebViewStart {
    * Activate a terminal
    */
   #activateTerminal() {
-    const terminalName = "npmLens Terminal";
+    const terminalName = 'npmLens Terminal';
     let terminal = vscode.window.terminals.find((t) => t.name === terminalName);
 
     if (!terminal) {
@@ -207,20 +200,19 @@ export default class WebViewPanelController extends WebViewStart {
 
     const handleMessage = async (message: MessageListener) => {
       switch (message?.command) {
-        case "updateAllPackages":
-        case "updatePackage": {
+        case 'updateAllPackages':
+        case 'updatePackage': {
           const terminal = this.#activateTerminal();
           terminal.show();
 
           const packageManager = await this.#getPackageManager();
           if (!packageManager) {
-            throw new Error("Package manager could not be determined.");
+            throw new Error('Package manager could not be determined.');
           }
 
           const command = getTerminalUpdateCommand({
             packageManager,
-            packageName:
-              "packageName" in message ? message.packageName : undefined,
+            packageName: 'packageName' in message ? message.packageName : undefined,
           });
 
           setTimeout(() => {
@@ -229,7 +221,7 @@ export default class WebViewPanelController extends WebViewStart {
           break;
         }
 
-        case "alert": {
+        case 'alert': {
           const { type, text } = message;
           await messageHandlers[type](text);
           break;
@@ -240,11 +232,7 @@ export default class WebViewPanelController extends WebViewStart {
       }
     };
 
-    this.#panel?.webview.onDidReceiveMessage(
-      handleMessage,
-      undefined,
-      this.#context.subscriptions
-    );
+    this.#panel?.webview.onDidReceiveMessage(handleMessage, undefined, this.#context.subscriptions);
   }
 
   /**
@@ -260,10 +248,10 @@ export default class WebViewPanelController extends WebViewStart {
    * @returns {string}
    */
   #getVersionExtension(): string {
-    const packageJSONExtension = this.#context.extension.packageJSON as {
+    const packageJsonExtension = this.#context.extension.packageJSON as {
       version: string;
     };
-    return packageJSONExtension.version;
+    return packageJsonExtension.version;
   }
 
   /**

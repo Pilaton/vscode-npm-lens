@@ -1,18 +1,18 @@
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import { type Dependencies } from "src/utils/get-package-json";
-import NPM from "../../../providers/npm-provider";
-import useStore from "../../store/store";
-import InfoExtended from "./info-extended";
-import InfoShort from "./info-short";
-import VersionStatus from "./version-status";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import type { Dependencies } from 'src/utils/get-package-json';
+import NPM from '../../../providers/npm-provider';
+import useStore from '../../store/store';
+import InfoExtended from './info-extended';
+import InfoShort from './info-short';
+import VersionStatus from './version-status';
 
-interface IProperties {
+interface Properties {
   dependencies: Dependencies;
 }
 
-export default function AccordionsDependency({ dependencies }: IProperties) {
+export default function AccordionsDependency({ dependencies }: Properties) {
   const [expanded, setExpanded] = useState<string | false>(false);
   const { setPackages } = useStore.getState();
 
@@ -20,7 +20,7 @@ export default function AccordionsDependency({ dependencies }: IProperties) {
 
   useEffect(() => {
     setPackages(npmProvider.getDataAllPackages());
-  }, [dependencies, npmProvider, setPackages]);
+  }, [npmProvider, setPackages]);
 
   return (
     <>
@@ -41,8 +41,8 @@ export default function AccordionsDependency({ dependencies }: IProperties) {
             id={name}
             expandIcon={<ExpandMoreIcon />}
             sx={{
-              "& .MuiAccordionSummary-content": {
-                alignItems: "center",
+              '& .MuiAccordionSummary-content': {
+                alignItems: 'center',
               },
             }}
           >
@@ -51,7 +51,7 @@ export default function AccordionsDependency({ dependencies }: IProperties) {
             </InfoShort>
           </AccordionSummary>
 
-          <AccordionDetails sx={{ minHeight: "160px" }}>
+          <AccordionDetails sx={{ minHeight: '160px' }}>
             <InfoExtended name={name} />
           </AccordionDetails>
         </Accordion>

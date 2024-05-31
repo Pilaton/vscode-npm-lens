@@ -1,15 +1,12 @@
-import type * as vscode from "vscode";
-import Context from "./controllers/context";
-import TreeViewPanel from "./controllers/tree-view-panel";
-import WebViewPanel from "./controllers/web-view-panel";
-import packageJsonWatcher from "./watchers/package-json-watcher";
+import type vscode from 'vscode';
+import { setContext } from './controllers/context';
+import TreeViewPanel from './controllers/tree-view-panel';
+import WebViewPanel from './controllers/web-view-panel';
+import packageJsonWatcher from './watchers/package-json-watcher';
 
 /* -------------------------------------------------------------------------- */
 
-const handleWebViewVisible = (
-  context: vscode.ExtensionContext,
-  webView: WebViewPanel
-) => {
+const handleWebViewVisible = (context: vscode.ExtensionContext, webView: WebViewPanel) => {
   packageJsonWatcher(context, webView);
 
   return async (event: vscode.TreeViewVisibilityChangeEvent) => {
@@ -18,13 +15,13 @@ const handleWebViewVisible = (
 };
 
 export const activate = (context: vscode.ExtensionContext) => {
-  Context.setContext(context);
+  setContext(context);
 
   const webView = new WebViewPanel({
     extensionUri: context.extensionUri,
-    viewType: "npmLens.webView",
-    title: "npmLens",
-    viewId: "panelIdA",
+    viewType: 'npmLens.webView',
+    title: 'npmLens',
+    viewId: 'panelIdA',
   });
   const treeView = new TreeViewPanel();
 
@@ -36,5 +33,5 @@ export const activate = (context: vscode.ExtensionContext) => {
 };
 
 export const deactivate = (): void => {
-  console.log("deactivate");
+  console.log('deactivate');
 };

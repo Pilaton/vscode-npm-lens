@@ -1,11 +1,11 @@
-import { type ReleaseType, coerce, diff } from "semver";
-import { type MessageListener } from "src/controllers/web-view-panel";
-import { type Dependencies } from "src/utils/get-package-json";
+import { type ReleaseType, coerce, diff } from 'semver';
+import type { MessageListener } from 'src/controllers/web-view-panel';
+import type { Dependencies } from 'src/utils/get-package-json';
 
-export interface IPackageData {
+export interface PackageData {
   name: string;
   description: string;
-  version?: IPackageVersion;
+  version?: PackageVersion;
   npmUrl: string;
   repositoryUrl: string;
   lastPublish: string;
@@ -13,12 +13,12 @@ export interface IPackageData {
   size: number | undefined;
 }
 
-export type PackageDataAsync = Promise<IPackageData | null>;
+export type PackageDataAsync = Promise<PackageData | null>;
 
-interface INpmRegistryResponse {
+interface NpmRegistryResponse {
   name: string;
   description: string;
-  "dist-tags": { latest: string };
+  'dist-tags': { latest: string };
   repository: { url: string };
   time: { modified: string };
   license: string;
@@ -32,7 +32,7 @@ interface INpmRegistryResponse {
   >;
 }
 
-interface IPackageVersion {
+interface PackageVersion {
   updateType: ReleaseType;
   major: number;
   minor: number;
@@ -43,28 +43,27 @@ interface IPackageVersion {
 
 const formatRepoUrl = (repoUrl: string): string => {
   const match = repoUrl.match(/github\.com.*(?=\.git)/);
-  return match ? `https://${match[0]}` : "";
+  return match ? `https://${match[0]}` : '';
 };
 
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
-  const day = date.toLocaleString("en-US", { day: "2-digit" });
-  const month = date.toLocaleString("en-US", { month: "long" });
-  const year = date.toLocaleString("en-US", { year: "numeric" });
+  const day = date.toLocaleString('en-US', { day: '2-digit' });
+  const month = date.toLocaleString('en-US', { month: 'long' });
+  const year = date.toLocaleString('en-US', { year: 'numeric' });
 
   return `${day} ${month} ${year}`;
 };
 /* -------------------------------------------------------------------------- */
 
-class NPM {
+export default class Npm {
   #packages: Record<string, PackageDataAsync> = {};
 
   constructor(dependencies: Dependencies) {
     this.#init(dependencies);
   }
 
-  async getPackageData(packageName: string): PackageDataAsync {
-    // eslint-disable-next-line @typescript-eslint/return-await
+  getPackageData(packageName: string): PackageDataAsync {
     return this.#packages[packageName];
   }
 
@@ -72,15 +71,13 @@ class NPM {
     return this.#packages;
   }
 
-  async fetchPackageData(
-    packageName: string
-  ): Promise<INpmRegistryResponse | null> {
+  async fetchPackageData(packageName: string): Promise<NpmRegistryResponse | null> {
     try {
       const response = await fetch(`https://registry.npmjs.org/${packageName}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch data for ${packageName}`);
       }
-      return (await response.json()) as INpmRegistryResponse;
+      return (await response.json()) as NpmRegistryResponse;
     } catch (error) {
       console.error(error);
       return null;
@@ -93,52 +90,44 @@ class NPM {
     }
   }
 
-  async #getPackage(
-    packageName: string,
-    currentVersion: string
-  ): PackageDataAsync {
+  async #getPackage(packageName: string, currentVersion: string): PackageDataAsync {
     const parsedData = await this.fetchPackageData(packageName);
-    if (!parsedData) return null;
+    if (!parsedData) {
+      return null;
+    }
 
     return this.#processPackageData(currentVersion, parsedData);
   }
 
-  #processPackageData(
-    currentVersion: string,
-    parsedData: INpmRegistryResponse
-  ): IPackageData | null {
+  #processPackageData(currentVersion: string, parsedData: NpmRegistryResponse): PackageData | null {
     try {
-      const latestVersion = parsedData["dist-tags"].latest;
+      const latestVersion = parsedData['dist-tags'].latest;
 
       const packageInfo = parsedData.versions[latestVersion];
 
-      const extendedVersion = this.#convertToExtendedVersion(
-        currentVersion,
-        latestVersion
-      );
+      const extendedVersion = this.#convertToExtendedVersion(currentVersion, latestVersion);
 
       const repositoryUrl =
-        typeof parsedData?.repository === "string"
+        typeof parsedData?.repository === 'string'
           ? parsedData?.repository
           : parsedData?.repository?.url;
 
       return {
         name: parsedData.name,
-        description: parsedData.description ?? "?",
+        description: parsedData.description ?? '?',
         version: extendedVersion,
         npmUrl: `https://npmjs.com/package/${parsedData.name}`,
-        repositoryUrl: repositoryUrl ? formatRepoUrl(repositoryUrl) : "",
+        repositoryUrl: repositoryUrl ? formatRepoUrl(repositoryUrl) : '',
         lastPublish: formatDate(parsedData.time.modified),
         license: parsedData.license,
         size: packageInfo.dist?.unpackedSize,
       };
     } catch (error) {
-      console.error("Error processing package data:", error);
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      console.error('Error processing package data:', error);
       window.vscode.postMessage({
-        command: "alert",
-        type: "error",
-        text: "«NPM» domain not available",
+        command: 'alert',
+        type: 'error',
+        text: '«NPM» domain not available',
       } satisfies MessageListener);
 
       return null;
@@ -148,13 +137,18 @@ class NPM {
   #convertToExtendedVersion(
     currentVersionProperty: string,
     latestVersion: string
-  ): IPackageData["version"] {
+  ): PackageData['version'] {
     const currentVersion = coerce(currentVersionProperty);
     const newVersion = coerce(latestVersion);
-    if (!currentVersion || !newVersion) return undefined;
+
+    if (!(currentVersion && newVersion)) {
+      return undefined;
+    }
 
     const updateType = diff(currentVersion.version, newVersion.version);
-    if (!updateType) return undefined;
+    if (!updateType) {
+      return undefined;
+    }
 
     return {
       updateType,
@@ -165,5 +159,3 @@ class NPM {
     };
   }
 }
-
-export default NPM;

@@ -1,35 +1,27 @@
-import GitHubIcon from "@mui/icons-material/GitHub";
-import {
-  Box,
-  Button,
-  Divider,
-  Stack,
-  SvgIcon,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import { type IPackageData } from "../../../providers/npm-provider";
-import NpmIcon from "../../assets/npm.svg?react";
-import useStore from "../../store/store";
-import convertSize from "../../utils/convert-size";
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { Box, Button, Divider, Stack, SvgIcon, Tooltip, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import type { PackageData } from '../../../providers/npm-provider';
+import NpmIcon from '../../assets/npm.svg?react';
+import useStore from '../../store/store';
+import convertSize from '../../utils/convert-size';
 
 /* -------------------------------------------------------------------------- */
 
-interface IDetailBlock extends React.ComponentProps<typeof Stack> {
+interface DetailBlockData extends React.ComponentProps<typeof Stack> {
   label: string;
   value: React.ReactNode;
   title?: string;
 }
 
-interface IStateNPMInfo {
-  data: IPackageData | null;
+interface StateNpmInfo {
+  data: PackageData | null;
   isPending: boolean;
 }
 
 /* -------------------------------------------------------------------------- */
 
-export function DetailBlock({ label, value, title = "" }: IDetailBlock) {
+export function DetailBlock({ label, value, title = '' }: DetailBlockData) {
   return (
     <Tooltip title={title} arrow placement="top" enterDelay={50}>
       <Stack spacing={0.5}>
@@ -41,7 +33,7 @@ export function DetailBlock({ label, value, title = "" }: IDetailBlock) {
 }
 
 export default function InfoExtended({ name }: { name: string }) {
-  const [npmInfo, setNpmInfo] = useState<IStateNPMInfo>({
+  const [npmInfo, setNpmInfo] = useState<StateNpmInfo>({
     data: null,
     isPending: true,
   });
@@ -64,7 +56,7 @@ export default function InfoExtended({ name }: { name: string }) {
     return () => {
       isMounted = false;
     };
-  }, [name, packageData]);
+  }, [packageData]);
 
   if (npmInfo.isPending || !npmInfo.data) {
     return <div>Loading...</div>;
@@ -77,16 +69,11 @@ export default function InfoExtended({ name }: { name: string }) {
       <Divider
         sx={{
           my: 2,
-          opacity: "0.6",
+          opacity: '0.6',
         }}
       />
 
-      <Stack
-        direction="row"
-        alignItems="flex-start"
-        justifyContent="space-between"
-        gap={3.5}
-      >
+      <Stack direction="row" alignItems="flex-start" justifyContent="space-between" gap={3.5}>
         <Stack direction="row" alignItems="center" gap={3.5}>
           <DetailBlock label="Updated" value={npmInfo.data.lastPublish} />
           <DetailBlock label="License" value={npmInfo.data.license} />
@@ -98,7 +85,7 @@ export default function InfoExtended({ name }: { name: string }) {
           justifyContent="flex-end"
           gap={3.5}
           flexWrap="wrap"
-          sx={{ "& div": { alignItems: "flex-end" } }}
+          sx={{ '& div': { alignItems: 'flex-end' } }}
         >
           <DetailBlock
             label="Unpacked"
@@ -111,7 +98,7 @@ export default function InfoExtended({ name }: { name: string }) {
       <Divider
         sx={{
           my: 2,
-          opacity: "0.6",
+          opacity: '0.6',
         }}
       />
 
