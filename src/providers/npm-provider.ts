@@ -41,8 +41,10 @@ interface PackageVersion {
 }
 /* -------------------------------------------------------------------------- */
 
+const REGEX = /github\.com.*(?=\.git)/;
+
 const formatRepoUrl = (repoUrl: string): string => {
-  const match = repoUrl.match(/github\.com.*(?=\.git)/);
+  const match = repoUrl.match(REGEX);
   return match ? `https://${match[0]}` : '';
 };
 

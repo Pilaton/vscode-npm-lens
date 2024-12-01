@@ -10,7 +10,7 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "single",
-      "trailingComma": "es5"
+      "trailingCommas": "es5"
     },
     "globals": ["React"]
   },
@@ -21,13 +21,51 @@
     "enabled": true,
     "rules": {
       "all": true,
+      "correctness": {
+        "noNodejsModules": "off",
+        "noUndeclaredDependencies": "off",
+        "useImportExtensions": "off"
+      },
       "style": {
         "noNonNullAssertion": "off",
         "noDefaultExport": "off",
-        "noImplicitBoolean": "off"
+        "noImplicitBoolean": "off",
+        "useFilenamingConvention": {
+          "level": "warn",
+          "options": {
+            "filenameCases": ["kebab-case"]
+          }
+        },
+        "useNamingConvention": {
+          "level": "warn",
+          "options": {
+            "conventions": [
+              {
+                "match": ".*",
+                "selector": {
+                  "kind": "objectLiteralProperty"
+                }
+              },
+              {
+                "match": ".*",
+                "selector": {
+                  "kind": "objectLiteralSetter"
+                }
+              },
+              {
+                "match": ".*",
+                "selector": {
+                  "kind": "objectLiteralGetter"
+                }
+              }
+            ]
+          }
+        }
       },
       "suspicious": {
-        "noConsoleLog": "off"
+        "noConsoleLog": "off",
+        "noConsole": "off",
+        "noReactSpecificProps": "off"
       }
     }
   }

@@ -1,21 +1,15 @@
 {
+  "extends": "@tsconfig/vite-react/tsconfig.json",
   "compilerOptions": {
-    "esModuleInterop": true,
-    "importHelpers": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
+    // "importHelpers": true,
     "lib": ["DOM", "DOM.Iterable", "ES2023"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
     "noImplicitAny": true,
     "sourceMap": false,
-    "strict": true,
     "target": "ESNext",
     "baseUrl": ".",
     "paths": {
       "src/*": ["src/*"]
-    },
-    "useDefineForClassFields": true
+    }
   },
   "include": ["src"]
 }
