@@ -44,7 +44,7 @@
     "dev:ts": "tsc --watch --outDir dist",
     "dev:web": "vite build --watch --mode=development -c vite-configs/vite-web.config.mts",
     "check": "tsc --noEmit",
-    "lint": "biome check .",
+    "lint:biome:dryRun": "biome check",
     "knip": "knip",
     "prepackage": "pnpm run build:all",
     "package": "vsce package --no-dependencies --out ./vsix",
