@@ -46,7 +46,7 @@ export default function AccordionsDependency({ dependencies }: Properties) {
               },
             }}
           >
-            <InfoShort name={name} currentVersion={currentVersion}>
+            <InfoShort name={name} currentVersion={currentVersion} expanded={expanded === name}>
               <VersionStatus name={name} npmProvider={npmProvider} />
             </InfoShort>
           </AccordionSummary>
