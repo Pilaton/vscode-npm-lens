@@ -140,8 +140,8 @@ export default class Npm {
     currentVersionProperty: string,
     latestVersion: string
   ): PackageData['version'] {
-    const currentVersion = coerce(currentVersionProperty);
-    const newVersion = coerce(latestVersion);
+    const currentVersion = coerce(currentVersionProperty, { includePrerelease: true });
+    const newVersion = coerce(latestVersion, { includePrerelease: true });
 
     if (!(currentVersion && newVersion)) {
       return undefined;
