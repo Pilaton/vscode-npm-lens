@@ -285,13 +285,6 @@ export default class WebViewPanelController extends WebViewStart {
    * @returns {Promise<PackageManager | null>}
    */
   async #getPackageManager(): Promise<PackageManager | null> {
-    const rootPath = getRootPath();
-
-    const packageManager = await defineManager(rootPath);
-    // console.log(
-    //   "WebViewPanelController · #getPackageManager · packageManager:",
-    //   packageManager
-    // );
-    return packageManager;
+    return await defineManager(getRootPath());
   }
 }

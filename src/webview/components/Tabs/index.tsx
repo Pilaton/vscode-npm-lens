@@ -1,4 +1,9 @@
-import { Box, Button, Tab, Tabs } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import { useState } from 'react';
 import type { MessageListener } from 'src/controllers/web-view-panel';
 import type { PackageJson } from 'src/utils/get-package-json';
@@ -8,6 +13,10 @@ import CounterDependency from './counter-dependency';
 interface TabPanelProperties {
   index: number;
   activeTab: number;
+}
+
+interface TabsProps {
+  packageJson: PackageJson;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -28,24 +37,12 @@ function TabPanel({ children, index, activeTab }: React.PropsWithChildren<TabPan
 
 /* -------------------------------------------------------------------------- */
 
-const handleUpdateAllPackages = () => {
-  const { vscode } = window;
-  // eslint-disable-next-line @typescript-eslint/no-floating-promises
-  vscode.postMessage({
-    command: 'updateAllPackages',
-  } satisfies MessageListener);
-};
+const TAB_NAMES = ['dependencies', 'devDependencies', 'peerDependencies'];
 
-export default function TabsDependency({
-  packageJson,
-}: {
-  packageJson: PackageJson;
-}) {
+export default function TabsDependency({ packageJson }: TabsProps) {
   const [activeTab, setActiveTab] = useState(0);
 
-  const tabsData = ['dependencies', 'devDependencies', 'peerDependencies'].filter(
-    (field) => field in packageJson
-  );
+  const tabNamesFiltered = TAB_NAMES.filter((field) => field in packageJson);
 
   const handleTabChange = (_: React.SyntheticEvent, newTab: number): void => {
     setActiveTab(newTab);
@@ -55,11 +52,11 @@ export default function TabsDependency({
 
   return (
     <>
-      <Box
+      <Stack
+        direction="row"
         sx={{
           borderBottom: 1,
           borderColor: 'divider',
-          display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '1rem',
@@ -74,25 +71,54 @@ export default function TabsDependency({
           variant="scrollable"
           scrollButtons={false}
         >
-          {tabsData.map((field) => (
-            <Tab key={field} label={field} sx={{ textTransform: 'inherit' }} />
+          {tabNamesFiltered.map((tabName) => (
+            <Tab
+              key={tabName}
+              label={
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  divider={
+                    <Divider
+                      orientation="vertical"
+                      variant="inset"
+                      flexItem
+                      sx={{ borderColor: 'inherit', opacity: 0.2 }}
+                    />
+                  }
+                >
+                  <div>{tabName}</div>
+                  <div>{Object.keys(packageJson[tabName as keyof PackageJson] || {}).length}</div>
+                </Stack>
+              }
+              sx={{ textTransform: 'inherit' }}
+            />
           ))}
         </Tabs>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+
+        <Stack direction="row" sx={{ alignItems: 'center', gap: '2rem' }}>
           <CounterDependency />
 
           {packageManager !== 'npm' && (
-            <Button size="small" variant="outlined" onClick={handleUpdateAllPackages}>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => {
+                window?.vscode.postMessage({
+                  command: 'updateAllPackages',
+                } satisfies MessageListener);
+              }}
+            >
               Update all
             </Button>
           )}
-        </Box>
-      </Box>
-      {tabsData.map((field, index) => {
-        const dependencies = packageJson[field as keyof PackageJson]!;
+        </Stack>
+      </Stack>
 
+      {tabNamesFiltered.map((tabName, index) => {
+        const dependencies = packageJson[tabName as keyof PackageJson]!;
         return (
-          <TabPanel key={field} activeTab={activeTab} index={index}>
+          <TabPanel key={tabName} activeTab={activeTab} index={index}>
             <AccordionsDependency dependencies={dependencies} />
           </TabPanel>
         );
