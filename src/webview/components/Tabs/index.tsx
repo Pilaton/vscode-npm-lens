@@ -4,6 +4,7 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import Tooltip from '@mui/material/Tooltip';
 import { useState } from 'react';
 import type { MessageListener } from 'src/controllers/web-view-panel';
 import type { PackageJson } from 'src/utils/get-package-json';
@@ -100,17 +101,22 @@ export default function TabsDependency({ packageJson }: TabsProps) {
           <CounterDependency />
 
           {packageManager !== 'npm' && (
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => {
-                window?.vscode.postMessage({
-                  command: 'updateAllPackages',
-                } satisfies MessageListener);
-              }}
+            <Tooltip
+              title="All project dependencies will be updated: dependencies, devDependencies, etc..."
+              arrow
             >
-              Update all
-            </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                  window?.vscode.postMessage({
+                    command: 'updateAllPackages',
+                  } satisfies MessageListener);
+                }}
+              >
+                Update all
+              </Button>
+            </Tooltip>
           )}
         </Stack>
       </Stack>
