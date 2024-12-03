@@ -3,7 +3,7 @@ import { type PackageManager, defineManager } from 'pubun';
 import vscode from 'vscode';
 import getPackageJson, { type PackageJson } from '../utils/get-package-json';
 import getRootPath from '../utils/get-root-path';
-import getTerminalUpdateCommand from '../utils/get-terminal-update-command';
+import { type TerminalCommandOptions, getTerminalCommand } from '../utils/get-terminal-command';
 import { getContext } from './context';
 
 interface UpdateAllPackageMessage {
@@ -13,13 +13,21 @@ interface UpdatePackageMessage {
   command: 'updatePackage';
   packageName: string;
 }
+interface RemovePackageMessage {
+  command: 'removePackage';
+  packageName: string;
+}
 interface AlertMessage {
   command: 'alert';
   type: 'info' | 'warning' | 'error';
   text: string;
 }
 
-export type MessageListener = UpdatePackageMessage | UpdateAllPackageMessage | AlertMessage;
+export type MessageListener =
+  | UpdatePackageMessage
+  | UpdateAllPackageMessage
+  | RemovePackageMessage
+  | AlertMessage;
 
 const errorStyle =
   'height: 100svh;font-size: 1.25rem;display: flex;justify-content: center;align-items: center;';
@@ -188,6 +196,7 @@ export default class WebViewPanelController extends WebViewStart {
    * based on the command specified in the message. Supported commands include:
    * - "updateAllPackages": Creates a terminal (if not already created) and sends a command to update all packages.
    * - "updatePackage": Similar to "updateAllPackages", but for a specific package.
+   * - "removePackage": Remove a package with a specific name.
    * - "alert": Displays a VS Code informational, warning, or error message based on the alert type.
    *
    */
@@ -198,26 +207,43 @@ export default class WebViewPanelController extends WebViewStart {
       error: vscode.window.showErrorMessage,
     };
 
+    const executeTerminalCommand = async (
+      commandType: TerminalCommandOptions['commandType'],
+      packageName?: string
+    ) => {
+      const terminal = this.#activateTerminal();
+      terminal.show();
+
+      const packageManager = await this.#getPackageManager();
+      if (!packageManager) {
+        throw new Error('Package manager could not be determined.');
+      }
+
+      const command = getTerminalCommand({
+        commandType,
+        packageManager,
+        packageName,
+      });
+
+      setTimeout(() => {
+        terminal.sendText(command);
+      }, 500);
+    };
+
     const handleMessage = async (message: MessageListener) => {
       switch (message?.command) {
-        case 'updateAllPackages':
+        case 'updateAllPackages': {
+          await executeTerminalCommand('updateAll');
+          break;
+        }
+
         case 'updatePackage': {
-          const terminal = this.#activateTerminal();
-          terminal.show();
+          await executeTerminalCommand('update', message?.packageName);
+          break;
+        }
 
-          const packageManager = await this.#getPackageManager();
-          if (!packageManager) {
-            throw new Error('Package manager could not be determined.');
-          }
-
-          const command = getTerminalUpdateCommand({
-            packageManager,
-            packageName: 'packageName' in message ? message.packageName : undefined,
-          });
-
-          setTimeout(() => {
-            terminal.sendText(command);
-          }, 500);
+        case 'removePackage': {
+          await executeTerminalCommand('remove', message?.packageName);
           break;
         }
 

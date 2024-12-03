@@ -1,6 +1,15 @@
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { Box, Button, Divider, Stack, SvgIcon, Tooltip, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import SvgIcon from '@mui/material/SvgIcon';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
+import type { MessageListener } from 'src/controllers/web-view-panel';
 import type { PackageData } from '../../../providers/npm-provider';
 import NpmIcon from '../../assets/npm.svg?react';
 import useStore from '../../store/store';
@@ -102,33 +111,64 @@ export default function InfoExtended({ name }: { name: string }) {
         }}
       />
 
-      <Stack direction="row" alignItems="center" flexWrap="wrap" gap={2}>
-        <Button
-          href={npmInfo.data.repositoryUrl}
-          target="_blank"
-          rel="noreferrer"
-          title="Open GitHub repository"
-          startIcon={<GitHubIcon />}
-          size="small"
-          variant="outlined"
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
         >
-          GitHub
-        </Button>
+          <Button
+            href={npmInfo.data.repositoryUrl}
+            target="_blank"
+            rel="noreferrer"
+            title="Open GitHub repository"
+            startIcon={<GitHubIcon />}
+            size="small"
+            variant="outlined"
+          >
+            GitHub
+          </Button>
+          <Button
+            href={npmInfo.data.npmUrl}
+            target="_blank"
+            rel="noreferrer"
+            title="Open NPM page"
+            startIcon={
+              <SvgIcon>
+                <NpmIcon />
+              </SvgIcon>
+            }
+            size="small"
+          >
+            NPM
+          </Button>
+        </Stack>
 
-        <Button
-          href={npmInfo.data.npmUrl}
-          target="_blank"
-          rel="noreferrer"
-          title="Open NPM page"
-          startIcon={
-            <SvgIcon>
-              <NpmIcon />
-            </SvgIcon>
-          }
-          size="small"
-        >
-          NPM
-        </Button>
+        <Tooltip title="Remove package" placement="left" arrow>
+          <IconButton
+            color="error"
+            size="small"
+            onClick={() => {
+              window?.vscode.postMessage({
+                command: 'removePackage',
+                packageName: name,
+              } satisfies MessageListener);
+            }}
+          >
+            <DeleteForeverIcon />
+          </IconButton>
+        </Tooltip>
       </Stack>
     </Box>
   );

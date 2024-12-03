@@ -14,11 +14,6 @@ const theme = createTheme({
     },
 
     divider: 'var(--vscode-sideBar-border, transparent)',
-
-    action: {
-      active: 'var(--vscode-icon-foreground)',
-      disabled: 'var(--vscode-activityBar-inactiveForeground)',
-    },
   },
 
   typography: {
@@ -31,22 +26,22 @@ const theme = createTheme({
         root: {
           textTransform: 'none',
           outline: 'none !important',
+          color: 'var(--vscode-textLink-foreground)',
+          '&:hover': {
+            color: 'var(--vscode-textLink-activeForeground)',
+          },
+          disabled: 'var(--vscode-activityBar-inactiveForeground)',
         },
 
-        containedSizeSmall: {
-          color: 'var(--vscode-button-foreground) !important',
-          backgroundColor: 'var(--vscode-button-background, transparent)',
-          '&:hover': {
-            backgroundColor: 'var(--vscode-button-hoverBackground)',
-          },
-        },
-        sizeSmall: {
-          color: 'var(--vscode-textLink-foreground)',
-          padding: '3px 9px',
+        outlined: {
           borderColor: 'var(--vscode-textLink-foreground)',
           '&:hover': {
             borderColor: 'var(--vscode-textLink-activeForeground)',
           },
+        },
+
+        sizeSmall: {
+          padding: '3px 9px',
         },
       },
     },
@@ -69,6 +64,12 @@ const theme = createTheme({
         indicator: {
           backgroundColor: 'var(--vscode-activityBarBadge-background)',
         },
+      },
+    },
+
+    MuiAccordionSummary: {
+      styleOverrides: {
+        expandIconWrapper: { color: 'var(--vscode-icon-foreground)' },
       },
     },
   },
