@@ -23,13 +23,13 @@ jobs:
         run: |
           mkdir -p destination/public
           cp vsix/*.vsix destination/
-          cp public/Screenshot-extension.jpg destination/public/
+          cp public/screen-extension.png destination/public/
           cp {CHANGELOG.md,README.md,LICENSE} destination/
 
       - name: Push changes
         working-directory: ./destination
         run: |
-          git config user.name 'Mark'
+          git config user.name 'Pilaton'
           git config user.email 'dev@pilaton.com'
           git add .
           git commit -m 'Sync files'
