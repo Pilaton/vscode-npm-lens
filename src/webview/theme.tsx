@@ -5,15 +5,13 @@ import { createTheme } from '@mui/material';
 //     .getPropertyValue(property)
 //     .trim() || "transparent";
 
-const theme = createTheme({
+export default createTheme({
   palette: {
     mode: 'dark',
     background: {
       default: 'var(--vscode-editorWidget-background)',
       paper: 'var(--vscode-sideBar-background)',
     },
-
-    divider: 'var(--vscode-sideBar-border, transparent)',
   },
 
   typography: {
@@ -52,13 +50,7 @@ const theme = createTheme({
         },
       },
     },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          color: 'var(--vscode-editor-foreground)',
-        },
-      },
-    },
+
     MuiTabs: {
       styleOverrides: {
         indicator: {
@@ -67,12 +59,25 @@ const theme = createTheme({
       },
     },
 
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          '&:before': {
+            backgroundColor: 'var(--vscode-sideBar-border)',
+          },
+        },
+      },
+    },
     MuiAccordionSummary: {
       styleOverrides: {
         expandIconWrapper: { color: 'var(--vscode-icon-foreground)' },
       },
     },
+
+    MuiDivider: {
+      styleOverrides: {
+        root: { borderColor: 'var(--vscode-sideBar-border)' },
+      },
+    },
   },
 });
-
-export default theme;

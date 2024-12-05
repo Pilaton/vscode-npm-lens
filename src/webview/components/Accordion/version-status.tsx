@@ -1,5 +1,7 @@
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { Box, Button, CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect, useState } from 'react';
 import type { MessageListener } from 'src/controllers/web-view-panel';
 import type { PackageData } from '../../../providers/npm-provider';

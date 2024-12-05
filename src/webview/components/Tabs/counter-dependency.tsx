@@ -1,4 +1,5 @@
-import { CircularProgress, Stack } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import Stack from '@mui/material/Stack';
 import prettyBytes from 'pretty-bytes';
 import { useEffect, useState } from 'react';
 import useStore from '../../store/store';

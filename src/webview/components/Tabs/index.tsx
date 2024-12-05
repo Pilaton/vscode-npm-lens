@@ -57,7 +57,7 @@ export default function TabsDependency({ packageJson }: TabsProps) {
         direction="row"
         sx={{
           borderBottom: 1,
-          borderColor: 'divider',
+          borderColor: 'var(--vscode-sideBar-border)',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '1rem',

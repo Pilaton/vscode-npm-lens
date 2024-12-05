@@ -1,4 +1,5 @@
-import { Box, Stack } from '@mui/material';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import { ThemeProvider, styled } from '@mui/material/styles';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -16,13 +17,12 @@ const { versionExtension } = window;
 
 const root = createRoot(rootElement);
 
-const BoxVersion = styled(Box)({
+const BoxVersion = styled('div')({
   letterSpacing: '0.75px',
   color: 'var(--vscode-foreground)',
   backgroundColor: 'hsla(0,0%,50.2%,.17)',
   padding: '1px 4px',
 });
-console.log(import.meta.env);
 
 const { packageJson, packageManager } = window;
 
