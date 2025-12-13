@@ -36,21 +36,28 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build and package extension
-        run: pnpm run package
+      - name: Build extension
+        run: pnpm run build
+      - name: Package extension
+        run: |
+          mkdir -p vsix
+          pnpm exec vsce package --no-dependencies --out vsix/
       - name: Get VSIX filename
         id: vsix
-        run: echo "filename=$(ls vsix/*.vsix)" >> $GITHUB_OUTPUT
+        run: |
+          VSIX_FILE=$(ls vsix/*.vsix)
+          echo "filename=$VSIX_FILE" >> $GITHUB_OUTPUT
+          echo "Found VSIX: $VSIX_FILE"
       - name: Upload VSIX to Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.tag_name }}
           files: vsix/*.vsix
       - name: Publish to VS Code Marketplace
-        run: pnpm exec vsce publish --packagePath ${{ steps.vsix.outputs.filename }}
+        run: pnpm exec vsce publish --no-dependencies --packagePath "${{ steps.vsix.outputs.filename }}"
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
       - name: Publish to Open VSX
-        run: pnpm exec ovsx publish ${{ steps.vsix.outputs.filename }}
+        run: pnpm exec ovsx publish "${{ steps.vsix.outputs.filename }}"
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
