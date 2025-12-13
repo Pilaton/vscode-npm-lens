@@ -1,0 +1,117 @@
+{
+  "name": "vscode-npm-lens",
+  "displayName": "npmLens",
+  "version": "4.0.0",
+  "description": "Visual panel for project dependencies: Monitor updates, analyze size, and more.",
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "npm",
+    "dependencies",
+    "package",
+    "yarn",
+    "pnpm",
+    "package.json",
+    "update",
+    "upgrade",
+    "bundlephobia",
+    "size"
+  ],
+  "bugs": {
+    "url": "https://github.com/Pilaton/vscode-npm-lens/issues",
+    "email": "dev@pilaton.com"
+  },
+  "homepage": "https://github.com/Pilaton/vscode-npm-lens#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pilaton/vscode-npm-lens.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Pilaton",
+    "email": "dev@pilaton.com",
+    "url": "https://github.com/Pilaton"
+  },
+  "publisher": "Pilaton",
+  "main": "./dist/extension.js",
+  "scripts": {
+    "dev": "pnpm run clean && pnpm run dev:extension & pnpm run dev:webview",
+    "dev:extension": "vite build --watch --mode=development -c vite-configs/vite-tree.config.mts",
+    "dev:webview": "vite build --watch --mode=development -c vite-configs/vite-web.config.mts",
+    "build": "pnpm run clean && pnpm run build:extension & pnpm run build:webview",
+    "build:extension": "vite build -c vite-configs/vite-tree.config.mts",
+    "build:webview": "vite build -c vite-configs/vite-web.config.mts",
+    "clean": "rimraf ./dist",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "knip": "knip",
+    "package": "pnpm run build && vsce package --no-dependencies --out ./vsix && pnpm run clean"
+  },
+  "contributes": {
+    "views": {
+      "npm-lens": [
+        {
+          "id": "npm-lens.treeView",
+          "name": "Hello!",
+          "type": "tree",
+          "icon": "$(package)"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "npm-lens",
+          "title": "npmLens",
+          "icon": "public/icon-panel.svg"
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.5",
+    "@mui/material": "^7.3.5",
+    "pretty-bytes": "^7.1.0",
+    "pubun": "^2.1.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "semver": "^7.7.3",
+    "use-sync-external-store": "^1.6.0",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.7",
+    "@tsconfig/vite-react": "^7.0.2",
+    "@types/node": "24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/semver": "^7.7.1",
+    "@types/vscode": "1.106.1",
+    "@vitejs/plugin-react": "^5.1.1",
+    "@vscode/vsce": "^3.7.1",
+    "knip": "^5.70.2",
+    "ovsx": "^0.10.7",
+    "rimraf": "^6.1.2",
+    "terser": "^5.44.1",
+    "ts-deepmerge": "^7.0.3",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "vite-plugin-banner": "^0.8.1",
+    "vite-plugin-svgr": "^4.5.0"
+  },
+  "engines": {
+    "vscode": ">=1.95.0",
+    "node": ">=20.0.0"
+  },
+  "icon": "public/marketplace-icon-384px.png",
+  "extensionKind": [
+    "workspace"
+  ],
+  "pricing": "Free"
+}
