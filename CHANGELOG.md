@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.1](https://github.com/Pilaton/vscode-npm-lens/compare/v4.0.0...v4.0.1) (2025-12-13)
+
+
+### Bug Fixes
+
+* accordion text now uses VS Code theme foreground color ([194219f](https://github.com/Pilaton/vscode-npm-lens/commit/194219f3ffc1bcb5ffc72bffe0e5e89de84e6a98))
+* update README badges and theme styling ([9a18daf](https://github.com/Pilaton/vscode-npm-lens/commit/9a18daf2c3359b42a794d482af1bc1eadf197e9e))
+
 ## [4.0.0](https://github.com/Pilaton/vscode-npm-lens/compare/v3.3.0...v4.0.0) (2025-12-13)
 
 ### Features
