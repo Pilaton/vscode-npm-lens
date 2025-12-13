@@ -9,7 +9,7 @@
 
 **A simple and elegant visual panel for managing npm dependencies in your project.** Monitor updates, analyze package sizes, and manage dependencies — all from a convenient sidebar.
 
-![npmLens Screenshot](public/screen-extension.png)
+![npmLens Screenshot](https://raw.githubusercontent.com/Pilaton/vscode-npm-lens/main/public/screen-extension.png)
 
 ## ✨ Features
 
