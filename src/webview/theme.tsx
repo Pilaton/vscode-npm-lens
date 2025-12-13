@@ -70,6 +70,9 @@ export default createTheme({
     },
     MuiAccordionSummary: {
       styleOverrides: {
+        root: {
+          color: 'var(--vscode-foreground)',
+        },
         expandIconWrapper: { color: 'var(--vscode-icon-foreground)' },
       },
     },
