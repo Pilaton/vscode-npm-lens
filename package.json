@@ -9,15 +9,18 @@
   ],
   "keywords": [
     "npm",
+    "node",
     "dependencies",
     "package",
     "yarn",
     "pnpm",
+    "bun",
     "package.json",
     "update",
-    "upgrade",
-    "bundlephobia",
-    "size"
+    "outdated",
+    "version",
+    "size",
+    "package-size"
   ],
   "bugs": {
     "url": "https://github.com/Pilaton/vscode-npm-lens/issues",
