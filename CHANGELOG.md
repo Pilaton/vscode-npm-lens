@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.0](https://github.com/Pilaton/vscode-npm-lens/compare/v4.0.1...v4.1.0) (2025-12-13)
+
+
+### Features
+
+* add webview tab icon and update aperture design ([64bc8af](https://github.com/Pilaton/vscode-npm-lens/commit/64bc8af1b14efd58f32b92f09bafc30b792e511a))
+
 ## [4.0.1](https://github.com/Pilaton/vscode-npm-lens/compare/v4.0.0...v4.0.1) (2025-12-13)
 
 
