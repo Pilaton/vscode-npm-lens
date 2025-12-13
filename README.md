@@ -1,11 +1,10 @@
 # npmLens
 
-[![Version](https://img.shields.io/visual-studio-marketplace/v/Pilaton.vscode-npm-lens?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
-[![Downloads](https://img.shields.io/visual-studio-marketplace/d/Pilaton.vscode-npm-lens?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/Pilaton.vscode-npm-lens?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
-[![Open VSX](https://img.shields.io/open-vsx/v/Pilaton/vscode-npm-lens?style=flat-square&label=Open%20VSX)](https://open-vsx.org/extension/Pilaton/vscode-npm-lens)
-[![License](https://img.shields.io/github/license/Pilaton/vscode-npm-lens?style=flat-square)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/Pilaton/vscode-npm-lens/ci.yml?style=flat-square&label=CI)](https://github.com/Pilaton/vscode-npm-lens/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/Pilaton.vscode-npm-lens?&label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
+[![Downloads](https://img.shields.io/visual-studio-marketplace/d/Pilaton.vscode-npm-lens)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/Pilaton.vscode-npm-lens)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
+[![Open VSX](https://img.shields.io/open-vsx/v/Pilaton/vscode-npm-lens?&label=Open%20VSX)](https://open-vsx.org/extension/Pilaton/vscode-npm-lens)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?)](LICENSE)
 
 **A simple and elegant visual panel for managing npm dependencies in your project.** Monitor updates, analyze package sizes, and manage dependencies — all from a convenient sidebar.
 
@@ -20,7 +19,7 @@
 - **Deprecated warnings** — Get notified when using deprecated packages
 - **Package info** — View basic information about any package
 - **Size analysis** — Calculate the total size impact of your dependencies
-- **Download statistics** — View weekly download counts with sparkline charts
+- **Download statistics** — View weekly download counts for each package
 - **Theme aware** — Adapts seamlessly to your VS Code theme
 
 ## 📥 Installation
@@ -45,7 +44,6 @@
 ## 🔧 Requirements
 
 - VS Code `>=1.106.0`
-- Node.js `>=20.0.0`
 - A `package.json` file in your workspace
 
 ## 🤝 Contributing
