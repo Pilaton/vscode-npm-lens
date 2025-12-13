@@ -26,7 +26,7 @@
   "homepage": "https://github.com/Pilaton/vscode-npm-lens#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Pilaton/vscode-npm-lens.git"
+    "url": "git+https://github.com/Pilaton/vscode-npm-lens.git"
   },
   "license": "MIT",
   "author": {
@@ -56,7 +56,7 @@
       "npm-lens": [
         {
           "id": "npm-lens.treeView",
-          "name": "Hello!",
+          "name": "Project",
           "type": "tree",
           "icon": "$(package)"
         }
@@ -114,6 +114,9 @@
     "workspace"
   ],
   "pricing": "Free",
+  "sponsor": {
+    "url": "https://github.com/sponsors/Pilaton"
+  },
   "volta": {
     "node": "24.12.0"
   }
