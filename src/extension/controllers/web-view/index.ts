@@ -98,6 +98,8 @@ export default class WebViewPanelController {
       }
     );
 
+    this.#panel.iconPath = vscode.Uri.joinPath(this.#options.extensionUri, 'public/icon-panel.svg');
+
     this.#enablePanelWatcher();
     this.#enableMessageHandler();
   }
