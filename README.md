@@ -44,7 +44,7 @@
 
 ## 🔧 Requirements
 
-- VS Code `>=1.95.0`
+- VS Code `>=1.106.0`
 - Node.js `>=20.0.0`
 - A `package.json` file in your workspace
 

@@ -106,7 +106,7 @@
     "vite-plugin-svgr": "^4.5.0"
   },
   "engines": {
-    "vscode": ">=1.95.0",
+    "vscode": ">=1.106.0",
     "node": ">=20.0.0"
   },
   "icon": "public/marketplace-icon-384px.png",
