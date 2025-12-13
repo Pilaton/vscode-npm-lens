@@ -113,5 +113,8 @@
   "extensionKind": [
     "workspace"
   ],
-  "pricing": "Free"
+  "pricing": "Free",
+  "volta": {
+    "node": "24.12.0"
+  }
 }
