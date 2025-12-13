@@ -1,10 +1,11 @@
 # npmLens
 
-[![Version](https://img.shields.io/visual-studio-marketplace/v/Pilaton.vscode-npm-lens?&label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
-[![Downloads](https://img.shields.io/visual-studio-marketplace/d/Pilaton.vscode-npm-lens)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/Pilaton.vscode-npm-lens)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
-[![Open VSX](https://img.shields.io/open-vsx/v/Pilaton/vscode-npm-lens?&label=Open%20VSX)](https://open-vsx.org/extension/Pilaton/vscode-npm-lens)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?)](LICENSE)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/Pilaton.vscode-npm-lens?color=blue&label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
+[![Downloads](https://img.shields.io/visual-studio-marketplace/d/Pilaton.vscode-npm-lens?color=blue)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/Pilaton.vscode-npm-lens?color=blue)](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
+[![Open VSX](https://img.shields.io/open-vsx/v/Pilaton/vscode-npm-lens?color=blue&label=Open%20VSX)](https://open-vsx.org/extension/Pilaton/vscode-npm-lens)
+![Open VSX Downloads](https://img.shields.io/open-vsx/dt/Pilaton/vscode-npm-lens?color=blue&link=https%3A%2F%2Fopen-vsx.org%2Fextension%2FPilaton%2Fvscode-npm-lens)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?color=blue)](LICENSE)
 
 **A simple and elegant visual panel for managing npm dependencies in your project.** Monitor updates, analyze package sizes, and manage dependencies — all from a convenient sidebar.
 
