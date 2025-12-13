@@ -1,0 +1,20 @@
+{
+  "files.exclude": {
+    "dist": false
+  },
+  "search.exclude": {
+    "dist": true
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "material-icon-theme.files.associations": {
+    "vite-tree.config.mts": "vite",
+    "vite-web.config.mts": "vite"
+  }
+}

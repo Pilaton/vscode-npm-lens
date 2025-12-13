@@ -1,0 +1,68 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.7/schema.json",
+  "files": {
+    "includes": ["**", "!**/dist", "!**/node_modules", "!**/package.json", "!**/.vscode"]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "lineWidth": 100
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "es5"
+    },
+    "globals": ["React"]
+  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "correctness": {
+        "noNodejsModules": "off",
+        "noUndeclaredDependencies": "off",
+        "useImportExtensions": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "noDefaultExport": "off",
+        "noImplicitBoolean": "off",
+        "useFilenamingConvention": {
+          "level": "warn",
+          "options": {
+            "filenameCases": ["kebab-case"]
+          }
+        },
+        "useNamingConvention": {
+          "level": "warn",
+          "options": {
+            "conventions": [
+              {
+                "match": ".*",
+                "selector": {
+                  "kind": "objectLiteralProperty"
+                }
+              },
+              {
+                "match": ".*",
+                "selector": {
+                  "kind": "objectLiteralSetter"
+                }
+              },
+              {
+                "match": ".*",
+                "selector": {
+                  "kind": "objectLiteralGetter"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "suspicious": {
+        "noConsole": "off",
+        "noReactSpecificProps": "off"
+      }
+    }
+  }
+}
