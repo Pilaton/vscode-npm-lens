@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.1](https://github.com/Pilaton/vscode-npm-lens/compare/v4.1.0...v4.1.1) (2025-12-14)
+
+
+### Bug Fixes
+
+* remove non-existent 'ci' label from dependabot config ([a099564](https://github.com/Pilaton/vscode-npm-lens/commit/a0995647a5f976989c9b6e01acb0df293268dedf))
+
 ## [4.1.0](https://github.com/Pilaton/vscode-npm-lens/compare/v4.0.1...v4.1.0) (2025-12-13)
 
 
