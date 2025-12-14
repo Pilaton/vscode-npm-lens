@@ -7,8 +7,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   lint:
@@ -96,6 +95,9 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     needs: [build]
+    permissions:
+      contents: write
+      pull-requests: write
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
@@ -111,6 +113,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [release]
     if: ${{ needs.release.outputs.release_created }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
