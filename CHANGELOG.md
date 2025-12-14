@@ -1,5 +1,25 @@
 # Changelog
 
+## [5.0.0](https://github.com/Pilaton/vscode-npm-lens/compare/v4.1.1...v5.0.0) (2025-12-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* Fresh start for public release
+
+### Features
+
+* add webview tab icon and update aperture design ([64bc8af](https://github.com/Pilaton/vscode-npm-lens/commit/64bc8af1b14efd58f32b92f09bafc30b792e511a))
+* Initial release - npmLens v4.0.0 ([41565c2](https://github.com/Pilaton/vscode-npm-lens/commit/41565c29b30195d9aec548db12a41d4641433be6))
+
+
+### Bug Fixes
+
+* accordion text now uses VS Code theme foreground color ([194219f](https://github.com/Pilaton/vscode-npm-lens/commit/194219f3ffc1bcb5ffc72bffe0e5e89de84e6a98))
+* remove non-existent 'ci' label from dependabot config ([a099564](https://github.com/Pilaton/vscode-npm-lens/commit/a0995647a5f976989c9b6e01acb0df293268dedf))
+* update engines.vscode to match @types/vscode version ([e7bcc2a](https://github.com/Pilaton/vscode-npm-lens/commit/e7bcc2a6ab6cf218caae195f197a9f5b14974a34))
+* update README badges and theme styling ([9a18daf](https://github.com/Pilaton/vscode-npm-lens/commit/9a18daf2c3359b42a794d482af1bc1eadf197e9e))
+
 ## [4.1.0](https://github.com/Pilaton/vscode-npm-lens/compare/v4.0.1...v4.1.0) (2025-12-13)
 
 
