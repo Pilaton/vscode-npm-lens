@@ -95,7 +95,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/semver": "^7.7.1",
-    "@types/vscode": "1.106.1",
+    "@types/vscode": "1.93.0",
     "@vitejs/plugin-react": "^5.1.1",
     "@vscode/vsce": "^3.7.1",
     "knip": "^5.70.2",
@@ -109,7 +109,7 @@
     "vite-plugin-svgr": "^4.5.0"
   },
   "engines": {
-    "vscode": ">=1.106.0",
+    "vscode": ">=1.93.0",
     "node": ">=20.0.0"
   },
   "icon": "public/marketplace-icon-384px.png",
