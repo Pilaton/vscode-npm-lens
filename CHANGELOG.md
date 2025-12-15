@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.1.1](https://github.com/Pilaton/vscode-npm-lens/compare/v4.1.0...v4.1.1) (2025-12-15)
+## [4.1.2](https://github.com/Pilaton/vscode-npm-lens/compare/v4.1.0...v4.1.2) (2025-12-15)
 
 
 ### Bug Fixes
