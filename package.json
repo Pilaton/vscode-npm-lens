@@ -95,7 +95,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/semver": "^7.7.1",
-    "@types/vscode": "1.93.0",
+    "@types/vscode": "1.107.0",
     "@vitejs/plugin-react": "^5.1.2",
     "@vscode/vsce": "^3.7.1",
     "knip": "^5.73.4",
