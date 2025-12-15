@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.1](https://github.com/Pilaton/vscode-npm-lens/compare/v4.1.0...v4.1.1) (2025-12-15)
+
+
+### Bug Fixes
+
+* lower VS Code engine version to 1.93.0 for wider compatibility ([08164fa](https://github.com/Pilaton/vscode-npm-lens/commit/08164fa1e56c88099260dd0ffe8035da16978569))
+
 ## [4.1.0](https://github.com/Pilaton/vscode-npm-lens/compare/v4.0.1...v4.1.0) (2025-12-13)
 
 
