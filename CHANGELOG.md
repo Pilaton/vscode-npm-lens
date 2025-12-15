@@ -1,5 +1,30 @@
 # Changelog
 
+## [4.1.3](https://github.com/Pilaton/vscode-npm-lens/compare/v4.1.1...v4.1.3) (2025-12-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* Fresh start for public release
+
+### Features
+
+* add webview tab icon and update aperture design ([64bc8af](https://github.com/Pilaton/vscode-npm-lens/commit/64bc8af1b14efd58f32b92f09bafc30b792e511a))
+* Initial release - npmLens v4.0.0 ([41565c2](https://github.com/Pilaton/vscode-npm-lens/commit/41565c29b30195d9aec548db12a41d4641433be6))
+
+
+### Bug Fixes
+
+* accordion text now uses VS Code theme foreground color ([194219f](https://github.com/Pilaton/vscode-npm-lens/commit/194219f3ffc1bcb5ffc72bffe0e5e89de84e6a98))
+* lower VS Code engine version to 1.93.0 for wider compatibility ([08164fa](https://github.com/Pilaton/vscode-npm-lens/commit/08164fa1e56c88099260dd0ffe8035da16978569))
+* update engines.vscode to match @types/vscode version ([e7bcc2a](https://github.com/Pilaton/vscode-npm-lens/commit/e7bcc2a6ab6cf218caae195f197a9f5b14974a34))
+* update README badges and theme styling ([9a18daf](https://github.com/Pilaton/vscode-npm-lens/commit/9a18daf2c3359b42a794d482af1bc1eadf197e9e))
+
+
+### Miscellaneous Chores
+
+* force version override ([780d2ec](https://github.com/Pilaton/vscode-npm-lens/commit/780d2ec9b6796c6cb4f2ff31e41133700ae48473))
+
 ## [4.1.2](https://github.com/Pilaton/vscode-npm-lens/compare/v4.1.0...v4.1.2) (2025-12-15)
 
 
