@@ -75,7 +75,16 @@ export default defineConfig(({ mode }) => {
   const isDevelopment = mode === 'development';
 
   return {
-    plugins: [banner(bannerText), react(), svgr(), noAssetsCopyPlugin()],
+    plugins: [
+      banner(bannerText),
+      react({
+        babel: {
+          plugins: ['babel-plugin-react-compiler'],
+        },
+      }),
+      svgr(),
+      noAssetsCopyPlugin(),
+    ],
     ...merge(baseBuildConfig, isDevelopment ? overrides.forDev : overrides.forProd),
   };
 });

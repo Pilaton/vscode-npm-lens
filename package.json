@@ -98,6 +98,7 @@
     "@types/vscode": "1.93.0",
     "@vitejs/plugin-react": "^5.1.2",
     "@vscode/vsce": "^3.7.1",
+    "babel-plugin-react-compiler": "^1.0.0",
     "knip": "^5.73.4",
     "ovsx": "^0.10.7",
     "rimraf": "^6.1.2",
