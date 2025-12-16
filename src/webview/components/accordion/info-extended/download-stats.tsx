@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchDownloadStats, formatDownloads } from '../../services/downloads-api';
+import { fetchDownloadStats, formatDownloads } from '../../../services/downloads-api';
 
 interface DownloadStatsProps {
   packageName: string;

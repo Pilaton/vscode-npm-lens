@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import type NpmPackageService from '../../services/npm-provider';
-import DeprecatedBadge from './deprecated-badge';
+import type NpmPackageService from '../../../services/npm-provider';
+import DeprecatedBadge from '../info-extended/deprecated-badge';
 
 interface DeprecatedStatusProps {
   name: string;

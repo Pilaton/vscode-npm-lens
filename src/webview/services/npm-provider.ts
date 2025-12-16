@@ -1,11 +1,32 @@
-import { coerce, diff, gt, type ReleaseType } from 'semver';
+import { coerce, diff, gt, maxSatisfying, type ReleaseType, satisfies, validRange } from 'semver';
 import type { Dependencies } from 'src/extension/utils/get-package-json';
 import type { WebviewMessage } from 'src/shared/types/messages';
+
+/** Version info for a single update option */
+interface VersionInfo {
+  version: string;
+  major: number;
+  minor: number;
+  patch: number;
+  updateType: ReleaseType;
+}
+
+/** Package version data with in-range and latest options */
+export interface PackageVersion {
+  /** Maximum version within the semver range (null if latest is within range) */
+  inRange: VersionInfo | null;
+  /** Latest available version on npm */
+  latest: VersionInfo | null;
+  /** True if version is pinned (exact, no ^~) */
+  isPinned: boolean;
+  /** True if current version equals latest */
+  isUpToDate: boolean;
+}
 
 export interface PackageData {
   name: string;
   description: string;
-  version?: PackageVersion;
+  version: PackageVersion;
   npmUrl: string;
   repositoryUrl: string;
   lastPublish: string;
@@ -34,13 +55,6 @@ interface NpmRegistryResponse {
   >;
 }
 
-interface PackageVersion {
-  updateType: ReleaseType;
-  major: number;
-  minor: number;
-  patch: number;
-  version: string;
-}
 /* -------------------------------------------------------------------------- */
 
 const GITHUB_URL_REGEX = /github\.com.*(?=\.git)/;
@@ -58,6 +72,7 @@ const formatDate = (dateString: string): string => {
 
   return `${day} ${month} ${year}`;
 };
+
 /* -------------------------------------------------------------------------- */
 
 export default class NpmPackageService {
@@ -103,13 +118,13 @@ export default class NpmPackageService {
     return this.#processPackageData(currentVersion, parsedData);
   }
 
-  #processPackageData(currentVersion: string, parsedData: NpmRegistryResponse): PackageData | null {
+  #processPackageData(versionRange: string, parsedData: NpmRegistryResponse): PackageData | null {
     try {
       const latestVersion = parsedData['dist-tags'].latest;
-
+      const allVersions = Object.keys(parsedData.versions);
       const packageInfo = parsedData.versions[latestVersion];
 
-      const extendedVersion = this.#convertToExtendedVersion(currentVersion, latestVersion);
+      const versionData = this.#calculateVersions(versionRange, latestVersion, allVersions);
 
       const repositoryUrl =
         typeof parsedData?.repository === 'string'
@@ -119,7 +134,7 @@ export default class NpmPackageService {
       return {
         name: parsedData.name,
         description: parsedData.description ?? '?',
-        version: extendedVersion,
+        version: versionData,
         npmUrl: `https://npmjs.com/package/${parsedData.name}`,
         repositoryUrl: repositoryUrl ? formatRepoUrl(repositoryUrl) : '',
         lastPublish: formatDate(parsedData.time.modified),
@@ -139,33 +154,91 @@ export default class NpmPackageService {
     }
   }
 
-  #convertToExtendedVersion(
-    currentVersionProperty: string,
-    latestVersion: string
-  ): PackageData['version'] {
-    const currentVersion = coerce(currentVersionProperty, { includePrerelease: true });
-    const newVersion = coerce(latestVersion, { includePrerelease: true });
+  #calculateVersions(
+    versionRange: string,
+    latestVersion: string,
+    allVersions: string[]
+  ): PackageVersion {
+    const isPinned = this.#isPinnedVersion(versionRange);
+    const currentVersion = coerce(versionRange, { includePrerelease: true });
+    const latestCoerced = coerce(latestVersion, { includePrerelease: true });
 
-    if (!(currentVersion && newVersion)) {
-      return undefined;
+    // Check if current version is up to date
+    const isUpToDate =
+      currentVersion && latestCoerced ? !gt(latestCoerced.version, currentVersion.version) : true;
+
+    // If pinned or up to date, return early
+    if (isPinned || isUpToDate) {
+      return {
+        inRange: null,
+        latest: null,
+        isPinned,
+        isUpToDate,
+      };
     }
 
-    // Only show update if npm version is actually newer
-    if (!gt(newVersion.version, currentVersion.version)) {
-      return undefined;
+    // Calculate latest version info
+    const latestInfo = this.#createVersionInfo(currentVersion?.version ?? '0.0.0', latestVersion);
+
+    // Check if latest satisfies the range
+    const range = validRange(versionRange);
+    const latestSatisfiesRange = range ? satisfies(latestVersion, range) : false;
+
+    // If latest is within range, no need for separate in-range version
+    if (latestSatisfiesRange) {
+      return {
+        inRange: null, // ✓ will be shown - latest is within range
+        latest: latestInfo,
+        isPinned: false,
+        isUpToDate: false,
+      };
     }
 
-    const updateType = diff(currentVersion.version, newVersion.version);
-    if (!updateType) {
-      return undefined;
-    }
+    // Find max version within range
+    const inRangeVersion = range ? maxSatisfying(allVersions, range) : null;
+    const currentCoercedVersion = currentVersion?.version ?? '0.0.0';
+
+    // Check if in-range version is actually an update
+    const inRangeInfo =
+      inRangeVersion && gt(inRangeVersion, currentCoercedVersion)
+        ? this.#createVersionInfo(currentCoercedVersion, inRangeVersion)
+        : null;
 
     return {
-      updateType,
-      major: newVersion.major,
-      minor: newVersion.minor,
-      patch: newVersion.patch,
-      version: newVersion.version,
+      inRange: inRangeInfo,
+      latest: latestInfo,
+      isPinned: false,
+      isUpToDate: false,
     };
+  }
+
+  #createVersionInfo(currentVersion: string, targetVersion: string): VersionInfo | null {
+    const target = coerce(targetVersion, { includePrerelease: true });
+    if (!target) return null;
+
+    const updateType = diff(currentVersion, target.version);
+    if (!updateType) return null;
+
+    return {
+      version: target.version,
+      major: target.major,
+      minor: target.minor,
+      patch: target.patch,
+      updateType,
+    };
+  }
+
+  /**
+   * Check if a version string is pinned (exact version without range prefix).
+   * Pinned versions don't have ^, ~, >=, >, <, <=, or other range specifiers.
+   */
+  #isPinnedVersion(version: string): boolean {
+    const trimmed = version.trim();
+    // Check for common range prefixes
+    const rangePatterns = /^[\^~><]/;
+    // Check for complex ranges (e.g., "1.0.0 - 2.0.0", "1.0.0 || 2.0.0", ">=1.0.0")
+    const complexRangePatterns = /[\s|=]/;
+
+    return !rangePatterns.test(trimmed) && !complexRangePatterns.test(trimmed);
   }
 }

@@ -10,6 +10,7 @@ const TERMINAL_NAME = 'npmLens Terminal';
 interface QueuedCommand {
   commandType: TerminalCommandOptions['commandType'];
   packageName?: string;
+  targetVersion?: string;
   resolve: () => void;
   reject: (error: Error) => void;
 }
@@ -40,14 +41,16 @@ function getTerminal(): vscode.Terminal {
 
 /**
  * Get the package manager used in the current project.
+ * Falls back to 'npm' if no lock file is detected.
  */
-export async function getPackageManager(): Promise<PackageManager | null> {
+export async function getPackageManager(): Promise<PackageManager> {
   const rootUri = getRootPath();
   if (!rootUri) {
-    return null;
+    return 'npm';
   }
 
-  return await defineManager(rootUri.fsPath);
+  const detected = await defineManager(rootUri.fsPath);
+  return detected ?? 'npm';
 }
 
 /**
@@ -77,7 +80,7 @@ async function processQueue(): Promise<void> {
   }
 
   isProcessing = true;
-  const { commandType, packageName, resolve, reject } = commandQueue.shift()!;
+  const { commandType, packageName, targetVersion, resolve, reject } = commandQueue.shift()!;
 
   try {
     const rootUri = getRootPath();
@@ -86,23 +89,22 @@ async function processQueue(): Promise<void> {
     }
 
     const packageManager = await getPackageManager();
-    if (!packageManager) {
-      throw new Error('Package manager could not be determined.');
-    }
 
     const command = getTerminalCommand({
       commandType,
       packageManager,
       packageName,
+      targetVersion,
     });
 
+    const versionText = targetVersion ? `@${targetVersion}` : '';
     const actionText = commandType === 'update' ? 'Updating' : 'Removing';
     const successText = commandType === 'update' ? 'updated' : 'removed';
 
     await vscode.window.withProgress(
       {
         location: vscode.ProgressLocation.Notification,
-        title: `${actionText} ${packageName}...`,
+        title: `${actionText} ${packageName}${versionText}...`,
         cancellable: false,
       },
       async () => {
@@ -143,13 +145,14 @@ async function processQueue(): Promise<void> {
 
 export async function executePackageCommand(
   commandType: TerminalCommandOptions['commandType'],
-  packageName?: string
+  packageName?: string,
+  targetVersion?: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     if (packageName) {
       updatingPackagesQueue.add(packageName);
     }
-    commandQueue.push({ commandType, packageName, resolve, reject });
+    commandQueue.push({ commandType, packageName, targetVersion, resolve, reject });
     processQueue();
   });
 }

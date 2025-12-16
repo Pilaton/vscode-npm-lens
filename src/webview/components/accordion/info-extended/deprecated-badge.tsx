@@ -1,5 +1,4 @@
 import WarningIcon from '@mui/icons-material/Warning';
-import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 
 interface DeprecatedBadgeProps {
@@ -45,24 +44,13 @@ export default function DeprecatedBadge({ message }: DeprecatedBadgeProps) {
         },
       }}
     >
-      <Chip
-        icon={<WarningIcon sx={{ fontSize: '0.875rem' }} />}
-        label="DEPRECATED"
-        size="small"
-        onClick={handleClick}
+      <WarningIcon
         sx={{
-          height: '20px',
-          fontSize: '0.625rem',
-          fontWeight: 600,
-          letterSpacing: '0.5px',
-          cursor: 'help',
-          backgroundColor: 'var(--vscode-editorWarning-background)',
+          fontSize: '1.25rem',
           color: 'var(--vscode-editorWarning-foreground)',
-          border: '1px solid var(--vscode-editorWarning-foreground)',
-          '& .MuiChip-icon': {
-            color: 'var(--vscode-editorWarning-foreground)',
-          },
+          cursor: 'help',
         }}
+        onClick={handleClick}
       />
     </Tooltip>
   );

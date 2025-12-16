@@ -132,7 +132,7 @@ export default class WebViewPanelController {
 
       switch (message?.command) {
         case 'updatePackage': {
-          await executePackageCommand('update', message?.packageName);
+          await executePackageCommand('update', message?.packageName, message?.targetVersion);
           break;
         }
 

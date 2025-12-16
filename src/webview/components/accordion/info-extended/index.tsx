@@ -9,11 +9,11 @@ import SvgIcon from '@mui/material/SvgIcon';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { type ComponentProps, type ReactNode, useEffect, useState } from 'react';
-import NpmIcon from '../../assets/npm.svg?react';
-import { useVscode } from '../../hooks/use-vscode';
-import type { PackageData } from '../../services/npm-provider';
-import useStore from '../../store/store';
-import convertSize from '../../utils/convert-size';
+import NpmIcon from '../../../assets/npm.svg?react';
+import { useVscode } from '../../../hooks/use-vscode';
+import type { PackageData } from '../../../services/npm-provider';
+import useStore from '../../../store/store';
+import convertSize from '../../../utils/convert-size';
 import DownloadStats from './download-stats';
 
 /* -------------------------------------------------------------------------- */
@@ -49,7 +49,6 @@ export default function InfoExtended({ name }: { name: string }) {
     isPending: true,
   });
 
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
   const packageData = useStore((state) => state.packages[name]);
 
   useEffect(() => {
@@ -61,8 +60,7 @@ export default function InfoExtended({ name }: { name: string }) {
         setNpmInfo({ data, isPending: false });
       }
     };
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fetchData();
+    void fetchData();
 
     return () => {
       isMounted = false;

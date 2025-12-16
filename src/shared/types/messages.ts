@@ -12,6 +12,7 @@ import type { PackageJson } from '../../extension/utils/get-package-json';
 export interface UpdatePackageMessage {
   command: 'updatePackage';
   packageName: string;
+  targetVersion?: string; // Optional: specific version to install (e.g., "4.0.9")
 }
 
 export interface RemovePackageMessage {

@@ -9,9 +9,9 @@ export function useVscode() {
     window.vscode.postMessage(message);
   }, []);
 
-  const updatePackage = useCallback(
-    (packageName: string) => {
-      postMessage({ command: 'updatePackage', packageName });
+  const updatePackageToVersion = useCallback(
+    (packageName: string, targetVersion: string) => {
+      postMessage({ command: 'updatePackage', packageName, targetVersion });
     },
     [postMessage]
   );
@@ -40,7 +40,7 @@ export function useVscode() {
 
   return {
     postMessage,
-    updatePackage,
+    updatePackageToVersion,
     removePackage,
     showAlert,
     copyToClipboard,

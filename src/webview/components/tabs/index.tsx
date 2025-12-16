@@ -98,7 +98,8 @@ export default function TabsDependency({ packageJson }: TabsProps) {
       </Stack>
 
       {tabNamesFiltered.map((tabName, index) => {
-        const dependencies = packageJson[tabName as keyof PackageJson]!;
+        const dependencies = packageJson[tabName as keyof PackageJson];
+        if (!dependencies) return null;
         return (
           <TabPanel key={tabName} activeTab={activeTab} index={index}>
             <AccordionsDependency dependencies={dependencies} />
