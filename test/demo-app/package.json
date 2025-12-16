@@ -10,15 +10,18 @@
   "author": "Pilaton <dev@pilaton.com> (https://pilaton.com)",
   "license": "MIT",
   "dependencies": {
-    "nanoid": "~4.0.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-tabs": "~4.2.1",
-    "sass": "1.60.0"
+    "lodash": "^4.17.0",
+    "axios": "~1.6.0",
+    "uuid": "9.0.0",
+    "date-fns": "^3.0.0",
+    "zod": "~3.22.0",
+    "nanoid": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "22.0.0",
-    "@types/react": "^18.3.13",
-    "tailwindcss": "~3.4.0"
+    "@types/lodash": "^4.14.0",
+    "@types/uuid": "9.0.0",
+    "typescript": "~5.3.0",
+    "prettier": "^3.1.0",
+    "eslint": "^8.50.0"
   }
 }
