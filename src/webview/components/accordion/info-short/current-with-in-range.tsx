@@ -22,7 +22,6 @@ export function CurrentWithInRange({
 }: CurrentWithInRangeProps) {
   const { version, isPending } = useVersionData(name, npmProvider);
 
-  // Determine if we should show the arrow and inRange version
   const showArrow =
     !isPending && version && !version.isPinned && !version.isUpToDate && version.inRange;
 

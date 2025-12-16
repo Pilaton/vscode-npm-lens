@@ -184,27 +184,23 @@ export function VersionCell({
     updatePackageToVersion(name, versionWithPrefix);
   };
 
-  // Loading
   if (isPending) {
     return <CircularProgress size={inline ? 14 : 18} />;
   }
 
-  // No data or unsupported version format (wildcards, complex ranges, tags, etc.)
   if (!version || !version.isSupported) {
     return <>—</>;
   }
 
-  // Up to date
   if (version.isUpToDate) {
     return <UpToDateIcon />;
   }
 
-  // For pinned versions: inRange shows "—", latest shows clickable version
+  // Pinned: inRange shows —, latest shows clickable version
   if (version.isPinned) {
     if (type === 'inRange') {
       return <PinnedIcon />;
     }
-    // For latest: show clickable version if available
     if (version.latest) {
       return (
         <ClickableVersion
@@ -217,15 +213,12 @@ export function VersionCell({
     return <UpToDateIcon />;
   }
 
-  // Get the target version based on type
   const targetVersion = type === 'inRange' ? version.inRange : version.latest;
 
-  // inRange type specific: if no inRange version, show nothing (arrow will be hidden in parent)
   if (type === 'inRange' && !targetVersion) {
     return null;
   }
 
-  // latest type: if no latest (shouldn't happen normally), show up-to-date icon
   if (!targetVersion) {
     return <UpToDateIcon />;
   }

@@ -164,7 +164,6 @@ export default class NpmPackageService {
   ): PackageVersion {
     const { isPinned, isSupported } = parseVersionSpec(versionRange);
 
-    // Early return for unsupported version formats (wildcards, complex ranges, tags, etc.)
     if (!isSupported) {
       return {
         inRange: null,
@@ -178,11 +177,9 @@ export default class NpmPackageService {
     const currentVersion = coerce(versionRange, { includePrerelease: true });
     const latestCoerced = coerce(latestVersion, { includePrerelease: true });
 
-    // Check if current version is up to date
     const isUpToDate =
       currentVersion && latestCoerced ? !gt(latestCoerced.version, currentVersion.version) : true;
 
-    // If up to date, return early
     if (isUpToDate) {
       return {
         inRange: null,
@@ -193,11 +190,9 @@ export default class NpmPackageService {
       };
     }
 
-    // Calculate latest version info (always show for all version types)
     const latestInfo = this.#createVersionInfo(currentVersion?.version ?? '0.0.0', latestVersion);
 
-    // For pinned (exact) versions: show latest only, no inRange
-    // User intentionally uses exact version, respect that for inRange
+    // Pinned versions: show latest only (no inRange)
     if (isPinned) {
       return {
         inRange: null,
@@ -208,14 +203,12 @@ export default class NpmPackageService {
       };
     }
 
-    // Check if latest satisfies the range
     const range = validRange(versionRange);
     const latestSatisfiesRange = range ? satisfies(latestVersion, range) : false;
 
-    // If latest is within range, no need for separate in-range version
     if (latestSatisfiesRange) {
       return {
-        inRange: null, // ✓ will be shown - latest is within range
+        inRange: null,
         latest: latestInfo,
         isPinned: false,
         isUpToDate: false,
@@ -223,11 +216,8 @@ export default class NpmPackageService {
       };
     }
 
-    // Find max version within range
     const inRangeVersion = range ? maxSatisfying(allVersions, range) : null;
     const currentCoercedVersion = currentVersion?.version ?? '0.0.0';
-
-    // Check if in-range version is actually an update
     const inRangeInfo =
       inRangeVersion && gt(inRangeVersion, currentCoercedVersion)
         ? this.#createVersionInfo(currentCoercedVersion, inRangeVersion)
