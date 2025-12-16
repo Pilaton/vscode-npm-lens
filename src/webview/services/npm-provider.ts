@@ -167,18 +167,29 @@ export default class NpmPackageService {
     const isUpToDate =
       currentVersion && latestCoerced ? !gt(latestCoerced.version, currentVersion.version) : true;
 
-    // If pinned or up to date, return early
-    if (isPinned || isUpToDate) {
+    // If up to date, return early
+    if (isUpToDate) {
       return {
         inRange: null,
         latest: null,
         isPinned,
-        isUpToDate,
+        isUpToDate: true,
       };
     }
 
-    // Calculate latest version info
+    // Calculate latest version info (always show for all version types)
     const latestInfo = this.#createVersionInfo(currentVersion?.version ?? '0.0.0', latestVersion);
+
+    // For pinned (exact) versions: show latest only, no inRange
+    // User intentionally uses exact version, respect that for inRange
+    if (isPinned) {
+      return {
+        inRange: null,
+        latest: latestInfo,
+        isPinned: true,
+        isUpToDate: false,
+      };
+    }
 
     // Check if latest satisfies the range
     const range = validRange(versionRange);
@@ -230,15 +241,23 @@ export default class NpmPackageService {
 
   /**
    * Check if a version string is pinned (exact version without range prefix).
-   * Pinned versions don't have ^, ~, >=, >, <, <=, or other range specifiers.
+   * Only supports ^, ~, and exact versions.
+   * Other formats (wildcards, complex ranges, tags, etc.) are treated as non-updatable.
    */
   #isPinnedVersion(version: string): boolean {
     const trimmed = version.trim();
-    // Check for common range prefixes
-    const rangePatterns = /^[\^~><]/;
-    // Check for complex ranges (e.g., "1.0.0 - 2.0.0", "1.0.0 || 2.0.0", ">=1.0.0")
-    const complexRangePatterns = /[\s|=]/;
 
-    return !rangePatterns.test(trimmed) && !complexRangePatterns.test(trimmed);
+    // Only ^, ~, or exact versions are supported
+    // Exact: starts with a digit and contains only digits and dots
+    const isExact = /^\d+\.\d+\.\d+(-[\w.]+)?$/.test(trimmed);
+    const isCaret = trimmed.startsWith('^');
+    const isTilde = trimmed.startsWith('~');
+
+    // If it's not ^, ~, or exact - treat as complex/unsupported
+    if (!isExact && !isCaret && !isTilde) {
+      return false; // Will be handled by the caller as "not supported"
+    }
+
+    return isExact;
   }
 }

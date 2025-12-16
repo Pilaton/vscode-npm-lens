@@ -123,6 +123,7 @@ export default function AccordionsDependency({ dependencies }: Properties) {
               <CurrentWithInRange
                 name={name}
                 currentVersion={currentVersion}
+                currentVersionSpec={currentVersion}
                 npmProvider={npmProvider}
               />
             </Stack>
@@ -135,7 +136,12 @@ export default function AccordionsDependency({ dependencies }: Properties) {
                 textAlign: 'right',
               }}
             >
-              <VersionCell name={name} npmProvider={npmProvider} type="latest" />
+              <VersionCell
+                name={name}
+                npmProvider={npmProvider}
+                type="latest"
+                currentVersionSpec={currentVersion}
+              />
             </Box>
 
             <Box component="span" sx={{ width: COLUMN_WIDTHS.spacer }} />

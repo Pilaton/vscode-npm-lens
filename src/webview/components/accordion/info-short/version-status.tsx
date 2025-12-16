@@ -3,6 +3,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useEffect, useState } from 'react';
+import { preservePrefix } from '../../../../shared/utils/version-prefix';
 import { useVscode } from '../../../hooks/use-vscode';
 import type NpmPackageService from '../../../services/npm-provider';
 import type { PackageVersion } from '../../../services/npm-provider';
@@ -150,6 +151,8 @@ interface VersionCellProps {
   name: string;
   npmProvider: NpmPackageService;
   type: VersionCellType;
+  /** Original version specifier from package.json (e.g., "^1.0.0", "~1.0.0") */
+  currentVersionSpec?: string;
   /** If true, renders without Box wrapper (for inline use) */
   inline?: boolean;
 }
@@ -158,7 +161,13 @@ interface VersionCellProps {
  * Displays a single version cell (inRange or latest).
  * Used to show available package updates in the accordion.
  */
-export function VersionCell({ name, npmProvider, type, inline = false }: VersionCellProps) {
+export function VersionCell({
+  name,
+  npmProvider,
+  type,
+  currentVersionSpec,
+  inline = false,
+}: VersionCellProps) {
   const { updatePackageToVersion } = useVscode();
   const { version, isPending } = useVersionData(name, npmProvider);
 
@@ -166,9 +175,13 @@ export function VersionCell({ name, npmProvider, type, inline = false }: Version
   const addUpdatingPackage = useStore((s) => s.addUpdatingPackage);
   const isUpdating = updatingPackages.has(name);
 
-  const update = (v: string) => {
+  const update = (targetVersion: string) => {
     addUpdatingPackage(name);
-    updatePackageToVersion(name, v);
+    // Preserve the original range prefix (^, ~, or exact) when updating
+    const versionWithPrefix = currentVersionSpec
+      ? preservePrefix(currentVersionSpec, targetVersion)
+      : targetVersion;
+    updatePackageToVersion(name, versionWithPrefix);
   };
 
   // Loading
@@ -176,14 +189,31 @@ export function VersionCell({ name, npmProvider, type, inline = false }: Version
     return <CircularProgress size={inline ? 14 : 18} />;
   }
 
-  // No data or pinned
-  if (!version || version.isPinned) {
-    const Icon = version?.isPinned ? PinnedIcon : () => <>—</>;
-    return <Icon />;
+  // No data
+  if (!version) {
+    return <>—</>;
   }
 
   // Up to date
   if (version.isUpToDate) {
+    return <UpToDateIcon />;
+  }
+
+  // For pinned versions: inRange shows "—", latest shows clickable version
+  if (version.isPinned) {
+    if (type === 'inRange') {
+      return <PinnedIcon />;
+    }
+    // For latest: show clickable version if available
+    if (version.latest) {
+      return (
+        <ClickableVersion
+          info={version.latest}
+          onClick={() => update(version.latest!.version)}
+          isUpdating={isUpdating}
+        />
+      );
+    }
     return <UpToDateIcon />;
   }
 
