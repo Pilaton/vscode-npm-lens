@@ -1,4 +1,4 @@
-import type { AlertMessage } from 'src/shared/types/messages';
+import type { AlertMessage } from '../../shared/types/messages';
 
 /**
  * Hook providing type-safe actions for communicating with the VS Code extension.

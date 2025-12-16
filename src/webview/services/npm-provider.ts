@@ -1,6 +1,6 @@
 import { coerce, diff, gt, maxSatisfying, type ReleaseType, satisfies, validRange } from 'semver';
-import type { Dependencies } from 'src/extension/utils/get-package-json';
-import type { WebviewMessage } from 'src/shared/types/messages';
+import type { Dependencies } from '../../extension/utils/get-package-json';
+import type { WebviewMessage } from '../../shared/types/messages';
 import { parseVersionSpec } from '../../shared/utils/version-prefix';
 
 /** Version info for a single update option */

@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { type PropsWithChildren, type SyntheticEvent, useState } from 'react';
-import type { PackageJson } from 'src/extension/utils/get-package-json';
+import type { PackageJson } from '../../../extension/utils/get-package-json';
 import AccordionsDependency from '../accordion';
 import CounterDependency from './counter-dependency';
 

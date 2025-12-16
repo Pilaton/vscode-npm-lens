@@ -5,7 +5,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { useEffect, useMemo, useState } from 'react';
-import type { Dependencies } from 'src/extension/utils/get-package-json';
+import type { Dependencies } from '../../../extension/utils/get-package-json';
 import NpmPackageService from '../../services/npm-provider';
 import useStore from '../../store/store';
 import InfoExtended from './info-extended';

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { ExtensionToWebviewMessage, InitMessage } from 'src/shared/types/messages';
+import type { ExtensionToWebviewMessage, InitMessage } from '../../shared/types/messages';
 import useStore from '../store/store';
 
 export interface ExtensionData {
