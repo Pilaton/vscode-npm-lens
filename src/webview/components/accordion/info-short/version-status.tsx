@@ -189,8 +189,8 @@ export function VersionCell({
     return <CircularProgress size={inline ? 14 : 18} />;
   }
 
-  // No data
-  if (!version) {
+  // No data or unsupported version format (wildcards, complex ranges, tags, etc.)
+  if (!version || !version.isSupported) {
     return <>—</>;
   }
 

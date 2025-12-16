@@ -1,30 +1,55 @@
 /**
- * Utilities for parsing and preserving semver range prefixes.
+ * Utilities for parsing and handling semver version specifiers.
+ * Only supports ^, ~, and exact versions.
  */
 
-type VersionPrefix = '^' | '~' | '';
+export type VersionPrefix = '^' | '~' | '';
 
-interface ParsedVersion {
+export interface ParsedVersionSpec {
+  /** The range prefix (^, ~, or empty for exact) */
   prefix: VersionPrefix;
+  /** The version number without prefix */
   version: string;
+  /** True if this is an exact version (no prefix) */
+  isPinned: boolean;
+  /** True if the format is supported (^, ~, or exact). False for wildcards, complex ranges, etc. */
+  isSupported: boolean;
 }
 
 /**
- * Extract the range prefix (^, ~, or exact) from a version specifier.
+ * Parse a version specifier to extract prefix and determine its type.
+ * Only supports ^, ~, and exact versions.
  */
-function parseVersionPrefix(spec: string): ParsedVersion {
+export function parseVersionSpec(spec: string): ParsedVersionSpec {
   const trimmed = spec.trim();
 
   if (trimmed.startsWith('^')) {
-    return { prefix: '^', version: trimmed.slice(1) };
+    return {
+      prefix: '^',
+      version: trimmed.slice(1),
+      isPinned: false,
+      isSupported: true,
+    };
   }
 
   if (trimmed.startsWith('~')) {
-    return { prefix: '~', version: trimmed.slice(1) };
+    return {
+      prefix: '~',
+      version: trimmed.slice(1),
+      isPinned: false,
+      isSupported: true,
+    };
   }
 
-  // Exact version or complex range - treat as exact
-  return { prefix: '', version: trimmed };
+  // Check if it's a valid exact version (digits.digits.digits with optional prerelease)
+  const isExact = /^\d+\.\d+\.\d+(-[\w.]+)?$/.test(trimmed);
+
+  return {
+    prefix: '',
+    version: trimmed,
+    isPinned: isExact,
+    isSupported: isExact, // Only exact semver versions without prefix are supported
+  };
 }
 
 /**
@@ -36,6 +61,6 @@ function parseVersionPrefix(spec: string): ParsedVersion {
  * - preservePrefix("1.0.0",  "1.2.3") -> "1.2.3"
  */
 export function preservePrefix(originalSpec: string, newVersion: string): string {
-  const { prefix } = parseVersionPrefix(originalSpec);
+  const { prefix } = parseVersionSpec(originalSpec);
   return `${prefix}${newVersion}`;
 }

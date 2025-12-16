@@ -1,6 +1,7 @@
 import { coerce, diff, gt, maxSatisfying, type ReleaseType, satisfies, validRange } from 'semver';
 import type { Dependencies } from 'src/extension/utils/get-package-json';
 import type { WebviewMessage } from 'src/shared/types/messages';
+import { parseVersionSpec } from '../../shared/utils/version-prefix';
 
 /** Version info for a single update option */
 interface VersionInfo {
@@ -21,6 +22,8 @@ export interface PackageVersion {
   isPinned: boolean;
   /** True if current version equals latest */
   isUpToDate: boolean;
+  /** True if version format is supported (^, ~, or exact). False for wildcards, complex ranges, tags, etc. */
+  isSupported: boolean;
 }
 
 export interface PackageData {
@@ -159,7 +162,19 @@ export default class NpmPackageService {
     latestVersion: string,
     allVersions: string[]
   ): PackageVersion {
-    const isPinned = this.#isPinnedVersion(versionRange);
+    const { isPinned, isSupported } = parseVersionSpec(versionRange);
+
+    // Early return for unsupported version formats (wildcards, complex ranges, tags, etc.)
+    if (!isSupported) {
+      return {
+        inRange: null,
+        latest: null,
+        isPinned: false,
+        isUpToDate: false,
+        isSupported: false,
+      };
+    }
+
     const currentVersion = coerce(versionRange, { includePrerelease: true });
     const latestCoerced = coerce(latestVersion, { includePrerelease: true });
 
@@ -174,6 +189,7 @@ export default class NpmPackageService {
         latest: null,
         isPinned,
         isUpToDate: true,
+        isSupported: true,
       };
     }
 
@@ -188,6 +204,7 @@ export default class NpmPackageService {
         latest: latestInfo,
         isPinned: true,
         isUpToDate: false,
+        isSupported: true,
       };
     }
 
@@ -202,6 +219,7 @@ export default class NpmPackageService {
         latest: latestInfo,
         isPinned: false,
         isUpToDate: false,
+        isSupported: true,
       };
     }
 
@@ -220,6 +238,7 @@ export default class NpmPackageService {
       latest: latestInfo,
       isPinned: false,
       isUpToDate: false,
+      isSupported: true,
     };
   }
 
@@ -237,27 +256,5 @@ export default class NpmPackageService {
       patch: target.patch,
       updateType,
     };
-  }
-
-  /**
-   * Check if a version string is pinned (exact version without range prefix).
-   * Only supports ^, ~, and exact versions.
-   * Other formats (wildcards, complex ranges, tags, etc.) are treated as non-updatable.
-   */
-  #isPinnedVersion(version: string): boolean {
-    const trimmed = version.trim();
-
-    // Only ^, ~, or exact versions are supported
-    // Exact: starts with a digit and contains only digits and dots
-    const isExact = /^\d+\.\d+\.\d+(-[\w.]+)?$/.test(trimmed);
-    const isCaret = trimmed.startsWith('^');
-    const isTilde = trimmed.startsWith('~');
-
-    // If it's not ^, ~, or exact - treat as complex/unsupported
-    if (!isExact && !isCaret && !isTilde) {
-      return false; // Will be handled by the caller as "not supported"
-    }
-
-    return isExact;
   }
 }
