@@ -47,6 +47,8 @@
     "build:extension": "vite build -c vite-configs/vite-tree.config.mts",
     "build:webview": "vite build -c vite-configs/vite-web.config.mts",
     "clean": "rimraf ./dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
@@ -107,7 +109,8 @@
     "typescript": "^5.9.3",
     "vite": "^7.3.0",
     "vite-plugin-banner": "^0.8.1",
-    "vite-plugin-svgr": "^4.5.0"
+    "vite-plugin-svgr": "^4.5.0",
+    "vitest": "^4.0.16"
   },
   "engines": {
     "vscode": ">=1.93.0",
