@@ -133,11 +133,21 @@ export default class WebViewPanelController {
       switch (message?.command) {
         case 'updatePackage': {
           await executePackageCommand('update', message?.packageName, message?.targetVersion);
+          // Sync updating state to webview after command completes
+          this.#sendMessage({
+            type: 'syncUpdating',
+            updatingPackages: getUpdatingPackages(),
+          });
           break;
         }
 
         case 'removePackage': {
           await executePackageCommand('remove', message?.packageName);
+          // Sync updating state to webview after command completes
+          this.#sendMessage({
+            type: 'syncUpdating',
+            updatingPackages: getUpdatingPackages(),
+          });
           break;
         }
 

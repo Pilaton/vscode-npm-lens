@@ -50,9 +50,14 @@ export interface InitMessage {
   };
 }
 
+export interface SyncUpdatingMessage {
+  type: 'syncUpdating';
+  updatingPackages: string[];
+}
+
 export interface ErrorMessage {
   type: 'error';
   message: string;
 }
 
-export type ExtensionToWebviewMessage = InitMessage | ErrorMessage;
+export type ExtensionToWebviewMessage = InitMessage | SyncUpdatingMessage | ErrorMessage;

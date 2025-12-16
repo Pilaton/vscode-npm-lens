@@ -38,6 +38,9 @@ export function useExtensionMessage(): ExtensionData {
           isLoading: false,
           error: null,
         });
+      } else if (message.type === 'syncUpdating') {
+        // Update loader state when packages finish updating
+        setUpdatingPackages(message.updatingPackages);
       } else if (message.type === 'error') {
         setData((prev) => ({
           ...prev,
