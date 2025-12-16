@@ -61,3 +61,4 @@ out
 vsix
 vsix/
 .git-backup/
+test/demo-app/package-lock.json
