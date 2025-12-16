@@ -2,7 +2,7 @@
   "name": "vscode-npm-lens",
   "displayName": "npmLens",
   "version": "4.1.2",
-  "description": "Visual panel for project dependencies: Monitor updates, analyze size, and more.",
+  "description": "Dependency update checker for npm, yarn, pnpm. Find outdated packages, update versions easily.",
   "categories": [
     "Other",
     "Visualization"
@@ -10,17 +10,25 @@
   "keywords": [
     "npm",
     "node",
+    "nodejs",
+    "dependency",
     "dependencies",
     "package",
+    "packages",
+    "package.json",
     "yarn",
     "pnpm",
     "bun",
-    "package.json",
     "update",
+    "updates",
     "outdated",
     "version",
-    "size",
-    "package-size"
+    "versions",
+    "semver",
+    "upgrade",
+    "manager",
+    "check",
+    "checker"
   ],
   "bugs": {
     "url": "https://github.com/Pilaton/vscode-npm-lens/issues",

@@ -7,20 +7,22 @@
 ![Open VSX Downloads](https://img.shields.io/open-vsx/dt/Pilaton/vscode-npm-lens?color=blue&link=https%3A%2F%2Fopen-vsx.org%2Fextension%2FPilaton%2Fvscode-npm-lens)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?color=blue)](LICENSE)
 
-**A simple and elegant visual panel for managing npm dependencies in your project.** Monitor updates, analyze package sizes, and manage dependencies — all from a convenient sidebar.
+**Dependency update checker for npm, yarn, pnpm.** Find outdated packages, update versions easily — all from a convenient sidebar panel.
 
 ![npmLens Screenshot](https://raw.githubusercontent.com/Pilaton/vscode-npm-lens/main/public/screen-extension.png)
 
 ## ✨ Features
 
-- **Visual dependency list** — See all your dependencies and their versions at a glance
-- **Update detection** — Check for new available versions with one click
-- **Easy updates** — Update or remove packages directly from the panel
+- **Dependency overview** — See all your dependencies and devDependencies at a glance
+- **Version checking** — Instantly check for new versions (supports `^`, `~`, and exact versions)
+- **One-click updates** — Click on any version to update the package
+- **Prefix preservation** — Updates keep your original prefix (`^1.0.0` → `^1.2.0`, not `^` → nothing)
 - **Multi-package queue** — Queue multiple package updates simultaneously
 - **Deprecated warnings** — Get notified when using deprecated packages
-- **Package info** — View basic information about any package
-- **Size analysis** — Calculate the total size impact of your dependencies
-- **Download statistics** — View weekly download counts for each package
+- **Package info** — View description, license, last updated date
+- **Size analysis** — See unpacked size of each package
+- **Download statistics** — View weekly download counts
+- **Package manager detection** — Automatically detects npm, yarn, pnpm, or bun
 - **Theme aware** — Adapts seamlessly to your VS Code theme
 
 ## 📥 Installation
@@ -42,25 +44,21 @@
 2. Click the **npmLens** icon in the Activity Bar (sidebar)
 3. Explore your dependencies!
 
+**Updating packages:**
+
+- Click on any colored version number to update that package
+- Green = patch, Yellow = minor, Red = major update
+- The package manager (npm/yarn/pnpm/bun) is detected automatically
+
 ## 🔧 Requirements
 
-- VS Code `>=1.106.0`
+- VS Code `>=1.93.0`
 - A `package.json` file in your workspace
-
-## 🤝 Contributing
-
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on how to get started.
 
 ## 📝 Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for a list of changes.
 
-## 📄 License
+---
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
-## 🔗 Links
-
-- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens)
-- [GitHub Repository](https://github.com/Pilaton/vscode-npm-lens)
-- [Report an Issue](https://github.com/Pilaton/vscode-npm-lens/issues)
+[VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=Pilaton.vscode-npm-lens) · [Open VSX](https://open-vsx.org/extension/Pilaton/vscode-npm-lens) · [GitHub](https://github.com/Pilaton/vscode-npm-lens) · [Issues](https://github.com/Pilaton/vscode-npm-lens/issues) · [Contributing](CONTRIBUTING.md) · [MIT License](LICENSE)
