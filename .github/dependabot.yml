@@ -2,6 +2,9 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
+    # Exclude test/demo-app from dependabot checks
+    exclude-paths:
+      - "test/**"
     schedule:
       interval: "weekly"
       day: "monday"
