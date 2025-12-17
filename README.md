@@ -9,7 +9,7 @@
 
 **Dependency update checker for npm, yarn, pnpm.** Find outdated packages, update versions easily — all from a convenient sidebar panel.
 
-![npmLens Screenshot](https://raw.githubusercontent.com/Pilaton/vscode-npm-lens/main/public/screen-extension.png)
+![npmLens Screenshot](https://raw.githubusercontent.com/Pilaton/vscode-npm-lens/main/public/demo.gif)
 
 ## ✨ Features
 
