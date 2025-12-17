@@ -101,7 +101,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.3.10",
     "@tsconfig/vite-react": "^7.0.2",
-    "@types/node": "24.10.4",
+    "@types/node": "22",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/semver": "^7.7.1",
@@ -122,7 +122,7 @@
   },
   "engines": {
     "vscode": ">=1.93.0",
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "icon": "public/marketplace-icon-384px.png",
   "extensionKind": [
@@ -133,6 +133,6 @@
     "url": "https://github.com/sponsors/Pilaton"
   },
   "volta": {
-    "node": "24.12.0"
+    "node": "22.15.0"
   }
 }
