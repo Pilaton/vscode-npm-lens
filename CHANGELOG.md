@@ -1,5 +1,25 @@
 # Changelog
 
+## [4.2.0](https://github.com/Pilaton/vscode-npm-lens/compare/v4.1.2...v4.2.0) (2025-12-17)
+
+
+### Features
+
+* **webview:** add React Compiler for automatic memoization ([191913a](https://github.com/Pilaton/vscode-npm-lens/commit/191913a6141b8dc1a1938b082b151375e568f91a))
+* **webview:** preserve version prefix and improve pinned version handling ([db45c6b](https://github.com/Pilaton/vscode-npm-lens/commit/db45c6b01dc49a1d08b3ddf25e96852b0327711f))
+* **webview:** refactor version display with new layout and column headers ([9ac587c](https://github.com/Pilaton/vscode-npm-lens/commit/9ac587cd82a89c550de370f76c0618d64f23c789))
+
+
+### Bug Fixes
+
+* **webview:** sync loader state after package update completes ([d98d9ff](https://github.com/Pilaton/vscode-npm-lens/commit/d98d9ff1802853eb008e4250c6b4cb507fe2a454))
+
+
+### Miscellaneous Chores
+
+* correct version to 4.2.0 ([f4a6771](https://github.com/Pilaton/vscode-npm-lens/commit/f4a6771138cfff94215a5af865a8576908f89527))
+* force version override ([780d2ec](https://github.com/Pilaton/vscode-npm-lens/commit/780d2ec9b6796c6cb4f2ff31e41133700ae48473))
+
 ## [4.1.2](https://github.com/Pilaton/vscode-npm-lens/compare/v4.1.0...v4.1.2) (2025-12-15)
 
 
