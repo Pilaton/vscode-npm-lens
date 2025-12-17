@@ -9,13 +9,13 @@ import type { PackageJson } from '../../extension/utils/get-package-json';
 /*                        Webview → Extension Messages                        */
 /* -------------------------------------------------------------------------- */
 
-export interface UpdatePackageMessage {
+interface UpdatePackageMessage {
   command: 'updatePackage';
   packageName: string;
-  targetVersion?: string; // Optional: specific version to install (e.g., "4.0.9")
+  targetVersion?: string;
 }
 
-export interface RemovePackageMessage {
+interface RemovePackageMessage {
   command: 'removePackage';
   packageName: string;
 }
@@ -26,7 +26,7 @@ export interface AlertMessage {
   text: string;
 }
 
-export interface ReadyMessage {
+interface ReadyMessage {
   command: 'ready';
 }
 
@@ -46,16 +46,16 @@ export interface InitMessage {
     packageJson: PackageJson;
     extensionVersion: string;
     packageManager: PackageManager | null;
-    updatingPackages: string[]; // Package names currently in update queue
+    updatingPackages: string[];
   };
 }
 
-export interface SyncUpdatingMessage {
+interface SyncUpdatingMessage {
   type: 'syncUpdating';
   updatingPackages: string[];
 }
 
-export interface ErrorMessage {
+interface ErrorMessage {
   type: 'error';
   message: string;
 }

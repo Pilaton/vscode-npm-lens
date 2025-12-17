@@ -4,5 +4,6 @@
   "project": ["src/**/*.{ts,tsx}"],
   "vite": {
     "config": ["vite-configs/vite*.config.mts"]
-  }
+  },
+  "ignoreDependencies": ["babel-plugin-react-compiler"]
 }

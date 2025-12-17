@@ -3,9 +3,9 @@
  * Only supports ^, ~, and exact versions.
  */
 
-export type VersionPrefix = '^' | '~' | '';
+type VersionPrefix = '^' | '~' | '';
 
-export interface ParsedVersionSpec {
+interface ParsedVersionSpec {
   /** The range prefix (^, ~, or empty for exact) */
   prefix: VersionPrefix;
   /** The version number without prefix */

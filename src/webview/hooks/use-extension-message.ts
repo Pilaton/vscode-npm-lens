@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ExtensionToWebviewMessage, InitMessage } from '../../shared/types/messages';
 import useStore from '../store/store';
 
-export interface ExtensionData {
+interface ExtensionData {
   packageJson: InitMessage['data']['packageJson'] | null;
   extensionVersion: string;
   packageManager: InitMessage['data']['packageManager'];
