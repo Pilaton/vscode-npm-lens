@@ -85,7 +85,6 @@ function ClickableVersion({
         cursor: 'pointer',
         borderRadius: '2px',
         paddingBlock: '3px',
-        fontWeight: 500,
         '&:hover': {
           backgroundColor: 'var(--vscode-extensionButton-prominentHoverBackground)',
           boxShadow:
