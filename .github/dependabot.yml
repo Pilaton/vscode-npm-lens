@@ -12,8 +12,10 @@ updates:
     labels:
       - "dependencies"
     # Ignore @types/vscode - must match engines.vscode version
+    # Ignore @types/node - must match engines.node version
     ignore:
       - dependency-name: "@types/vscode"
+      - dependency-name: "@types/node"
     groups:
       dev-dependencies:
         dependency-type: "development"
