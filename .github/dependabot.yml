@@ -11,6 +11,9 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
+    # Ignore @types/vscode - must match engines.vscode version
+    ignore:
+      - dependency-name: "@types/vscode"
     groups:
       dev-dependencies:
         dependency-type: "development"
